@@ -12,17 +12,19 @@ class Player {
         this.size = size; // size of the player
     }
     display() { //Draws the player
-        stroke(0,0,0); //Outline color
-        fill(0,0,255); //Color of shape
-        square(this.x, this.y, this.size) //Draws the shape
+        stroke(255,255,2); //Outline color
+        fill(248); //Color of shape\
+        //triangle(this.x-this.size/2, this.y-this.size, this.x, this.y, this.x+this.size/2, this.y-this.size); // trying to add a wake
+        ellipse(this.x, this.y, this.size*1.75, this.size*4, 3); // Draws the shape of the boat as an ellipse
+        /*triangle(this.x, this.y, this.x+this.size/2, this.y-2*this.size, this.x+this.size, this.y) //Draws the shape of the boat as a triangle*/
     }
 }
 
 function movePlayer(event) {
     if (event.keyCode == 37 || event.keyCode == 65) { // left arrow / a
         player.x -= 10; // move the player left
-        if (player.x < 0) { //Don't let the player go off the screen
-            player.x = 0;
+        if (player.x < player.size) { //Don't let the player go off the screen
+            player.x = player.size;
         }
     } else if (event.keyCode == 39 || event.keyCode == 68) { // right arrow / d
         player.x += 10;
@@ -31,8 +33,8 @@ function movePlayer(event) {
         }
     } else if (event.keyCode == 38 || event.keyCode == 87) { // up arrow / w
         player.y -= 10;
-        if (player.y < (CANV_HEIGHT - (CANV_HEIGHT / 8))) { //Don't let the player go above 1/8 of the screen
-            player.y = (CANV_HEIGHT - (CANV_HEIGHT / 8));
+        if (player.y < (CANV_HEIGHT - (CANV_HEIGHT / 3))) { //Don't let the player go above 1/3 of the screen
+            player.y = (CANV_HEIGHT - (CANV_HEIGHT / 3));
         }
     } else if (event.keyCode == 40 || event.keyCode == 83) { // down arrow / s
         player.y += 10;
@@ -56,7 +58,7 @@ function setup() {
 }
 
 function draw() {
-    background(220); // set the background to white
+    background(145, 240, 243); // set the background to a light blue
     player.display(); // draw the player
 }
 
