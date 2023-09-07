@@ -24,11 +24,11 @@ class Player {
       // details of boat
         stroke(90);
         fill(200);
-        quad(this.x-this.size/3, this.y+this.size, this.x+this.size/3, this.y+this.size, this.x+this.size/3, this.y-this.size, this.x-this.size/3, this.y-this.size);
+        quad(this.x-this.size/3, this.y+this.size, this.x+this.size/3, this.y+this.size, this.x+this.size/3, this.y-this.size*.75, this.x-this.size/3, this.y-this.size*.75);
         stroke(100);
         fill(190);
         rectMode(CENTER);
-        square(this.x, this.y, this.size/3);
+        square(this.x, this.y+this.size/4, this.size/3);
     }
 }
 
