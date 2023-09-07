@@ -12,11 +12,23 @@ class Player {
         this.size = size; // size of the player
     }
     display() { //Draws the player
+      //Draws wake behind boat
+        stroke(255,255,250); //Outline color
+        fill(220, 250, 253); //Color of shape
+        triangle(this.x-this.size/1.5, this.y+4*this.size, this.x, this.y, this.x+this.size/1.5, this.y+4*this.size);
+      //Draws boat
         stroke(255,255,2); //Outline color
-        fill(248); //Color of shape\
-        //triangle(this.x-this.size/2, this.y-this.size, this.x, this.y, this.x+this.size/2, this.y-this.size); // trying to add a wake
-        ellipse(this.x, this.y, this.size*1.75, this.size*4, 3); // Draws the shape of the boat as an ellipse
-        /*triangle(this.x, this.y, this.x+this.size/2, this.y-2*this.size, this.x+this.size, this.y) //Draws the shape of the boat as a triangle*/
+        fill(226, 194, 162); //Color of shape
+        ellipse(this.x, this.y, this.size*1.75, this.size*4, 3);
+        
+      // details of boat
+        stroke(90);
+        fill(200);
+        quad(this.x-this.size/3, this.y+this.size, this.x+this.size/3, this.y+this.size, this.x+this.size/3, this.y-this.size, this.x-this.size/3, this.y-this.size);
+        stroke(100);
+        fill(190);
+        rectMode(CENTER);
+        square(this.x, this.y, this.size/3);
     }
 }
 
@@ -58,7 +70,7 @@ function setup() {
 }
 
 function draw() {
-    background(145, 240, 243); // set the background to a light blue
+    background(145, 240, 243); // set the background to white
     player.display(); // draw the player
 }
 
