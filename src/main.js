@@ -1,6 +1,6 @@
 const CANV_WIDTH = 720; 
 const CANV_HEIGHT = 400;
-
+var score = 0; // Used to keep track of player score
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////  PLAYER CLASS AND FUNCTIONS  /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -12,9 +12,23 @@ class Player {
         this.size = size; // size of the player
     }
     display() { //Draws the player
-        stroke(0,0,0); //Outline color
-        fill(0,0,255); //Color of shape
-        square(this.x, this.y, this.size) //Draws the shape
+      //Draws wake behind boat
+        stroke(255,255,250); //Outline color
+        fill(220, 250, 253); //Color of shape
+        triangle(this.x-this.size/1.5, this.y+4*this.size, this.x, this.y, this.x+this.size/1.5, this.y+4*this.size);
+      //Draws boat
+        stroke(255,255,2); //Outline color
+        fill(226, 194, 162); //Color of shape
+        ellipse(this.x, this.y, this.size*1.75, this.size*4, 3);
+        
+      // details of boat
+        stroke(90);
+        fill(200);
+        quad(this.x-this.size/3, this.y+this.size, this.x+this.size/3, this.y+this.size, this.x+this.size/3, this.y-this.size*.75, this.x-this.size/3, this.y-this.size*.75);
+        stroke(100);
+        fill(190);
+        rectMode(CENTER);
+        square(this.x, this.y+this.size/4, this.size/3);
     }
 }
 
@@ -56,8 +70,12 @@ function setup() {
 }
 
 function draw() {
-    background(220); // set the background to white
+    background(145, 240, 243); // set the background to white
+    textSize(18); // determines size of font
+    fill(51); // determines color of text
+    text('Score: ' + score, 0, 15);// determines what is displayed, at what x,y
     player.display(); // draw the player
 }
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
