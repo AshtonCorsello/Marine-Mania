@@ -88,7 +88,7 @@ function draw() {
 
     const delay = random (1000, 5000) //ms
     if(!task_done) {
-        enemies.push(new enemy()); // append snowflake object
+        enemies.push(new enemy()); // append enemy object
         task_done = true;
         last_done = millis();
     }
@@ -100,14 +100,14 @@ function draw() {
 
     let t = frameCount / 60; // update time
 
-     // loop through snowflakes with a for..of loop
+     // loop through enemies with a for..of loop
     for (let enmy of enemies) {
-         enmy.update(t); // update snowflake position
-         enmy.display(); // draw snowflake
+         enmy.update(t); // update enemy position
+         enmy.display(); // draw enemy
     }
 
 
-// snowflake class
+// enemy class
 function enemy() {
     // initialize coordinates
     this.posX = 0;
@@ -115,8 +115,7 @@ function enemy() {
     this.initialangle = random(0, 2 * PI);
     this.size = 15;
   
-    // radius of snowflake spiral
-    // chosen so the snowflakes are uniformly spread out in area
+    // radius of placeholder
     this.radius = sqrt(random(pow(width / 2, 2)));
   
     this.update = function(time) {
@@ -124,11 +123,9 @@ function enemy() {
       let w = 0.6; // angular speed
       let angle = w * time + this.initialangle;
       this.posX = width / 2 + this.radius * sin(angle);
+        this.posY += pow(this.size, 0.5);
   
-      // different size snowflakes fall at slightly different y speeds
-      this.posY += pow(this.size, 0.5);
-  
-      // delete snowflake if past end of screen
+      // delete enemy if past end of screen
       if (this.posY > height) {
         let index = enemies.indexOf(this);
         enemies.splice(index, 1);
