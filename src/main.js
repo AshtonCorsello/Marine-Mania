@@ -1,6 +1,6 @@
 const CANV_WIDTH = 720; 
 const CANV_HEIGHT = 400;
-var score = 0; // Used to keep track of player score
+//var score = 0; // Used to keep track of player score
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////  PLAYER CLASS AND FUNCTIONS  /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -10,6 +10,11 @@ class Player {
         this.x = x; // x position of the player
         this.y = y; // y position of the player
         this.size = size; // size of the player
+
+        this.score = 0; // Used to keep track of player score
+
+      this.task_done = false;
+      this.last_done = 0;
     }
     display() { //Draws the player
       //Draws wake behind boat
@@ -29,6 +34,8 @@ class Player {
         fill(190);
         rectMode(CENTER);
         square(this.x, this.y+this.size/4, this.size/3);
+
+        text('Score: ' + this.score, 0, 15);// determines what is displayed, at what x,y
     }
 }
 
@@ -71,54 +78,38 @@ function setup() {
     fill(240);
     noStroke();
     player = new Player(CANV_WIDTH/2,(CANV_HEIGHT - CANV_HEIGHT/16),10); // create a new player object
-   // enemy = new Enemy(CANV_WIDTH/2, (CANV_HEIGHT - CANV_HEIGHT/2),10); // create a new enemy object
+    enemy1 = new Enemy1()
     document.addEventListener('keydown', movePlayer); // add event listener for key presses in order to move the player
 }
-
-let task_done = false;
-let last_done = 0;
 
 function draw() {
     background(145, 240, 243); // set the background to white
     textSize(18); // determines size of font
     fill(51); // determines color of text
-    text('Score: ' + score, 0, 15);// determines what is displayed, at what x,y
+
     player.display(); // draw the player
 
+    enemy1.showcase();
 
-    const delay = random (1000, 5000) //ms
-    if(!task_done) {
-        enemies.push(new enemy()); // append enemy object
-        task_done = true;
-        last_done = millis();
-    }
-    else {
-        if(millis() - last_done > delay) {
-        task_done = false;
-        }
-    }
-
-    let t = frameCount / 60; // update time
-
-     // loop through enemies with a for..of loop
-    for (let enmy of enemies) {
-         enmy.update(t); // update enemy position
-         enmy.display(); // draw enemy
-    }
-
+  }
 
 // enemy class
-function enemy() {
-    // initialize coordinates
-    this.posX = 0;
-    this.posY = random(-50, 0);
-    this.initialangle = random(0, 2 * PI);
-    this.size = 15;
+class Enemy1 {
+
+    constructor() {
+      // initialize coordinates
+      this.posX = 0;
+      this.posY = random(-50, 0);
+      this.initialangle = random(0, 2 * PI);
+      this.size = 15;
+
+      // radius of placeholder
+      this.radius = sqrt(random(pow(width / 2, 2)));
+
+    }
   
-    // radius of placeholder
-    this.radius = sqrt(random(pow(width / 2, 2)));
   
-    this.update = function(time) {
+    update(time) {
       // x position follows a circle
       let w = 0.6; // angular speed
       let angle = w * time + this.initialangle;
@@ -132,12 +123,33 @@ function enemy() {
       }
     };
   
-    this.display = function() {
+    display() {
       ellipse(this.posX, this.posY, this.size);
     };
-  }
 
+    showcase() {
+      const delay = random (1000, 5000) //ms
+      if(!this.task_done) {
+          enemies.push(new Enemy1()); // append enemy object
+          this.task_done = true;
+          this.last_done = millis();
+      }
+      else {
+          if(millis() - this.last_done > delay) {
+            this.task_done = false;
+          }
+      } 
+      let t = frameCount / 60; // update time
+
+     // loop through enemies with a for..of loop
+      for (let enmy of enemies) {
+         enmy.update(t); // update enemy position
+         enmy.display(); // draw enemy
+      }
+    }
 }
+
+
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
