@@ -55,6 +55,7 @@ function movePlayer(event) {
         }
     }
 }
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,11 +64,19 @@ function movePlayer(event) {
 
 let player; // player object
 
+let enemies = []; // array to hold snowflake objects
+
 function setup() {
     createCanvas(CANV_WIDTH, CANV_HEIGHT);
+    fill(240);
+    noStroke();
     player = new Player(CANV_WIDTH/2,(CANV_HEIGHT - CANV_HEIGHT/16),10); // create a new player object
+   // enemy = new Enemy(CANV_WIDTH/2, (CANV_HEIGHT - CANV_HEIGHT/2),10); // create a new enemy object
     document.addEventListener('keydown', movePlayer); // add event listener for key presses in order to move the player
 }
+
+let task_done = false;
+let last_done = 0;
 
 function draw() {
     background(145, 240, 243); // set the background to white
@@ -75,6 +84,62 @@ function draw() {
     fill(51); // determines color of text
     text('Score: ' + score, 0, 15);// determines what is displayed, at what x,y
     player.display(); // draw the player
+
+
+    const delay = random (1000, 5000) //ms
+    if(!task_done) {
+        enemies.push(new enemy()); // append snowflake object
+        task_done = true;
+        last_done = millis();
+    }
+    else {
+        if(millis() - last_done > delay) {
+        task_done = false;
+        }
+    }
+
+    let t = frameCount / 60; // update time
+
+     // loop through snowflakes with a for..of loop
+    for (let enmy of enemies) {
+         enmy.update(t); // update snowflake position
+         enmy.display(); // draw snowflake
+    }
+
+
+// snowflake class
+function enemy() {
+    // initialize coordinates
+    this.posX = 0;
+    this.posY = random(-50, 0);
+    this.initialangle = random(0, 2 * PI);
+    this.size = 15;
+  
+    // radius of snowflake spiral
+    // chosen so the snowflakes are uniformly spread out in area
+    this.radius = sqrt(random(pow(width / 2, 2)));
+  
+    this.update = function(time) {
+      // x position follows a circle
+      let w = 0.6; // angular speed
+      let angle = w * time + this.initialangle;
+      this.posX = width / 2 + this.radius * sin(angle);
+  
+      // different size snowflakes fall at slightly different y speeds
+      this.posY += pow(this.size, 0.5);
+  
+      // delete snowflake if past end of screen
+      if (this.posY > height) {
+        let index = enemies.indexOf(this);
+        enemies.splice(index, 1);
+      }
+    };
+  
+    this.display = function() {
+      ellipse(this.posX, this.posY, this.size);
+    };
+  }
+
 }
 
 
