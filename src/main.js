@@ -1,17 +1,22 @@
 const CANV_WIDTH = 720; 
 const CANV_HEIGHT = 400;
-var score = 0; // Used to keep track of player score
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////  PLAYER CLASS AND FUNCTIONS  /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class Player {
     constructor(x, y, size) {
+        this.score = 0; // Contains the score of the player
         this.x = x; // x position of the player
         this.y = y; // y position of the player
         this.size = size; // size of the player
     }
     display() { //Draws the player
+        // Displays the score of the player
+        textSize(18); // determines size of font
+        fill(51); // determines color of text
+        text('Score: ' + this.score, 0, 15);// determines what is displayed, at what x,y
+        
         stroke(0,0,0); //Outline color
         fill(0,0,255); //Color of shape
         square(this.x, this.y, this.size) //Draws the shape
@@ -57,9 +62,6 @@ function setup() {
 
 function draw() {
     background(220); // set the background to white
-    textSize(18); // determines size of font
-    fill(51); // determines color of text
-    text('Score: ' + score, 0, 15);// determines what is displayed, at what x,y
     player.display(); // draw the player
 }
 
