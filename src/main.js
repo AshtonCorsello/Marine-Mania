@@ -1,16 +1,54 @@
 const CANV_WIDTH = 720; 
 const CANV_HEIGHT = 400;
-
+//var score = 0; // Used to keep track of player score
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////  PLAYER CLASS AND FUNCTIONS  /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class Player {
-    constructor(x, y, size) {
+   constructor(x, y, size) {
         this.x = x; // x position of the player
         this.y = y; // y position of the player
         this.size = size; // size of the player
+        this.speed = 3;
+        this.score = 0; // Used to keep track of player score
+        this.task_done = false;
+        this.last_done = 0;
     }
+  
+    update(){
+        let mvmt = createVector(0,0);
+
+        if(pressedKeys.a || pressedKeys.ArrowLeft) {
+            mvmt.x -= 1;
+            if (player.x < 0) { //Don't let the player go off the screen
+                mvmt.x = 0;
+            }
+          }
+          if(pressedKeys.d || pressedKeys.ArrowRight) {
+            mvmt.x += 1;
+            if (player.x > CANV_WIDTH - player.size) {
+                mvmt.x = 0;
+            }
+          }
+          if(pressedKeys.w || pressedKeys.ArrowUp) {
+            mvmt.y -= 1;
+            if (player.y < (CANV_HEIGHT - (CANV_HEIGHT / 4))) { //Don't let the player go above 1/8 of the screen
+                player.y = (CANV_HEIGHT - (CANV_HEIGHT / 4));
+            }
+          }
+          if(pressedKeys.s || pressedKeys.ArrowDown) {
+            mvmt.y += 1;
+            if (player.y >= CANV_HEIGHT - player.size) {
+                player.y = CANV_HEIGHT - player.size;
+            }
+          }
+
+        mvmt.setMag(this.speed); // Limits diagonal speed to still max at 10
+        this.x += mvmt.x;
+        this.y += mvmt.y;
+    }
+  
     display() { //Draws the player
       //Draws wake behind boat
         stroke(255,255,250); //Outline color
@@ -29,32 +67,11 @@ class Player {
         fill(190);
         rectMode(CENTER);
         square(this.x, this.y+this.size/4, this.size/3);
+
+        text('Score: ' + this.score, 0, 15);// determines what is displayed, at what x,y
     }
 }
 
-function movePlayer(event) {
-    if (event.keyCode == 37 || event.keyCode == 65) { // left arrow / a
-        player.x -= 10; // move the player left
-        if (player.x < player.size) { //Don't let the player go off the screen
-            player.x = player.size;
-        }
-    } else if (event.keyCode == 39 || event.keyCode == 68) { // right arrow / d
-        player.x += 10;
-        if (player.x > CANV_WIDTH - player.size) {
-            player.x = CANV_WIDTH - player.size;
-        }
-    } else if (event.keyCode == 38 || event.keyCode == 87) { // up arrow / w
-        player.y -= 10;
-        if (player.y < (CANV_HEIGHT - (CANV_HEIGHT / 3))) { //Don't let the player go above 1/3 of the screen
-            player.y = (CANV_HEIGHT - (CANV_HEIGHT / 3));
-        }
-    } else if (event.keyCode == 40 || event.keyCode == 83) { // down arrow / s
-        player.y += 10;
-        if (player.y >= CANV_HEIGHT) {
-            player.y = CANV_HEIGHT - player.size;
-        }
-    }
-}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -62,16 +79,94 @@ function movePlayer(event) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 let player; // player object
+let pressedKeys = {}; // Holding for the pressed keys
+
+let enemies = []; // array to hold snowflake objects
 
 function setup() {
     createCanvas(CANV_WIDTH, CANV_HEIGHT);
+    fill(240);
+    noStroke();
     player = new Player(CANV_WIDTH/2,(CANV_HEIGHT - CANV_HEIGHT/16),10); // create a new player object
-    document.addEventListener('keydown', movePlayer); // add event listener for key presses in order to move the player
+    enemy1 = new Enemy1()
 }
 
 function draw() {
     background(145, 240, 243); // set the background to white
+    textSize(18); // determines size of font
+    fill(51); // determines color of text
+
     player.display(); // draw the player
+
+    player.update();
+    enemy1.showcase();
 }
+
+function keyPressed(){
+    pressedKeys[key] = true;
+}
+
+function keyReleased(){
+    delete pressedKeys[key];
+}
+
+// enemy class
+class Enemy1 {
+
+    constructor() {
+      // initialize coordinates
+      this.posX = 0;
+      this.posY = random(-50, 0);
+      this.initialangle = random(0, 2 * PI);
+      this.size = 15;
+
+      // radius of placeholder
+      this.radius = sqrt(random(pow(width / 2, 2)));
+
+    }
+  
+  
+    update(time) {
+      // x position follows a circle
+      let w = 0.6; // angular speed
+      let angle = w * time + this.initialangle;
+      this.posX = width / 2 + this.radius * sin(angle);
+        this.posY += pow(this.size, 0.5);
+  
+      // delete enemy if past end of screen
+      if (this.posY > height) {
+        let index = enemies.indexOf(this);
+        enemies.splice(index, 1);
+      }
+    };
+  
+    display() {
+      ellipse(this.posX, this.posY, this.size);
+    };
+
+    showcase() {
+      const delay = random (1000, 5000) //ms
+      if(!this.task_done) {
+          enemies.push(new Enemy1()); // append enemy object
+          this.task_done = true;
+          this.last_done = millis();
+      }
+      else {
+          if(millis() - this.last_done > delay) {
+            this.task_done = false;
+          }
+      } 
+      let t = frameCount / 60; // update time
+
+     // loop through enemies with a for..of loop
+      for (let enmy of enemies) {
+         enmy.update(t); // update enemy position
+         enmy.display(); // draw enemy
+      }
+    }
+}
+
+
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
