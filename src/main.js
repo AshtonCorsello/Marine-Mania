@@ -33,7 +33,7 @@ class Player {
           }
           if(pressedKeys.w || pressedKeys.ArrowUp) {
             mvmt.y -= 1;
-            if (player.y < (CANV_HEIGHT - (CANV_HEIGHT / 4))) { //Don't let the player go above 1/8 of the screen
+            if (player.y < (CANV_HEIGHT - (CANV_HEIGHT / 4))) { //Don't let the player go above 1/4 of the screen
                 player.y = (CANV_HEIGHT - (CANV_HEIGHT / 4));
             }
           }
@@ -166,7 +166,85 @@ class Enemy1 {
     }
 }
 
+// Need to look through this to develop projectiles
+/*class Enemy1 {
 
+    constructor() {
+      // initialize coordinates
+      this.posX = 0;
+      this.posY = random(-50, 0);
+      this.initialangle = random(0, 2 * PI);
+      this.size = 15;
 
+      // radius of placeholder
+      this.radius = sqrt(random(pow(width / 2, 2)));
 
+    }
+  
+  
+    update(time) {
+      // x position follows a circle
+      let w = 0.6; // angular speed
+      let angle = w * time + this.initialangle;
+      this.posX = width / 2 + this.radius * sin(angle);
+        this.posY += pow(this.size, 0.5);
+  
+      // delete enemy if past end of screen
+      if (this.posY > height) {
+        let index = enemies.indexOf(this);
+        enemies.splice(index, 1);
+      }
+    };
+  
+    display() {
+      ellipse(this.posX, this.posY, this.size);
+    };
+
+    showcase() {
+      const delay = random (1000, 5000) //ms
+      if(!this.task_done) {
+          enemies.push(new Enemy1()); // append enemy object
+          this.task_done = true;
+          this.last_done = millis();
+      }
+      else {
+          if(millis() - this.last_done > delay) {
+            this.task_done = false;
+          }
+      } 
+      let t = frameCount / 60; // update time
+
+     // loop through enemies with a for..of loop
+      for (let enmy of enemies) {
+         enmy.update(t); // update enemy position
+         enmy.display(); // draw enemy
+      }
+    }
+}
+
+// want to combine the events with mouse presses for shooting projectiles
+function movePlayer(event) {
+    if (event.keyCode == 37 || event.keyCode == 65) { // left arrow / a
+        player.x -= 10; // move the player left
+        if (player.x < player.size) { //Don't let the player go off the screen
+            player.x = player.size;
+        }
+    } else if (event.keyCode == 39 || event.keyCode == 68) { // right arrow / d
+        player.x += 10;
+        if (player.x > CANV_WIDTH - player.size) {
+            player.x = CANV_WIDTH - player.size;
+        }
+    } else if (event.keyCode == 38 || event.keyCode == 87) { // up arrow / w
+        player.y -= 10;
+        if (player.y < (CANV_HEIGHT - (CANV_HEIGHT / 3))) { //Don't let the player go above 1/3 of the screen
+            player.y = (CANV_HEIGHT - (CANV_HEIGHT / 3));
+        }
+    } else if (event.keyCode == 40 || event.keyCode == 83) { // down arrow / s
+        player.y += 10;
+        if (player.y >= CANV_HEIGHT) {
+            player.y = CANV_HEIGHT - player.size;
+        }
+    }
+}
+*/
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
