@@ -110,8 +110,8 @@ function movePlayer(event) {
         }
     } else if (event.keyCode == 38) { // up arrow
         player.y -= 10;
-        if (player.y < (CANV_HEIGHT - (CANV_HEIGHT / 8))) { //Don't let the player go above 1/8 of the screen
-            player.y = (CANV_HEIGHT - (CANV_HEIGHT / 8));
+        if (player.y < (CANV_HEIGHT - (CANV_HEIGHT / 4))) { //Don't let the player go above 1/4 of the screen
+            player.y = (CANV_HEIGHT - (CANV_HEIGHT / 4));
         }
     } else if (event.keyCode == 40) { // down arrow
         player.y += 10;
