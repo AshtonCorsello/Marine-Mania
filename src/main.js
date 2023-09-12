@@ -72,55 +72,6 @@ class Player {
     }
 }
 
-
-// Old movement function. Commented out || NJC - 9/11
-// function movePlayer(event) {
-//     if (event.keyCode == 37) { // left arrow
-//         player.x -= 10; // move the player left
-//         if (player.x < 0) { //Don't let the player go off the screen
-//             player.x = 0;
-//         }
-//     } else if (event.keyCode == 39) { // right arrow
-//         player.x += 10;
-//         if (player.x > CANV_WIDTH - player.size) {
-//             player.x = CANV_WIDTH - player.size;
-//         }
-//     } else if (event.keyCode == 38) { // up arrow
-//         player.y -= 10;
-//         if (player.y < (CANV_HEIGHT - (CANV_HEIGHT / 8))) { //Don't let the player go above 1/8 of the screen
-//             player.y = (CANV_HEIGHT - (CANV_HEIGHT / 8));
-//         }
-//     } else if (event.keyCode == 40) { // down arrow
-//         player.y += 10;
-//         if (player.y >= CANV_HEIGHT) {
-//             player.y = CANV_HEIGHT - player.size;
-//         }
-//     }
-// }
-function movePlayer(event) {
-    if (event.keyCode == 37) { // left arrow
-        player.x -= 10; // move the player left
-        if (player.x < 0) { //Don't let the player go off the screen
-            player.x = 0;
-        }
-    } else if (event.keyCode == 39) { // right arrow
-        player.x += 10;
-        if (player.x > CANV_WIDTH - player.size) {
-            player.x = CANV_WIDTH - player.size;
-        }
-    } else if (event.keyCode == 38) { // up arrow
-        player.y -= 10;
-        if (player.y < (CANV_HEIGHT - (CANV_HEIGHT / 4))) { //Don't let the player go above 1/4 of the screen
-            player.y = (CANV_HEIGHT - (CANV_HEIGHT / 4));
-        }
-    } else if (event.keyCode == 40) { // down arrow
-        player.y += 10;
-        if (player.y >= CANV_HEIGHT) {
-            player.y = CANV_HEIGHT - player.size;
-        }
-    }
-}
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -137,11 +88,7 @@ function setup() {
     fill(240);
     noStroke();
     player = new Player(CANV_WIDTH/2,(CANV_HEIGHT - CANV_HEIGHT/16),10); // create a new player object
-
-    // Below was used for old movement. Commented out || NJC - 9/11
-    // document.addEventListener('keydown', movePlayer); // add event listener for key presses in order to move the player 
     enemy1 = new Enemy1()
-    document.addEventListener('keydown', movePlayer); // add event listener for key presses in order to move the player
 }
 
 function draw() {
