@@ -80,7 +80,7 @@ class Player {
 
 let player; // player object
 let pressedKeys = {}; // Holding for the pressed keys
-
+let hit = false; // flag for player being hit by enemy or projectile
 let enemies = []; // array to hold snowflake objects
 
 function setup() {
@@ -96,10 +96,17 @@ function draw() {
     textSize(18); // determines size of font
     fill(51); // determines color of text
 
+    if(hit == false){ // stops drawing the player if they get hit
     player.display(); // draw the player
+    }
 
     player.update();
     enemy1.showcase();
+
+   for (let enmy of enemies){ // checks each enemy for collision
+      if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size)) hit = true;
+  }
+   
 }
 
 function keyPressed(){
@@ -167,6 +174,11 @@ class Enemy1 {
 }
 
 
+//checks if two objects intersect using (x,y) and radius
+function intersect(obj1X, obj1Y, obj1R, obj2X, obj2Y, obj2R){
+    if (sqrt(pow((obj1X - obj2X),2) + pow((obj1Y - obj2Y),2)) < (obj1R + obj2R)) {return true;}
+    else {return false;}
+}
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
