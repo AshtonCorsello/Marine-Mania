@@ -2,77 +2,6 @@ const CANV_WIDTH = 720;
 const CANV_HEIGHT = 400;
 //var score = 0; // Used to keep track of player score
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////  PLAYER CLASS AND FUNCTIONS  /////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-class Player {
-   constructor(x, y, size) {
-        this.x = x; // x position of the player
-        this.y = y; // y position of the player
-        this.size = size; // size of the player
-        this.speed = 3;
-        this.score = 0; // Used to keep track of player score
-        this.task_done = false;
-        this.last_done = 0;
-    }
-  
-    update(){
-        let mvmt = createVector(0,0);
-
-        if(pressedKeys.a || pressedKeys.ArrowLeft) {
-            mvmt.x -= 1;
-            if (player.x < 0) { //Don't let the player go off the screen
-                mvmt.x = 0;
-            }
-          }
-          if(pressedKeys.d || pressedKeys.ArrowRight) {
-            mvmt.x += 1;
-            if (player.x > CANV_WIDTH - player.size) {
-                mvmt.x = 0;
-            }
-          }
-          if(pressedKeys.w || pressedKeys.ArrowUp) {
-            mvmt.y -= 1;
-            if (player.y < (CANV_HEIGHT - (CANV_HEIGHT / 4))) { //Don't let the player go above 1/8 of the screen
-                player.y = (CANV_HEIGHT - (CANV_HEIGHT / 4));
-            }
-          }
-          if(pressedKeys.s || pressedKeys.ArrowDown) {
-            mvmt.y += 1;
-            if (player.y >= CANV_HEIGHT - player.size) {
-                player.y = CANV_HEIGHT - player.size;
-            }
-          }
-
-        mvmt.setMag(this.speed); // Limits diagonal speed to still max at 10
-        this.x += mvmt.x;
-        this.y += mvmt.y;
-    }
-  
-    display() { //Draws the player
-      //Draws wake behind boat
-        stroke(255,255,250); //Outline color
-        fill(220, 250, 253); //Color of shape
-        triangle(this.x-this.size/1.5, this.y+4*this.size, this.x, this.y, this.x+this.size/1.5, this.y+4*this.size);
-      //Draws boat
-        stroke(255,255,2); //Outline color
-        fill(226, 194, 162); //Color of shape
-        ellipse(this.x, this.y, this.size*1.75, this.size*4, 3);
-        
-      // details of boat
-        stroke(90);
-        fill(200);
-        quad(this.x-this.size/3, this.y+this.size, this.x+this.size/3, this.y+this.size, this.x+this.size/3, this.y-this.size*.75, this.x-this.size/3, this.y-this.size*.75);
-        stroke(100);
-        fill(190);
-        rectMode(CENTER);
-        square(this.x, this.y+this.size/4, this.size/3);
-
-        text('Score: ' + this.score, 0, 15);// determines what is displayed, at what x,y
-    }
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////  P5JS MAIN FUNCTIONS  //////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,7 +9,6 @@ class Player {
 
 let player; // player object
 let pressedKeys = {}; // Holding for the pressed keys
-let hit = false; // flag for player being hit by enemy or projectile
 let enemies = []; // array to hold snowflake objects
 
 function setup() {
@@ -96,15 +24,16 @@ function draw() {
     textSize(18); // determines size of font
     fill(51); // determines color of text
 
-    if(hit == false){ // stops drawing the player if they get hit
-    player.display(); // draw the player
+    if(!player.isHit()){ // stops drawing the player if they get hit
+      player.display(); // draw the player
+      player.update();
     }
 
-    player.update();
-    enemy1.showcase();
+  enemy1.showcase();
 
    for (let enmy of enemies){ // checks each enemy for collision
-      if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size)) hit = true;
+      if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size))
+        player.setHitTrue();
   }
    
 }
