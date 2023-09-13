@@ -176,7 +176,13 @@ class Projectile {
         // initialize coordinates
         this.posX = player.x;
         this.posY = player.y + player.size/2;
-        this.initialAngle = atan((targetY-player.y)/(targetX-player.x));
+        this.slope = (player.y-targetY)/(player.x-targetX);
+        let mult = (player.x > targetX ? -1 : 1) / (player.y > targetY ? Math.abs(this.slope) : 1);
+        this.slope = mult * this.slope;
+        angleMode(DEGREES);
+        this.initialAngle = atan(this.slope);
+        console.log("Target: " , targetX , "," , targetY);
+        console.log("Player: " , player.x , "," , player.y);
         console.log(this.initialAngle);
         this.size = 10;
     }
@@ -184,10 +190,10 @@ class Projectile {
   
     update(time) {
       // x position follows a circle
-      let w = 0.6; // angular speed
-      let angle = w * time + this.initialAngle;
-      this.posX = width / 2 + this.radius * sin(angle);
-      this.posY += pow(this.size, 0.5);
+      //let w = 0.6; // angular speed
+      //let angle = w * time + this.initialAngle;
+      this.posX += this.slope * time;
+      this.posY += this.slope * time;
   
       // delete enemy if past end of screen
       if (this.posY > height) {
