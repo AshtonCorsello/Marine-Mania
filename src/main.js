@@ -176,14 +176,9 @@ class Projectile {
         // initialize coordinates
         this.posX = player.x;
         this.posY = player.y + player.size/2;
-        this.slope = (player.y-targetY)/(player.x-targetX);
-        if(player.y > targetY && player.x < targetX) { // in front of boat & to right (pos & neg)
-          this.slope = 0-this.slope;
-        } else if(player.y > targetY && player.x > targetX) { // in front of boat & to left (pos & pos)
-          this.slope = 1/this.slope;
-        } else if(player.y < targetY && player.x > targetX) { // behind boat & to the left (neg & pos)
-          this.slope = 0-(1/this.slope);
-        }
+        this.dirMult = (targetX<player.x ? -1: 1);
+        this.slope = this.dirMult * (player.y-targetY)/(player.x-targetX);
+        
         angleMode(DEGREES);
         this.initialAngle = atan(this.slope);
         console.log("Target: " , targetX , "," , targetY);
@@ -197,7 +192,7 @@ class Projectile {
       // x position follows a circle
       //let w = 0.6; // angular speed
       //let angle = w * time + this.initialAngle;
-      this.posX += this.slope * time;
+      this.posX += this.dirMult * time;
       this.posY += this.slope * time;
   
       // delete enemy if past end of screen
