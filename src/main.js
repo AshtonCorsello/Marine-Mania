@@ -177,8 +177,13 @@ class Projectile {
         this.posX = player.x;
         this.posY = player.y + player.size/2;
         this.slope = (player.y-targetY)/(player.x-targetX);
-        let mult = (player.x > targetX ? -1 : 1) / (player.y > targetY ? Math.abs(this.slope) : 1);
-        this.slope = mult * this.slope;
+        if(player.y > targetY && player.x < targetX) { // in front of boat & to right (pos & neg)
+          this.slope = 0-this.slope;
+        } else if(player.y > targetY && player.x > targetX) { // in front of boat & to left (pos & pos)
+          this.slope = 1/this.slope;
+        } else if(player.y < targetY && player.x > targetX) { // behind boat & to the left (neg & pos)
+          this.slope = 0-(1/this.slope);
+        }
         angleMode(DEGREES);
         this.initialAngle = atan(this.slope);
         console.log("Target: " , targetX , "," , targetY);
