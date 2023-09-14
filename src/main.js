@@ -159,7 +159,7 @@ class Enemy1 {
             this.task_done = false;
           }
       } 
-      let t = frameCount / 60; // update time
+      let t = frameCount / 120; // update time
 
      // loop through enemies with a for..of loop
       for (let enmy of enemies) {
@@ -176,9 +176,10 @@ class Projectile {
         // initialize coordinates
         this.posX = player.x;
         this.posY = player.y + player.size/2;
+        //this.dirMult = 1;
         this.dirMult = (targetX<player.x ? -1: 1);
         this.slope = this.dirMult * (player.y-targetY)/(player.x-targetX);
-        
+        this.speed = 10;
         angleMode(DEGREES);
         this.initialAngle = atan(this.slope);
         console.log("Target: " , targetX , "," , targetY);
@@ -192,8 +193,10 @@ class Projectile {
       // x position follows a circle
       //let w = 0.6; // angular speed
       //let angle = w * time + this.initialAngle;
-      this.posX += this.dirMult * time;
-      this.posY += this.slope * time;
+      //this.posX += this.dirMult;
+      //this.posY += this.slope;
+      this.posY += sin(this.initialAngle)*this.speed;
+      this.posX += cos(this.initialAngle)*this.dirMult*this.speed;
   
       // delete enemy if past end of screen
       if (this.posY > height) {
