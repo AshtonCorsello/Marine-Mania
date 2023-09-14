@@ -82,8 +82,14 @@ let player; // player object
 let pressedKeys = {}; // Holding for the pressed keys
 let hit = false; // flag for player being hit by enemy or projectile
 let enemies = []; // array to hold snowflake objects
+let mysound;  //Music
+
+function preload(){
+  mysound = loadSound("test.mp3");
+}
 
 function setup() {
+   mysound.play();
     createCanvas(CANV_WIDTH, CANV_HEIGHT);
     fill(240);
     noStroke();
