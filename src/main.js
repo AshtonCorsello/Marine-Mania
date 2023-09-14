@@ -195,7 +195,7 @@ class Projectile {
     }
   
   
-    update(time) {
+    update() {
       // Decides how much to move in each direction per frame
       this.posY += sin(this.initialAngle)*this.speed;
       this.posX += cos(this.initialAngle)*this.dirMult*this.speed;
@@ -229,9 +229,4 @@ class Projectile {
       console.log("Firing from click");
       projectiles.push(new Projectile(mouseX, mouseY));
   }
-  function mouseIsPressed(){
-     console.log("Firing with held mouse");
-     projectiles.push(new Projectile(mouseX, mouseY));
-  }
-  
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
