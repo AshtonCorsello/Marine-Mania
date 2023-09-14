@@ -107,6 +107,10 @@ function draw() {
 
 function keyPressed(){
     pressedKeys[key] = true;
+    if(keyCode === 32){  // if spacebar is pressed
+      console.log("Space firing");
+      projectiles.push(new Projectile(player.x, player.y-1));
+    }
 }
 
 function keyReleased(){
@@ -216,7 +220,6 @@ class Projectile {
     showcase() {
       const delay = 2500 //ms
       let t = frameCount / 60; // update time
-
      // loop through projectiles with a for..of loop
       for (let prjctl of projectiles) {
          prjctl.update(t); // update projectile position
@@ -225,8 +228,8 @@ class Projectile {
     }
 }
   // want to combine the events with mouse presses for shooting projectiles
-  function mouseClicked(){
-      console.log("Firing from click");
+  function mousePressed(){
+      //console.log("Firing from mouse press");
       projectiles.push(new Projectile(mouseX, mouseY));
   }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
