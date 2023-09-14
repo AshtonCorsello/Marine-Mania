@@ -226,7 +226,12 @@ class Projectile {
 }
   // want to combine the events with mouse presses for shooting projectiles
   function mouseClicked(){
-      //console.log("Firing");
+      console.log("Firing from click");
       projectiles.push(new Projectile(mouseX, mouseY));
   }
+  function mouseIsPressed(){
+     console.log("Firing with held mouse");
+     projectiles.push(new Projectile(mouseX, mouseY));
+  }
+  
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
