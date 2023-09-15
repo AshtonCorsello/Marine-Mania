@@ -1,6 +1,6 @@
 const CANV_WIDTH = 720; 
 const CANV_HEIGHT = 400;
-//var score = 0; // Used to keep track of player score
+var mode = 0; // Stores weither the user has left the main menu
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -22,23 +22,51 @@ function setup() {
 }
 
 function draw() {
-    background(145, 240, 243); // set the background to white
-    textSize(18); // determines size of font
-    fill(51); // determines color of text
-
-    if(!player.isHit()){ // stops drawing the player if they get hit
-      player.display(); // draw the player
-      player.update();
+    if(mode == 0){ // Main menu
+      background(0, 204, 255) // set the background to blue
+      textSize(32);
+      text('Marine Mania', 250, 150); // Name of game
+      button1 = createButton('Start Game'); // set text of button
+      button1.position(300, 200); // set button position
+      button1.size(100, 20); // sets size of button
+      button2 = createButton('Debug Room');
+      button2.position(300, 250); // set button position
+      button2.size(100, 20); // sets size of button
+      if(mouseX >= 300 && mouseX <= 400 && mouseY >= 200 && mouseY <= 220 && mouseIsPressed == true){ // If the mouse is at the right spot and clicked
+        mode = 1;
+        removeElements(button1,button2); // removes the buttons from the screen
+      }
+      if(mouseX >= 300 && mouseX <= 400 && mouseY >= 250 && mouseY <= 270 && mouseIsPressed == true){
+        mode = 2;
+        removeElements(button1,button2);
+      }
     }
-  
-    enemy1.showcase();
-    projectile1.showcase();
+    if(mode == 1){ // Game has started
+      // Drawing the level
+      background(145, 240, 243); // set the background to white
+      textSize(18); // determines size of font
+      fill(51); // determines color of text
 
-   for (let enmy of enemies){ // checks each enemy for collision
-      if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size))
-        player.setHitTrue();
-  }
-   
+      if(!player.isHit()){ // stops drawing the player if they get hit
+        player.display(); // draw the player
+        player.update();
+      }
+  
+      enemy1.showcase();
+      projectile1.showcase();
+
+      for (let enmy of enemies){ // checks each enemy for collision
+        if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size))
+          player.setHitTrue();
+      }
+    }
+    if(mode == 2){ // debug room implementation
+      background(0, 0, 0) // set the background to black so that I can test the button works
+    }
+}
+
+function changeMode(i){
+  mode = i;
 }
 
 function keyPressed(){
