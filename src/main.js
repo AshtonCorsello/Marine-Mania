@@ -70,10 +70,6 @@ function changeMode(i){
   mode = i;
 }
 
-function buttonPressed(){
-  
-}
-
 function keyPressed(){
     pressedKeys[key] = true;
    if(keyCode === 32){  // if spacebar is pressed
