@@ -9,7 +9,7 @@ var mode = 0; // Stores weither the user has left the main menu
 
 let player; // player object
 let pressedKeys = {}; // Holding for the pressed keys
-let enemies = []; // array to hold snowflake objects
+let enemies = []; // array to hold enemy objects
 let projectiles = []; // array to hold projectile objects
 
 function setup() {
@@ -50,8 +50,13 @@ function draw() {
       if(!player.isHit()){ // stops drawing the player if they get hit
         player.display(); // draw the player
         player.update();
+        player.increaseScore();
       }
-  
+
+      if (player.isHit()) { 
+        changeMode(3); 
+      }
+    
       enemy1.showcase();
       projectile1.showcase();
 
@@ -59,10 +64,18 @@ function draw() {
         if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size))
           player.setHitTrue();
       }
+
     }
     if(mode == 2){ // debug room implementation
       background(0, 0, 0) // set the background to black so that I can test the button works
     }
+
+    if(mode == 3) { // Gameover/Score menu
+      background(0, 204, 255) // set the background to blue
+      textSize(32);
+      text('Score: ' + player.score, 250, 150);// determines what is displayed, at what x,y
+    }
+
 }
 
 function changeMode(i){
