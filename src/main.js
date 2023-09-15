@@ -59,7 +59,6 @@ function draw() {
         if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size))
           player.setHitTrue();
       }
-   
     }
     if(mode == 2){ // debug room implementation
       background(0, 0, 0) // set the background to black so that I can test the button works
