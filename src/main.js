@@ -11,6 +11,8 @@ let player; // player object
 let pressedKeys = {}; // Holding for the pressed keys
 let enemies = []; // array to hold snowflake objects
 let projectiles = []; // array to hold projectile objects
+let prop = false;
+
 
 function setup() {
     createCanvas(CANV_WIDTH, CANV_HEIGHT);
@@ -19,10 +21,10 @@ function setup() {
     player = new Player(CANV_WIDTH/2,(CANV_HEIGHT - CANV_HEIGHT/16),10); // create a new player object
     enemy1 = new Enemy1()
     projectile1 = new Projectile();
-    backgroundMusic = document.getElementById('background-music'); // load the music using its id
-
-    backgroundMusic.play(); // paly the music
+    
 }
+
+
 
 function draw() {
     if(mode == 0){ // Main menu
@@ -43,8 +45,10 @@ function draw() {
         mode = 2;
         removeElements(button1,button2);
       }
+
+
     }
-    if(mode == 1){ // Game has started
+    if(mode == 1 | mode == 2){ // Game has started
       // Drawing the level
       background(145, 240, 243); // set the background to white
       textSize(18); // determines size of font
@@ -58,15 +62,44 @@ function draw() {
       enemy1.showcase();
       projectile1.showcase();
 
-      for (let enmy of enemies){ // checks each enemy for collision
-        if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size))
-          player.setHitTrue();
+      button3 = createButton('prop');
+      button3.position(650, 10); // set button position
+      button3.size(40, 20); // sets size of button
+
+      if(mouseX >= 650 && mouseX <= 750 && mouseY >= 10 && mouseY <= 30 && mouseIsPressed == true && prop == false){
+        removeElements(button3);
+        player.display(prop = true);
+        mode = 2;
+        button4 = createButton('close prop');
+        button4.position(650, 40); // set button position
+        button4.size(80, 20); // sets size of button
+      }if(mouseX >= 650 && mouseX <= 750 && mouseY >= 40 && mouseY <= 70 && mouseIsPressed == true && prop == true){
+        player.display(prop = false);
+        mode = 1;
+        removeElements(button4);
+        button3 = createButton('prop');
+        button3.position(650, 10); // set button position
+        button3.size(40, 20); // sets size of button
+      }
+
+      if(mode == 2){
+        for (let enmy of enemies){ // Shield Mode checks each enemy for collision
+          if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size))
+            player.setHitFalse();
+        }
+      }else{
+        for (let enmy of enemies){ // checks each enemy for collision
+          if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size))
+            player.setHitTrue();
+        }
       }
     }
-    if(mode == 2){ // debug room implementation
+    if(mode == 9){ // debug room implementation
       background(0, 0, 0) // set the background to black so that I can test the button works
     }
 }
+
+
 
 function changeMode(i){
   mode = i;
@@ -83,6 +116,7 @@ function keyPressed(){
 function keyReleased(){
     delete pressedKeys[key];
 }
+
 
 // enemy class
 class Enemy1 {
