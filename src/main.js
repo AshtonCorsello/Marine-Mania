@@ -11,10 +11,11 @@ let player; // player object
 let pressedKeys = {}; // Holding for the pressed keys
 let enemies = []; // array to hold snowflake objects
 let projectiles = []; // array to hold projectile objects
-let prop = false;
+let prop = false;// Energy shield presence state
 let energiesarray = [];// Array of shield energy cycles
-let energies = 0;
-let shieldtime = 0;
+let energies = 0;// Number of energy blocks
+var time = 0;
+
 
 
 function setup() {
@@ -26,7 +27,7 @@ function setup() {
     enemy1 = new Enemy1()
     projectile1 = new Projectile();
     setTimeout(energie, 5000);
-    
+    setTimeout(Gametime, 1000); 
 }
 
 
@@ -45,8 +46,9 @@ function draw() {
       if(mouseX >= 300 && mouseX <= 400 && mouseY >= 200 && mouseY <= 220 && mouseIsPressed == true){ // If the mouse is at the right spot and clicked
         mode = 1;
         removeElements(button1,button2); // removes the buttons from the screen
-        energies = 0;
-        energiesarray = [];
+        energies = 0;// initialization
+        energiesarray = [];// initialization
+        setTimeout(Gametime, 1000); // start counting
       }
       if(mouseX >= 300 && mouseX <= 400 && mouseY >= 250 && mouseY <= 270 && mouseIsPressed == true){
         mode = 2;
@@ -68,22 +70,22 @@ function draw() {
   
       enemy1.showcase();
       projectile1.showcase();
-      if (energies >= 1){
+      if (energies >= 1){// Start shield button is displayed when the number of energy blocks is greater than 1
         button3 = createButton('prop');
         button3.position(650, 10); // set button position
         button3.size(40, 20); // sets size of button
       }
 
-      if(mouseX >= 650 && mouseX <= 750 && mouseY >= 10 && mouseY <= 30 && mouseIsPressed == true && prop == false){
-        removeElements(button3);
-        player.display(prop = true);
-        mode = 2;
-        setTimeout(Shieldtime, 5000*(energies));
-        energies = 0;
-        energiesarray = [];
+      if(mouseX >= 650 && mouseX <= 750 && mouseY >= 10 && mouseY <= 30 && mouseIsPressed == true && prop == false){// Click on the shield button to turn on the shield if it is off.
+        removeElements(button3); // Disable Shield Button
+        player.display(prop = true);// Change shield status and display shield
+        mode = 2; //Toggle Invincible Mode
+        setTimeout(Shieldtime, 5000*(energies));// Shield Duration
+        energies = 0;// Empty energy
+        energiesarray = [];// Empty energy
       }
 
-      if(mode == 2){
+      if(mode == 2){// Invincible Mode
         for (let enmy of enemies){ // Shield Mode checks each enemy for collision
           if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size))
             player.setHitFalse();
@@ -100,12 +102,17 @@ function draw() {
     }
 }
 
-function Shieldtime(){
+function Shieldtime(){// Turns off invincibility mode at the end of the energy shield's duration and changes the shield's state
   player.display(prop = false);
   mode = 1;
 }
 
-function energie(){
+function Gametime(){
+  time++;
+  setTimeout(Gametime, 2000);
+}
+
+function energie(){// Generate an energy block every 5 seconds
   if(energies<10){
     energiesarray[energies] = 40+energies*17;
     energies++;
