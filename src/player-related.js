@@ -52,13 +52,24 @@ class Player {
     }
   
     display() { //Draws the player
+        stroke(255,255,2);
+        fill(255, 255, 255);
+        rect(700, 116, 30, 176, 5);
+  
+        for(var i = 0; i < 10; i++){
+          stroke(0,0,0);
+          fill(255, 156, 51);
+          rect(700, energiesarray[i], 30, 15, 20);
+        }
+      
       
       if(prop == true){
         //Draws Shield
         stroke(255,255,2);
         fill(255, 255, 255);
         rect(this.x, this.y, this.size*3, this.size*6, 20);  
-         }
+        }
+      
       //Draws wake behind boat
         stroke(255,255,250); //Outline color
         fill(220, 250, 253); //Color of shape
@@ -76,6 +87,7 @@ class Player {
         fill(190);
         rectMode(CENTER);
         square(this.x, this.y+this.size/4, this.size/3);
+      
 
         text('Score: ' + this.score, 0, 15);// determines what is displayed, at what x,y
     }
