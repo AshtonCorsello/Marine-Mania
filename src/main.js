@@ -12,15 +12,20 @@ let pressedKeys = {}; // Holding for the pressed keys
 let enemies = []; // array to hold snowflake objects
 let projectiles = []; // array to hold projectile objects
 let prop = false;
+let energiesarray = [];// Array of shield energy cycles
+let energies = 0;
+let shieldtime = 0;
 
 
 function setup() {
     createCanvas(CANV_WIDTH, CANV_HEIGHT);
     fill(240);
     noStroke();
+  
     player = new Player(CANV_WIDTH/2,(CANV_HEIGHT - CANV_HEIGHT/16),10); // create a new player object
     enemy1 = new Enemy1()
     projectile1 = new Projectile();
+    setTimeout(energie, 5000);
     
 }
 
@@ -40,6 +45,8 @@ function draw() {
       if(mouseX >= 300 && mouseX <= 400 && mouseY >= 200 && mouseY <= 220 && mouseIsPressed == true){ // If the mouse is at the right spot and clicked
         mode = 1;
         removeElements(button1,button2); // removes the buttons from the screen
+        energies = 0;
+        energiesarray = [];
       }
       if(mouseX >= 300 && mouseX <= 400 && mouseY >= 250 && mouseY <= 270 && mouseIsPressed == true){
         mode = 2;
@@ -61,25 +68,19 @@ function draw() {
   
       enemy1.showcase();
       projectile1.showcase();
-
-      button3 = createButton('prop');
-      button3.position(650, 10); // set button position
-      button3.size(40, 20); // sets size of button
+      if (energies >= 1){
+        button3 = createButton('prop');
+        button3.position(650, 10); // set button position
+        button3.size(40, 20); // sets size of button
+      }
 
       if(mouseX >= 650 && mouseX <= 750 && mouseY >= 10 && mouseY <= 30 && mouseIsPressed == true && prop == false){
         removeElements(button3);
         player.display(prop = true);
         mode = 2;
-        button4 = createButton('close prop');
-        button4.position(650, 40); // set button position
-        button4.size(80, 20); // sets size of button
-      }if(mouseX >= 650 && mouseX <= 750 && mouseY >= 40 && mouseY <= 70 && mouseIsPressed == true && prop == true){
-        player.display(prop = false);
-        mode = 1;
-        removeElements(button4);
-        button3 = createButton('prop');
-        button3.position(650, 10); // set button position
-        button3.size(40, 20); // sets size of button
+        setTimeout(Shieldtime, 5000*(energies));
+        energies = 0;
+        energiesarray = [];
       }
 
       if(mode == 2){
@@ -99,7 +100,18 @@ function draw() {
     }
 }
 
+function Shieldtime(){
+  player.display(prop = false);
+  mode = 1;
+}
 
+function energie(){
+  if(energies<10){
+    energiesarray[energies] = 40+energies*17;
+    energies++;
+    setTimeout(energie, 5000);
+  }
+}
 
 function changeMode(i){
   mode = i;
