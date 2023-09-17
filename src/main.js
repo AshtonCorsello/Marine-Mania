@@ -26,8 +26,6 @@ function setup() {
     player = new Player(CANV_WIDTH/2,(CANV_HEIGHT - CANV_HEIGHT/16),10); // create a new player object
     enemy1 = new Enemy1()
     projectile1 = new Projectile();
-    setTimeout(energie, 5000);
-    setTimeout(Gametime, 1000); 
 }
 
 
@@ -49,6 +47,7 @@ function draw() {
         energies = 0;// initialization
         energiesarray = [];// initialization
         setTimeout(Gametime, 1000); // start counting
+        setTimeout(energie, 5000); // start shield charge
       }
       if(mouseX >= 300 && mouseX <= 400 && mouseY >= 250 && mouseY <= 270 && mouseIsPressed == true){
         mode = 2;
@@ -57,7 +56,7 @@ function draw() {
 
 
     }
-    if(mode == 1 | mode == 2){ // Game has started
+    if(mode == 1 | mode == 5){ // Game has started
       // Drawing the level
       background(145, 240, 243); // set the background to white
       textSize(18); // determines size of font
@@ -71,21 +70,21 @@ function draw() {
       enemy1.showcase();
       projectile1.showcase();
       if (energies >= 1){// Start shield button is displayed when the number of energy blocks is greater than 1
-        button3 = createButton('prop');
-        button3.position(650, 10); // set button position
-        button3.size(40, 20); // sets size of button
+        button3 = createButton('Shield');
+        button3.position(675, 210); // set button position
+        button3.size(55, 40); // sets size of button
       }
 
-      if(mouseX >= 650 && mouseX <= 750 && mouseY >= 10 && mouseY <= 30 && mouseIsPressed == true && prop == false){// Click on the shield button to turn on the shield if it is off.
+      if(mouseX >= 675 && mouseX <= 750 && mouseY >= 210 && mouseY <= 240 && mouseIsPressed == true && prop == false){// Click on the shield button to turn on the shield if it is off.
         removeElements(button3); // Disable Shield Button
         player.display(prop = true);// Change shield status and display shield
-        mode = 2; //Toggle Invincible Mode
+        mode = 5; //Toggle Invincible Mode
         setTimeout(Shieldtime, 5000*(energies));// Shield Duration
         energies = 0;// Empty energy
         energiesarray = [];// Empty energy
       }
 
-      if(mode == 2){// Invincible Mode
+      if(mode == 5){// Invincible Mode
         for (let enmy of enemies){ // Shield Mode checks each enemy for collision
           if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size))
             player.setHitFalse();
@@ -97,7 +96,7 @@ function draw() {
         }
       }
     }
-    if(mode == 9){ // debug room implementation
+    if(mode == 2){ // debug room implementation
       background(0, 0, 0) // set the background to black so that I can test the button works
     }
 }
@@ -109,7 +108,7 @@ function Shieldtime(){// Turns off invincibility mode at the end of the energy s
 
 function Gametime(){
   time++;
-  setTimeout(Gametime, 2000);
+  setTimeout(Gametime, 1000);
 }
 
 function energie(){// Generate an energy block every 5 seconds
