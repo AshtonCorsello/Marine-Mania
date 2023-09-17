@@ -54,8 +54,8 @@ class Player {
     display() { //Draws the player
       
       //Draws energy tanks
-        stroke(255,255,2);
-        fill(255, 255, 255);
+        stroke(58, 127, 214);
+        fill(205, 205, 205);
         rect(700, 116, 30, 176, 5);
       
       // Draws Energy Blocks
@@ -67,7 +67,7 @@ class Player {
       
       //Draws Shield
       if(prop == true){
-        stroke(255,255,2);
+        stroke(58, 214, 134);
         fill(255, 255, 255);
         rect(this.x, this.y, this.size*3, this.size*6, 20);  
         }
@@ -90,7 +90,7 @@ class Player {
         rectMode(CENTER);
         square(this.x, this.y+this.size/4, this.size/3);
       
-        text('Gametime: '+time+' sec',200,20);// Show game time
+        text('Gametime: '+time+' sec',300,20);// Show game time
         text('Score: ' + this.score, 0, 15);// determines what is displayed, at what x,y
     }
   
