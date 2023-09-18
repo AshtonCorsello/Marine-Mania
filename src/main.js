@@ -69,7 +69,7 @@ function draw() {
   
       enemy1.showcase();
       projectile1.showcase();
-      if (energies >= 1){// Start shield button is displayed when the number of energy blocks is greater than 1
+      if (energies >= 1 && prop == false){// Start shield button is displayed when the number of energy blocks is greater than 1
         button3 = createButton('Shield');
         button3.position(675, 210); // set button position
         button3.size(55, 40); // sets size of button
