@@ -19,6 +19,9 @@ function setup() {
     player = new Player(CANV_WIDTH/2,(CANV_HEIGHT - CANV_HEIGHT/16),10); // create a new player object
     enemy1 = new Enemy1()
     projectile1 = new Projectile();
+    backgroundMusic = document.getElementById('background-music'); // load the music using its id
+
+    backgroundMusic.play(); // paly the music
 }
 
 function draw() {
