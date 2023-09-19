@@ -72,7 +72,7 @@ class Player {
         rect(this.x, this.y, this.size*3, this.size*6, 20); 
         text('Shield time: '+(ShieldCT+1)+' sec',500,20); // Shield time
         }
-      
+
       //Draws wake behind boat
         stroke(255,255,250); //Outline color
         fill(220, 250, 253); //Color of shape
@@ -90,10 +90,9 @@ class Player {
         fill(190);
         rectMode(CENTER);
         square(this.x, this.y+this.size/4, this.size/3);
+
       
         text('Gametime: '+time+' sec',275,20);// Show game time
         text('Score: ' + this.score, 0, 15);// determines what is displayed, at what x,y
     }
-  
-  
 }

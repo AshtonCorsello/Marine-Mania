@@ -7,7 +7,6 @@ let loadTime = 3; // Stores the number of seconds to load
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////  P5JS MAIN FUNCTIONS  //////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 let player; // player object
 let pressedKeys = {}; // Holding for the pressed keys
 let enemies = []; // array to hold snowflake objects
@@ -18,22 +17,16 @@ let energies = 0;// Number of energy blocks
 var time = 0; // Playtime
 var ShieldCT = 0; // Shield time
 
-
-
 function setup() {
     createCanvas(CANV_WIDTH, CANV_HEIGHT);
     fill(240);
     noStroke();
-  
     player = new Player(CANV_WIDTH/2,(CANV_HEIGHT - CANV_HEIGHT/16),10); // create a new player object
     enemy1 = new Enemy1()
     projectile1 = new Projectile();
     backgroundMusic = document.getElementById('background-music'); // load the music using its id
-
     backgroundMusic.play(); // play the music
 }
-
-
 
 function draw() {
     if(mode == 0){ // Main menu
@@ -53,8 +46,6 @@ function draw() {
         mode = 2;
         removeElements(button1,button2);
       }
-
-
     }
     if(mode == 1 | mode == 5){ // Game has started
       let currentTime = int(millis()/1000) // Converts mil secs into seconds
@@ -97,6 +88,7 @@ function draw() {
             mode = 9;
           }
         }
+
       }
         }
       else{
@@ -183,14 +175,15 @@ function keyPressed(){
     pressedKeys[key] = true;
    if(keyCode === 32){  // if spacebar is pressed
       console.log("Space firing");
-      projectiles.push(new Projectile(player.x, player.y+1));
+      if(!player.isHit()){
+        projectiles.push(new Projectile(player.x, player.y+1));
+      }
     }
 }
 
 function keyReleased(){
     delete pressedKeys[key];
 }
-
 
 // enemy class
 class Enemy1 {
@@ -312,7 +305,9 @@ class Projectile {
 
 function mousePressed(){
    //console.log("Firing from mouse press");
-   projectiles.push(new Projectile(mouseX, mouseY));
+  if(!player.isHit()) { // Checks if the player is hit before firing.
+    projectiles.push(new Projectile(mouseX, mouseY));
+  }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
