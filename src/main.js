@@ -218,7 +218,9 @@ class Projectile {
 
 function mousePressed(){
    //console.log("Firing from mouse press");
-   projectiles.push(new Projectile(mouseX, mouseY));
+  if(!player.isHit()) {
+    projectiles.push(new Projectile(mouseX, mouseY));
+  }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
