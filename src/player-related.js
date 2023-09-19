@@ -73,9 +73,4 @@ class Player {
         text('Score: ' + this.score, 0, 15);// determines what is displayed, at what x,y
     }
 
-    increaseScore() {
-      if (mode == 1) {
-        this.score = this.score + 1
-      }
-    }
 }
