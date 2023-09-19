@@ -90,7 +90,9 @@ function keyPressed(){
     pressedKeys[key] = true;
    if(keyCode === 32){  // if spacebar is pressed
       console.log("Space firing");
-      projectiles.push(new Projectile(player.x, player.y+1));
+      if(!player.isHit()){
+        projectiles.push(new Projectile(player.x, player.y+1));
+      }
     }
 }
 
@@ -218,7 +220,9 @@ class Projectile {
 
 function mousePressed(){
    //console.log("Firing from mouse press");
-   projectiles.push(new Projectile(mouseX, mouseY));
+  if(!player.isHit()) { // Checks if the player is hit before firing.
+    projectiles.push(new Projectile(mouseX, mouseY));
+  }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
