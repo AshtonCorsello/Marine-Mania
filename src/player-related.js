@@ -14,7 +14,7 @@ class Player {
         //creates private hit flag
         let hit = false;
         this.isHit = function() { return hit; };
-        this.setHitTrue = function() { hit = true; removeElements(button3);prop = true;};
+        this.setHitTrue = function() { hit = true; };
         this.setHitFalse = function() { hit = false; };
     }
   
