@@ -69,7 +69,7 @@ function draw() {
   
       enemy1.showcase();
       projectile1.showcase();
-      if (energies >= 1 && prop == false){// Start shield button is displayed when the number of energy blocks is greater than 1
+      if (energies == 1 && prop == false){// Start shield button is displayed when the number of energy blocks is greater than 1
         button3 = createButton('Shield');
         button3.position(675, 210); // set button position
         button3.size(55, 40); // sets size of button
@@ -91,19 +91,30 @@ function draw() {
         }
       }else{
         for (let enmy of enemies){ // checks each enemy for collision
-          if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size))
+          if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size)){
             player.setHitTrue();
+            mode = 9;
+          }
         }
       }
     }
     if(mode == 2){ // debug room implementation
       background(0, 0, 0) // set the background to black so that I can test the button works
     }
+  if(mode == 9){ // debug room implementation
+      background(0, 0, 0);
+      textSize(64);
+      fill(255, 156, 51);
+      text('Game Over', 200, 150);
+    // set the background to black so that I can test the button works
+    }
+  
 }
 
 function Shieldtime(){// Turns off invincibility mode at the end of the energy shield's duration and changes the shield's state
   player.display(prop = false);
   mode = 1;
+  setTimeout(energie, 5000);
 }
 
 function Gametime(){
@@ -112,7 +123,7 @@ function Gametime(){
 }
 
 function energie(){// Generate an energy block every 5 seconds
-  if(energies<10){
+  if(energies<10 && prop == false){
     energiesarray[energies] = 40+energies*17;
     energies++;
     setTimeout(energie, 5000);
