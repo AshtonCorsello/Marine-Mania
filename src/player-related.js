@@ -56,20 +56,21 @@ class Player {
       //Draws energy tanks
         stroke(58, 127, 214);
         fill(205, 205, 205);
-        rect(700, 116, 30, 176, 5);
+        rect(677, 116, 30, 176, 5);
       
       // Draws Energy Blocks
         for(var i = 0; i < 10; i++){
           stroke(0,0,0);
           fill(255, 156, 51);
-          rect(700, energiesarray[i], 30, 15, 20);
+          rect(677, energiesarray[i], 30, 15, 20);
         }
       
       //Draws Shield
       if(prop == true){
         stroke(58, 214, 134);
         fill(255, 255, 255);
-        rect(this.x, this.y, this.size*3, this.size*6, 20);  
+        rect(this.x, this.y, this.size*3, this.size*6, 20); 
+        text('Shield time: '+(ShieldCT+1)+' sec',500,20); // Shield time
         }
       
       //Draws wake behind boat
@@ -90,7 +91,7 @@ class Player {
         rectMode(CENTER);
         square(this.x, this.y+this.size/4, this.size/3);
       
-        text('Gametime: '+time+' sec',300,20);// Show game time
+        text('Gametime: '+time+' sec',275,20);// Show game time
         text('Score: ' + this.score, 0, 15);// determines what is displayed, at what x,y
     }
   
