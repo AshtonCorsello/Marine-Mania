@@ -95,4 +95,5 @@ class Player {
         text('Gametime: '+time+' sec',275,20);// Show game time
         text('Score: ' + this.score, 0, 15);// determines what is displayed, at what x,y
     }
+
 }

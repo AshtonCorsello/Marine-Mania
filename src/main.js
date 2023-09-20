@@ -9,7 +9,7 @@ let loadTime = 3; // Stores the number of seconds to load
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 let player; // player object
 let pressedKeys = {}; // Holding for the pressed keys
-let enemies = []; // array to hold snowflake objects
+let enemies = []; // array to hold enemy objects
 let projectiles = []; // array to hold projectile objects
 let prop = false;// Energy shield presence state
 let energiesarray = [];// Array of shield energy cycles
@@ -26,9 +26,12 @@ function setup() {
     projectile1 = new Projectile();
     backgroundMusic = document.getElementById('background-music'); // load the music using its id
     backgroundMusic.play(); // play the music
-}
+
+    lastPrint = millis() - 1000;
+  }
 
 function draw() {
+
     if(mode == 0){ // Main menu
       background(0, 204, 255) // set the background to blue
       textSize(32);
@@ -50,6 +53,7 @@ function draw() {
     if(mode == 1 | mode == 5){ // Game has started
       let currentTime = int(millis()/1000) // Converts mil secs into seconds
       let countDown = loadTime - currentTime; // Amount of time passed
+      var timeElapsed = millis() - lastPrint;
       if(countDown < 0){
         // Drawing the level
         background(145, 240, 243); // set the background to white
@@ -59,6 +63,11 @@ function draw() {
         if(!player.isHit()){ // stops drawing the player if they get hit
           player.display(); // draw the player
           player.update();
+        }
+        if (timeElapsed > 1000) {
+          player.score++;
+          console.log(player.score);
+          lastPrint = millis();
         }
   
       enemy1.showcase();
@@ -103,7 +112,7 @@ function draw() {
     if(mode == 2){ // debug room implementation
       background(0, 0, 0) // set the background to black so that I can test the button works
     }
-  if(mode == 9){ // Game Over Screen
+    if(mode == 9){ // Game Over Screen
       GameOver();
     } 
 }
@@ -137,6 +146,8 @@ function GameOver(){ // Game over
       textSize(64);
       fill(255, 156, 51);
       text('Game Over', 200, 150);
+      textSize(32);
+      text('Score: ' + player.score, 300, 250);// determines what is displayed, at what x,y
 }
 
 
