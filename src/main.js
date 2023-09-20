@@ -11,6 +11,12 @@ let player; // player object
 let pressedKeys = {}; // Holding for the pressed keys
 let enemies = []; // array to hold snowflake objects
 let projectiles = []; // array to hold projectile objects
+let prop = false;// Energy shield presence state
+let energiesarray = [];// Array of shield energy cycles
+let energies = 0;// Number of energy blocks
+let enemyOn = new Boolean(true); // For use in debug. Defaults to true in normal mode. Will turn on or off enemy spawning.
+var time = 0; // Playtime
+var ShieldCT = 0; // Shield time
 
 function setup() {
     createCanvas(CANV_WIDTH, CANV_HEIGHT);
@@ -21,7 +27,13 @@ function setup() {
     projectile1 = new Projectile();
     backgroundMusic = document.getElementById('background-music'); // load the music using its id
 
+
     backgroundMusic.play(); // paly the music
+
+    backgroundMusic.play(); // play the music
+
+    lastPrint = millis() - 1000;
+
 }
 
 function draw() {
@@ -50,11 +62,19 @@ function draw() {
       textSize(18); // determines size of font
       fill(51); // determines color of text
 
+
       if(!player.isHit()){ // stops drawing the player if they get hit
         player.display(); // draw the player
         player.update();
       }
   
+
+        if(!player.isHit()){ // stops drawing the player if they get hit
+          player.display(); // draw the player
+          player.update();
+        }
+        
+
       enemy1.showcase();
       projectile1.showcase();
 
@@ -64,12 +84,100 @@ function draw() {
       }
     }
     if(mode == 2){ // debug room implementation
-      background(0, 0, 0) // set the background to black so that I can test the button works
+      DebugDraw();
     }
+
+  if(mode == 9){ // Game Over Screen
+      GameOver();
+    } 
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////           function          ////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function GameInitialization(){ // initialization
+        mode = 1;
+        removeElements(button1,button2); // removes the buttons from the screen
+        energies = 0;// initialization
+        energiesarray = [];// initialization
+        setTimeout(Gametime, 4000); // start counting
+        setTimeout(energie, 8000); // start shield charge
+        loadTime =  int(millis()/1000) + loadTime;// Sets the load time to be the loadtime + whenever the button was pressed
+}
+
+function OpenShield(){ //  Open Shield
+        removeElements(button3); // Disable Shield Button
+        player.display(prop = true);// Change shield status and display shield
+        mode = 5; //Toggle Invincible Mode
+        ShieldCountdown();// Shield Countdown
+        setTimeout(Shieldtime, 5000*(energies));// Shield Duration
+        energies = 0;// Empty energy
+        energiesarray = [];// Empty energy
+}
+
+function GameOver(){ // Game over
+      background(0, 0, 0);
+      textSize(64);
+      fill(255, 156, 51);
+      text('Game Over', 200, 150);
+      textSize(32);
+      text('Score: ' + player.score, 300, 250);
+}
+
+
+function ShieldCountdown(){ //Shield Countdown
+  if(ShieldCT > 0){
+    ShieldCT--;
+    setTimeout(ShieldCountdown, 1000)
+  }  
+}
+
+function Shieldtime(){// Turns off invincibility mode at the end of the energy shield's duration and changes the shield's state
+  player.display(prop = false);
+  mode = 1;
+  setTimeout(energie, 5000);
+}
+
+function Gametime(){// Playtime
+  time++;
+  setTimeout(Gametime, 1000);
+}
+
+function energie(){// Generate an energy block every 5 seconds
+  if(energies<10 && prop == false){
+    energiesarray[energies] = 40+energies*17;
+    energies++;
+    ShieldCT = ShieldCT + 5;
+    setTimeout(energie, 5000);
+  }
 }
 
 function changeMode(i){
   mode = i;
+}
+
+function DebugDraw(){ //Draw function specifically for Debug menu (AKA Mode 2)
+  background(145, 240, 243); //White background
+
+  if(!player.isHit()){ // stops drawing the player if they get hit
+    player.display(); // draw the player
+    player.update();
+  }
+
+  projectile1.showcase();
+  enemy1.showcase();
+
+  if (keyCode === 49){
+    if (enemyOn)
+    {
+      enemyOn = false;
+    }
+    else
+    {
+      enemyOn = true;
+    }
+  }
 }
 
 function keyPressed(){
@@ -119,6 +227,7 @@ class Enemy1 {
     }
 
     showcase() {
+      if (enemyOn){
       const delay = random (1000, 5000) //ms
       if(!this.task_done) {
           enemies.push(new Enemy1()); // append enemy object
@@ -138,6 +247,7 @@ class Enemy1 {
          enmy.display(); // draw enemy
       }
     }
+  }
 }
 
 
