@@ -78,7 +78,7 @@ function draw() {
         button3.size(55, 40); // sets size of button
       }
 
-      if(mouseX >= 675 && mouseX <= 750 && mouseY >= 210 && mouseY <= 240 && mouseIsPressed == true && prop == false){// Click on the shield button to turn on the shield if it is off.
+      if(mouseX >= 650 && mouseX <= 715 && mouseY >= 210 && mouseY <= 250 && mouseIsPressed == true && prop == false){// Click on the shield button to turn on the shield if it is off.
         OpenShield();
       }
 
