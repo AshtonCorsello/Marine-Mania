@@ -1,15 +1,15 @@
 const CANV_WIDTH = 720; 
 const CANV_HEIGHT = 400;
 var mode = 0; // Stores weither the user has left the main menu
+let loadTime = 3; // Stores the number of seconds to load
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////  P5JS MAIN FUNCTIONS  //////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 let player; // player object
 let pressedKeys = {}; // Holding for the pressed keys
-let enemies = []; // array to hold snowflake objects
+let enemies = []; // array to hold enemy objects
 let projectiles = []; // array to hold projectile objects
 let prop = false;// Energy shield presence state
 let energiesarray = [];// Array of shield energy cycles
@@ -26,17 +26,12 @@ function setup() {
     enemy1 = new Enemy1()
     projectile1 = new Projectile();
     backgroundMusic = document.getElementById('background-music'); // load the music using its id
-
-
-    backgroundMusic.play(); // paly the music
-
     backgroundMusic.play(); // play the music
-
     lastPrint = millis() - 1000;
-
-}
+  }
 
 function draw() {
+
     if(mode == 0){ // Main menu
       background(0, 204, 255) // set the background to blue
       textSize(32);
@@ -48,26 +43,32 @@ function draw() {
       button2.position(300, 250); // set button position
       button2.size(100, 20); // sets size of button
       if(mouseX >= 300 && mouseX <= 400 && mouseY >= 200 && mouseY <= 220 && mouseIsPressed == true){ // If the mouse is at the right spot and clicked
-        mode = 1;
-        removeElements(button1,button2); // removes the buttons from the screen
+        GameInitialization();
       }
       if(mouseX >= 300 && mouseX <= 400 && mouseY >= 250 && mouseY <= 270 && mouseIsPressed == true){
         mode = 2;
         removeElements(button1,button2);
       }
     }
-    if(mode == 1){ // Game has started
-      // Drawing the level
-      background(145, 240, 243); // set the background to white
-      textSize(18); // determines size of font
-      fill(51); // determines color of text
+    if(mode == 1 | mode == 5){ // Game has started
+      let currentTime = int(millis()/1000) // Converts mil secs into seconds
+      let countDown = loadTime - currentTime; // Amount of time passed
+      var timeElapsed = millis() - lastPrint;
+      if(countDown < 0){
+        // Drawing the level
+        background(145, 240, 243); // set the background to white
+        textSize(18); // determines size of font
+        fill(51); // determines color of text
 
-
-      if(!player.isHit()){ // stops drawing the player if they get hit
-        player.display(); // draw the player
-        player.update();
-      }
-  
+        if(!player.isHit()){ // stops drawing the player if they get hit
+          player.display(); // draw the player
+          player.update();
+        }
+        if (timeElapsed > 1000) {
+          player.score++;
+          console.log(player.score);
+          lastPrint = millis();
+        }
 
         if(!player.isHit()){ // stops drawing the player if they get hit
           player.display(); // draw the player
@@ -77,17 +78,48 @@ function draw() {
 
       enemy1.showcase();
       projectile1.showcase();
-
-      for (let enmy of enemies){ // checks each enemy for collision
-        if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size))
-          player.setHitTrue();
+      if (energies == 1 && prop == false){// Start shield button is displayed when the number of energy blocks is greater than 1
+        button3 = createButton('Shield');
+        button3.position(650, 210); // set button position
+        button3.size(55, 40); // sets size of button
       }
+
+      if(mouseX >= 650 && mouseX <= 715 && mouseY >= 210 && mouseY <= 250 && mouseIsPressed == true && prop == false){// Click on the shield button to turn on the shield if it is off.
+        OpenShield();
+      }
+
+      if(mode == 5){// Invincible Mode
+        for (let enmy of enemies){ // Shield Mode checks each enemy for collision
+          if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size))
+            player.setHitFalse();
+        }
+      }else{
+        for (let enmy of enemies){ // checks each enemy for collision
+          if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size)){
+            player.setHitTrue();
+            if(energies > 0 && prop == false){// Death removes shield button if present
+              removeElements(button3);
+            }
+            mode = 9;
+          }
+        }
+
+      }
+        }
+      else{
+        // Draws the countdown
+        background(0, 204, 255) // Used to remove text, Title
+        textSize(20);
+        fill(0, 0, 0);
+        text("The game will start in: " + countDown, 250, 150);
+      }
+        
     }
     if(mode == 2){ // debug room implementation
       DebugDraw();
     }
 
-  if(mode == 9){ // Game Over Screen
+    if(mode == 9){ // Game Over Screen
       GameOver();
     } 
 }
@@ -122,7 +154,7 @@ function GameOver(){ // Game over
       fill(255, 156, 51);
       text('Game Over', 200, 150);
       textSize(32);
-      text('Score: ' + player.score, 300, 250);
+      text('Score: ' + player.score, 300, 250);// determines what is displayed, at what x,y
 }
 
 
@@ -184,7 +216,9 @@ function keyPressed(){
     pressedKeys[key] = true;
    if(keyCode === 32){  // if spacebar is pressed
       console.log("Space firing");
-      projectiles.push(new Projectile(player.x, player.y+1));
+      if(!player.isHit()){
+        projectiles.push(new Projectile(player.x, player.y+1));
+      }
     }
 }
 
@@ -314,7 +348,9 @@ class Projectile {
 
 function mousePressed(){
    //console.log("Firing from mouse press");
-   projectiles.push(new Projectile(mouseX, mouseY));
+  if(!player.isHit()) { // Checks if the player is hit before firing.
+    projectiles.push(new Projectile(mouseX, mouseY));
+  }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
