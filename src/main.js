@@ -14,6 +14,7 @@ let projectiles = []; // array to hold projectile objects
 let prop = false;// Energy shield presence state
 let energiesarray = [];// Array of shield energy cycles
 let energies = 0;// Number of energy blocks
+let enemyOn = new Boolean(true); // For use in debug. Defaults to true in normal mode. Will turn on or off enemy spawning.
 var time = 0; // Playtime
 var ShieldCT = 0; // Shield time
 
@@ -26,7 +27,6 @@ function setup() {
     projectile1 = new Projectile();
     backgroundMusic = document.getElementById('background-music'); // load the music using its id
     backgroundMusic.play(); // play the music
-
     lastPrint = millis() - 1000;
   }
 
@@ -69,7 +69,13 @@ function draw() {
           console.log(player.score);
           lastPrint = millis();
         }
-  
+
+        if(!player.isHit()){ // stops drawing the player if they get hit
+          player.display(); // draw the player
+          player.update();
+        }
+        
+
       enemy1.showcase();
       projectile1.showcase();
       if (energies == 1 && prop == false){// Start shield button is displayed when the number of energy blocks is greater than 1
@@ -110,8 +116,9 @@ function draw() {
         
     }
     if(mode == 2){ // debug room implementation
-      background(0, 0, 0) // set the background to black so that I can test the button works
+      DebugDraw();
     }
+
     if(mode == 9){ // Game Over Screen
       GameOver();
     } 
@@ -182,6 +189,29 @@ function changeMode(i){
   mode = i;
 }
 
+function DebugDraw(){ //Draw function specifically for Debug menu (AKA Mode 2)
+  background(145, 240, 243); //White background
+
+  if(!player.isHit()){ // stops drawing the player if they get hit
+    player.display(); // draw the player
+    player.update();
+  }
+
+  projectile1.showcase();
+  enemy1.showcase();
+
+  if (keyCode === 49){
+    if (enemyOn)
+    {
+      enemyOn = false;
+    }
+    else
+    {
+      enemyOn = true;
+    }
+  }
+}
+
 function keyPressed(){
     pressedKeys[key] = true;
    if(keyCode === 32){  // if spacebar is pressed
@@ -231,6 +261,7 @@ class Enemy1 {
     }
 
     showcase() {
+      if (enemyOn){
       const delay = random (1000, 5000) //ms
       if(!this.task_done) {
           enemies.push(new Enemy1()); // append enemy object
@@ -250,6 +281,7 @@ class Enemy1 {
          enmy.display(); // draw enemy
       }
     }
+  }
 }
 
 
