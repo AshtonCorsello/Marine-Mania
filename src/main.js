@@ -16,7 +16,10 @@ let energiesarray = [];// Array of shield energy cycles
 let energies = 0;// Number of energy blocks
 let enemyOn = new Boolean(true); // For use in debug. Defaults to true in normal mode. Will turn on or off enemy spawning.
 var time = 0; // Playtime
-var ShieldCT = 0; // Shield time
+var ShieldCT = 0; // Shield timeA
+let minEnemySpawnDelay = 50; // least possible spawn delay for enemies in miliseconds
+let startingDelay = 1000;
+
 
 function setup() {
     createCanvas(CANV_WIDTH, CANV_HEIGHT);
@@ -74,9 +77,11 @@ function draw() {
           player.display(); // draw the player
           player.update();
         }
-        
+      
+      let calculatedDelay = startingDelay - currentTime * 3; // delay decreases over time
+      let enemySpawnDelay = (calculatedDelay > minEnemySpawnDelay) ? calculatedDelay : minEnemySpawnDelay;
+      enemy1.showcase(enemySpawnDelay); //update, draw, and spawn enemies
 
-      enemy1.showcase();
       projectile1.showcase();
       if (energies == 1 && prop == false){// Start shield button is displayed when the number of energy blocks is greater than 1
         button3 = createButton('Shield');
