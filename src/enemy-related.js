@@ -8,7 +8,7 @@ class Enemy1 {
     constructor() {
       // initialize coordinates
       this.posX = 0;
-      this.posY = random(-300, 0);
+      this.posY = random(-100, 0);
       this.initialangle = random(0, 2 * PI);
       this.size = 15;
       this.readyToSpawn = false;
