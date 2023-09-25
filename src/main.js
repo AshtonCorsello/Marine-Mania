@@ -21,7 +21,7 @@ let energiesarray = [];// Array of shield energy cycles
 let energies = 0;// Number of energy blocks
 let enemyOn = new Boolean(true); // For use in debug. Defaults to true in normal mode. Will turn on or off enemy spawning.
 var time = 0; // Playtime
-var ShieldCT = 0; // Shield timeA
+var ShieldCT = 0; // Shield time
 
 
 function setup() {

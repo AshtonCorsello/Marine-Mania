@@ -37,7 +37,6 @@ class Enemy1 {
       }
       
       this.posY += pow(this.size, 0.5);
-      console.log(time);
       // delete enemy if past end of screen
       if (this.posY > height) {
         let index = enemies.indexOf(this);
@@ -50,27 +49,27 @@ class Enemy1 {
     }
 
     showcase(delay) {
-    if (enemyOn){
-      if(this.readyToSpawn) {
+      if (enemyOn){
+        if(this.readyToSpawn) {
           enemies.push(new Enemy1()); // append enemy object
           this.readyToSpawn = false;
           this.lastSpawnedTime = millis();
-      }
-      else {
+        }
+        else {
           if(millis() - this.lastSpawnedTime > delay) {
             this.readyToSpawn = true;
           }
-      } 
-      let t = frameCount / 60; // update time
+        } 
+        let t = frameCount / 60; // update time
 
-      for (let enmy of enemies) {
-         enmy.update(t); // update enemy position
-      }
+        for (let enmy of enemies) {
+          enmy.update(t); // update enemy position
+        }
  
-     // loop through enemies with a for..of loop
-      for (let enmy of enemies) {
-         enmy.display(); // draw enemy
+      // loop through enemies with a for..of loop
+        for (let enmy of enemies) {
+          enmy.display(); // draw enemy
+        }
       }
     }
-  }
 }
