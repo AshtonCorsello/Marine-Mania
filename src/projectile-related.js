@@ -46,9 +46,12 @@ class Projectile {
     showcase() {
       const delay = 2500 //ms
       let t = frameCount / 60; // update time
-      // loop through projectiles with a for..of loop
+
       for (let prjctl of projectiles) {
          prjctl.update(t); // update projectile position
+      }
+
+      for (let prjctl of projectiles) {
          prjctl.display(); // draw projectile
       }
     }
