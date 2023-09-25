@@ -138,16 +138,6 @@ function GameInitialization(){ // initialization
         loadTime =  int(millis()/1000) + loadTime;// Sets the load time to be the loadtime + whenever the button was pressed
 }
 
-function OpenShield(){ //  Open Shield
-        removeElements(button3); // Disable Shield Button
-        player.display(prop = true);// Change shield status and display shield
-        mode = 5; //Toggle Invincible Mode
-        ShieldCountdown();// Shield Countdown
-        setTimeout(Shieldtime, 5000*(energies));// Shield Duration
-        energies = 0;// Empty energy
-        energiesarray = [];// Empty energy
-}
-
 function GameOver(){ // Game over
       background(0, 0, 0);
       textSize(64);
@@ -157,32 +147,9 @@ function GameOver(){ // Game over
       text('Score: ' + player.score, 300, 250);// determines what is displayed, at what x,y
 }
 
-
-function ShieldCountdown(){ //Shield Countdown
-  if(ShieldCT > 0){
-    ShieldCT--;
-    setTimeout(ShieldCountdown, 1000)
-  }  
-}
-
-function Shieldtime(){// Turns off invincibility mode at the end of the energy shield's duration and changes the shield's state
-  player.display(prop = false);
-  mode = 1;
-  setTimeout(energie, 5000);
-}
-
 function Gametime(){// Playtime
   time++;
   setTimeout(Gametime, 1000);
-}
-
-function energie(){// Generate an energy block every 5 seconds
-  if(energies<10 && prop == false){
-    energiesarray[energies] = 40+energies*17;
-    energies++;
-    ShieldCT = ShieldCT + 5;
-    setTimeout(energie, 5000);
-  }
 }
 
 function changeMode(i){
