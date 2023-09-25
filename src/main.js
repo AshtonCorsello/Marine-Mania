@@ -1,5 +1,10 @@
 const CANV_WIDTH = 720; 
 const CANV_HEIGHT = 400;
+
+const MIN_ENMY_DELAY = 50; // least possible spawn delay for enemies in miliseconds
+const STARTING_ENMY_DELAY = 1000;
+const DELAY_DECR_MULT = 10; //how fast level progresses //dont use large number
+
 var mode = 0; // Stores weither the user has left the main menu
 let loadTime = 3; // Stores the number of seconds to load
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -17,8 +22,6 @@ let energies = 0;// Number of energy blocks
 let enemyOn = new Boolean(true); // For use in debug. Defaults to true in normal mode. Will turn on or off enemy spawning.
 var time = 0; // Playtime
 var ShieldCT = 0; // Shield timeA
-let minEnemySpawnDelay = 50; // least possible spawn delay for enemies in miliseconds
-let startingDelay = 1000;
 
 
 function setup() {
@@ -78,8 +81,8 @@ function draw() {
           player.update();
         }
       
-      let calculatedDelay = startingDelay - currentTime * 3; // delay decreases over time
-      let enemySpawnDelay = (calculatedDelay > minEnemySpawnDelay) ? calculatedDelay : minEnemySpawnDelay;
+      let calcdDelay = STARTING_ENMY_DELAY - currentTime * DELAY_DECR_MULT; // delay decreases over time
+      let enemySpawnDelay = (calcdDelay > MIN_ENMY_DELAY) ? calcdDelay : MIN_ENMY_DELAY;
       enemy1.showcase(enemySpawnDelay); //update, draw, and spawn enemies
 
       projectile1.showcase();

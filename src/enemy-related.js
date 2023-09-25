@@ -8,11 +8,15 @@ class Enemy1 {
     constructor() {
       // initialize coordinates
       this.posX = 0;
-      this.posY = random(-100, 0);
-      this.initialangle = random(0, 2 * PI);
+      this.posY = random(-50, 0);
+      this.initialangle = random(0, 360); // degrees
       this.size = 15;
       this.readyToSpawn = false;
       this.lastSpawnedTime = 0;
+
+      //get enemy instance's curvetype
+      let curvesArr = ["sin", "cos"];
+      this.curveType = random(curvesArr);
 
       // radius of placeholder
       this.radius = sqrt(random(pow(width / 2, 2)));
@@ -24,7 +28,14 @@ class Enemy1 {
       // x position follows a circle
       let w = 50; // angular speed
       let angle = w * time + this.initialangle;
-      this.posX = width / 2 + this.radius * sin(angle);
+
+      if(this.curveType === "sin"){
+        this.posX = width / 2 + this.radius * sin(angle);
+      }
+      else if(this.curveType === "cos"){ 
+        this.posX = width / 2 + this.radius * cos(angle);
+      }
+      
       this.posY += pow(this.size, 0.5);
       console.log(time);
       // delete enemy if past end of screen
