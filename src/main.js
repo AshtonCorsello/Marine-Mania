@@ -96,7 +96,6 @@ function draw() {
         }
         if (timeElapsed > 1000) {
           player.score++;
-          console.log(player.score);
           lastPrint = millis();
         }
 
@@ -232,7 +231,6 @@ function DebugDraw(){ //Draw function specifically for Debug menu (AKA Mode 2)
 function keyPressed(){
     pressedKeys[key] = true;
    if(keyCode === 32){  // if spacebar is pressed
-      console.log("Space firing");
       if(!player.isHit()){
         projectiles.push(new Projectile(player.x, player.y+1));
       }

@@ -35,7 +35,6 @@ class Projectile {
       if (this.posY > CANV_HEIGHT || this.posX > CANV_WIDTH || this.posX < 0 || this.hit == true) {
       let index = projectiles.indexOf(this);
       projectiles.splice(index, 1);
-      console.log('projectile deleted');
       }
    }
 
