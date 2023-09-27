@@ -32,9 +32,10 @@ class Projectile {
       this.posX += cos(this.initialAngle)*this.dirMult*this.speed;
   
       // delete projectile if past end of screen or if it hits an enemy
-      if (this.posY > height || this.hit == true) {
+      if (this.posY > CANV_HEIGHT || this.posX > CANV_WIDTH || this.posX < 0 || this.hit == true) {
         let index = projectiles.indexOf(this);
         projectiles.splice(index, 1);
+        console.log('projectile deleted');
       }
     }
 
