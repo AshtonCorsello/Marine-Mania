@@ -14,6 +14,7 @@ class Enemy1 {
       this.readyToSpawn = false;
       this.lastSpawnedTime = 0;
       this.hit = false;
+      this.scoreIncrease = 5;
 
       //get enemy instance's curvetype
       let curvesArr = ["sin", "cos"];
