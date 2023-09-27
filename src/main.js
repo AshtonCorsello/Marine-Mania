@@ -1,5 +1,5 @@
-const CANV_WIDTH = 900; //originally 720
-const CANV_HEIGHT = 500; //originally 400
+const CANV_WIDTH = window.innerWidth; //originally 720
+const CANV_HEIGHT = window.innerHeight; //originally 400
 const CANV_AREA = CANV_HEIGHT * CANV_WIDTH;
 const CANV_SCALAR = CANV_AREA/288000;
 
@@ -30,7 +30,7 @@ function setup() {
     createCanvas(CANV_WIDTH, CANV_HEIGHT);
     fill(240);
     noStroke();
-    player = new Player(CANV_WIDTH/2,(CANV_HEIGHT - CANV_HEIGHT/16),10); // create a new player object
+    player = new Player(CANV_WIDTH/2,(CANV_HEIGHT - CANV_HEIGHT/16),10*CANV_SCALAR); // create a new player object
     enemy1 = new Enemy1()
     projectile1 = new Projectile();
     backgroundMusic = document.getElementById('background-music'); // load the music using its id

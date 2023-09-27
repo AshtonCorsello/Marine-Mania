@@ -8,7 +8,7 @@ class Enemy1 {
     constructor() {
       // initialize coordinates
       this.posX = 0;
-      this.posY = random(-50, 0);
+      this.posY = random(CANV_HEIGHT*(-50/400), 0);
       this.initialangle = random(0, 360); // degrees
       this.size = 15*CANV_SCALAR;
       this.readyToSpawn = false;
@@ -19,7 +19,7 @@ class Enemy1 {
       this.curveType = random(curvesArr);
 
       // radius of placeholder
-      this.radius = sqrt(random(pow(width / 2, 2)));
+      this.radius = sqrt(random(pow(width / 2, 2))); //need to check this for scalability
 
     }
   
