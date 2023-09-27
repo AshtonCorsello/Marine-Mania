@@ -56,13 +56,13 @@ class Player {
       //Draws energy tanks
         stroke(58, 127, 214);
         fill(205, 205, 205);
-        rect(677, 116, 30, 176, 5);
+        rect(CANV_WIDTH*(677/720), CANV_HEIGHT*(116/400), CANV_WIDTH*(30/720), CANV_HEIGHT*(176/400), 5);
       
       // Draws Energy Blocks
         for(var i = 0; i < 10; i++){
           stroke(0,0,0);
           fill(255, 156, 51);
-          rect(677, energiesarray[i], 30, 15, 20);
+          rect(CANV_WIDTH*(677/720), energiesarray[i], CANV_WIDTH*(30/720), CANV_HEIGHT*(15/400), 20);
         }
       
       //Draws Shield
@@ -70,7 +70,7 @@ class Player {
         stroke(58, 214, 134);
         fill(255, 255, 255);
         rect(this.x, this.y, this.size*3, this.size*6, 20); 
-        text('Shield time: '+(ShieldCT+1)+' sec',500,20); // Shield time
+        text('Shield time: '+(ShieldCT+1)+' sec',CANV_WIDTH*(50/72),CANV_HEIGHT/20); // Shield time
         }
 
       //Draws wake behind boat
@@ -92,8 +92,10 @@ class Player {
         square(this.x, this.y+this.size/4, this.size/3);
 
       
-        text('Gametime: '+time+' sec',275,20);// Show game time
-        text('Score: ' + this.score, 0, 15);// determines what is displayed, at what x,y
+        text('Gametime: '+time+' sec',CANV_WIDTH/2,CANV_HEIGHT/20);// Show game time
+        textAlign(LEFT);
+        text('Score: ' + this.score, CANV_WIDTH/20, CANV_HEIGHT/20);// determines what is displayed, at what x,y
+        textAlign(CENTER);
     }
 
 }

@@ -10,7 +10,7 @@ class Enemy1 {
       this.posX = 0;
       this.posY = random(-50, 0);
       this.initialangle = random(0, 360); // degrees
-      this.size = 15;
+      this.size = 15*CANV_SCALAR;
       this.readyToSpawn = false;
       this.lastSpawnedTime = 0;
 
