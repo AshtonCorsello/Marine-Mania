@@ -13,6 +13,7 @@ class Enemy1 {
       this.size = 15;
       this.readyToSpawn = false;
       this.lastSpawnedTime = 0;
+      this.hit = false;
 
       //get enemy instance's curvetype
       let curvesArr = ["sin", "cos"];
@@ -21,6 +22,8 @@ class Enemy1 {
       // radius of placeholder
       this.radius = sqrt(random(pow(width / 2, 2)));
 
+      // sets hit to true
+      this.setHitTrue = function() {hit = true;};
     }
   
   
@@ -37,8 +40,8 @@ class Enemy1 {
       }
       
       this.posY += pow(this.size, 0.5);
-      // delete enemy if past end of screen
-      if (this.posY > height) {
+      // delete enemy if past end of screen or if hit by projectile
+      if (this.posY > height || this.hit == true) {
         let index = enemies.indexOf(this);
         enemies.splice(index, 1);
       }
