@@ -5,6 +5,8 @@ const MIN_ENMY_DELAY = 50; // least possible spawn delay for enemies in miliseco
 const STARTING_ENMY_DELAY = 1000;
 const DELAY_DECR_MULT = 10; //how fast level progresses //dont use large number
 
+const FPS_ON = true; //flag for toggling fps counter on and off
+
 var mode = 0; // Stores weither the user has left the main menu
 let loadTime = 3; // Stores the number of seconds to load
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -16,6 +18,7 @@ let player; // player object
 let pressedKeys = {}; // Holding for the pressed keys
 let enemies = []; // array to hold enemy objects
 let projectiles = []; // array to hold projectile objects
+let fpsCounter;
 let prop = false;// Energy shield presence state
 let energiesarray = [];// Array of shield energy cycles
 let energies = 0;// Number of energy blocks
@@ -31,6 +34,7 @@ function setup() {
     player = new Player(CANV_WIDTH/2,(CANV_HEIGHT - CANV_HEIGHT/16),10); // create a new player object
     enemy1 = new Enemy1()
     projectile1 = new Projectile();
+    fpsCounter = new FpsCounter();
     backgroundMusic = document.getElementById('background-music'); // load the music using its id
     backgroundMusic.play(); // play the music
     lastPrint = millis() - 1000;
@@ -41,6 +45,7 @@ function draw() {
     if(mode == 0){ // Main menu
       background(0, 204, 255) // set the background to blue
       textSize(32);
+      fill('Black');
       text('Marine Mania', 250, 150); // Name of game
       button1 = createButton('Start Game'); // set text of button
       button1.position(300, 200); // set button position
@@ -144,6 +149,15 @@ function draw() {
     if(mode == 9){ // Game Over Screen
       GameOver();
     } 
+
+  //fps counter stuff
+  if(FPS_ON){
+    if(fpsCounter.readyToUpdate())
+      fpsCounter.update();
+
+    fpsCounter.draw();
+  }
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
