@@ -111,8 +111,22 @@ function draw() {
             mode = 9;
           }
         }
-
       }
+
+
+      //collision between player projectile and enemies
+      for (let prjctl of projectiles){
+        for (let enmy of enemies){
+          if (intersect(prjctl.posX, prjctl.posY, prjctl.size, enmy.posX, enmy.posY, enmy.size)){
+            enmy.hit = true;
+            prjctl.hit = true;
+          }
+        }
+      }
+
+
+
+
         }
       else{
         // Draws the countdown

@@ -7,6 +7,7 @@ class Projectile {
       // initialize coordinates
      this.posX = player.x;
      this.posY = player.y + player.size/2;
+     this.hit = false;
      
      this.projectileScalar = 28800; //currently set to scale projectiles to 10px and 10px per frame on 720 x 400 canvas
    
@@ -30,8 +31,8 @@ class Projectile {
       this.posY += sin(this.initialAngle)*this.speed;
       this.posX += cos(this.initialAngle)*this.dirMult*this.speed;
   
-      // delete projectile if past end of screen
-      if (this.posY > height) {
+      // delete projectile if past end of screen or if it hits an enemy
+      if (this.posY > height || this.hit == true) {
         let index = projectiles.indexOf(this);
         projectiles.splice(index, 1);
       }
