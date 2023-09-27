@@ -1,5 +1,10 @@
 const CANV_WIDTH = 720; 
 const CANV_HEIGHT = 400;
+
+const MIN_ENMY_DELAY = 50; // least possible spawn delay for enemies in miliseconds
+const STARTING_ENMY_DELAY = 1000;
+const DELAY_DECR_MULT = 10; //how fast level progresses //dont use large number
+
 var mode = 0; // Stores weither the user has left the main menu
 let loadTime = 3; // Stores the number of seconds to load
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -17,6 +22,7 @@ let energies = 0;// Number of energy blocks
 let enemyOn = new Boolean(true); // For use in debug. Defaults to true in normal mode. Will turn on or off enemy spawning.
 var time = 0; // Playtime
 var ShieldCT = 0; // Shield time
+
 
 function setup() {
     createCanvas(CANV_WIDTH, CANV_HEIGHT);
@@ -74,9 +80,11 @@ function draw() {
           player.display(); // draw the player
           player.update();
         }
-        
+      
+      let calcdDelay = STARTING_ENMY_DELAY - currentTime * DELAY_DECR_MULT; // delay decreases over time
+      let enemySpawnDelay = (calcdDelay > MIN_ENMY_DELAY) ? calcdDelay : MIN_ENMY_DELAY;
+      enemy1.showcase(enemySpawnDelay); //update, draw, and spawn enemies
 
-      enemy1.showcase();
       projectile1.showcase();
       if (energies == 1 && prop == false){// Start shield button is displayed when the number of energy blocks is greater than 1
         button3 = createButton('Shield');
@@ -103,8 +111,22 @@ function draw() {
             mode = 9;
           }
         }
-
       }
+
+
+      //collision between player projectile and enemies
+      for (let prjctl of projectiles){
+        for (let enmy of enemies){
+          if (intersect(prjctl.posX, prjctl.posY, prjctl.size, enmy.posX, enmy.posY, enmy.size)){
+            enmy.hit = true;
+            prjctl.hit = true;
+          }
+        }
+      }
+
+
+
+
         }
       else{
         // Draws the countdown
@@ -206,4 +228,4 @@ function mousePressed(){
   }
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

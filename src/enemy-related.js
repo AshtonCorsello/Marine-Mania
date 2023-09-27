@@ -9,24 +9,39 @@ class Enemy1 {
       // initialize coordinates
       this.posX = 0;
       this.posY = random(-50, 0);
-      this.initialangle = random(0, 2 * PI);
+      this.initialangle = random(0, 360); // degrees
       this.size = 15;
+      this.readyToSpawn = false;
+      this.lastSpawnedTime = 0;
+      this.hit = false;
+
+      //get enemy instance's curvetype
+      let curvesArr = ["sin", "cos"];
+      this.curveType = random(curvesArr);
 
       // radius of placeholder
       this.radius = sqrt(random(pow(width / 2, 2)));
 
+      // sets hit to true
+      this.setHitTrue = function() {hit = true;};
     }
   
   
     update(time) {
       // x position follows a circle
-      let w = 0.6; // angular speed
+      let w = 50; // angular speed
       let angle = w * time + this.initialangle;
-      this.posX = width / 2 + this.radius * sin(angle);
-        this.posY += pow(this.size, 0.5);
-  
-      // delete enemy if past end of screen
-      if (this.posY > height) {
+
+      if(this.curveType === "sin"){
+        this.posX = width / 2 + this.radius * sin(angle);
+      }
+      else if(this.curveType === "cos"){ 
+        this.posX = width / 2 + this.radius * cos(angle);
+      }
+      
+      this.posY += pow(this.size, 0.5);
+      // delete enemy if past end of screen or if hit by projectile
+      if (this.posY > height || this.hit == true) {
         let index = enemies.indexOf(this);
         enemies.splice(index, 1);
       }
@@ -36,26 +51,28 @@ class Enemy1 {
       ellipse(this.posX, this.posY, this.size);
     }
 
-    showcase() {
+    showcase(delay) {
       if (enemyOn){
-      const delay = random (1000, 5000) //ms
-      if(!this.task_done) {
+        if(this.readyToSpawn) {
           enemies.push(new Enemy1()); // append enemy object
-          this.task_done = true;
-          this.last_done = millis();
-      }
-      else {
-          if(millis() - this.last_done > delay) {
-            this.task_done = false;
+          this.readyToSpawn = false;
+          this.lastSpawnedTime = millis();
+        }
+        else {
+          if(millis() - this.lastSpawnedTime > delay) {
+            this.readyToSpawn = true;
           }
-      } 
-      let t = frameCount / 60; // update time
+        } 
+        let t = frameCount / 60; // update time
 
-     // loop through enemies with a for..of loop
-      for (let enmy of enemies) {
-         enmy.update(t); // update enemy position
-         enmy.display(); // draw enemy
+        for (let enmy of enemies) {
+          enmy.update(t); // update enemy position
+        }
+ 
+      // loop through enemies with a for..of loop
+        for (let enmy of enemies) {
+          enmy.display(); // draw enemy
+        }
       }
     }
-  }
 }
