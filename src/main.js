@@ -7,6 +7,8 @@ const MIN_ENMY_DELAY = 50; // least possible spawn delay for enemies in miliseco
 const STARTING_ENMY_DELAY = 1000;
 const DELAY_DECR_MULT = 10; //how fast level progresses //dont use large number
 
+const FPS_ON = true; //flag for toggling fps counter on and off
+
 var mode = 0; // Stores weither the user has left the main menu
 let loadTime = 3; // Stores the number of seconds to load
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -18,12 +20,20 @@ let player; // player object
 let pressedKeys = {}; // Holding for the pressed keys
 let enemies = []; // array to hold enemy objects
 let projectiles = []; // array to hold projectile objects
+let fpsCounter;
 let prop = false;// Energy shield presence state
 let energiesarray = [];// Array of shield energy cycles
 let energies = 0;// Number of energy blocks
 let enemyOn = new Boolean(true); // For use in debug. Defaults to true in normal mode. Will turn on or off enemy spawning.
 var time = 0; // Playtime
 var ShieldCT = 0; // Shield time
+
+let mySound; // background music
+let startedAudio = false;
+
+function preload() {
+   mySound = loadSound('./src/BeepBox-Song.wav'); // load music file
+}
 
 
 function setup() {
@@ -33,12 +43,21 @@ function setup() {
     player = new Player(CANV_WIDTH/2,(CANV_HEIGHT - CANV_HEIGHT/16),10*CANV_SCALAR); // create a new player object
     enemy1 = new Enemy1()
     projectile1 = new Projectile();
-    backgroundMusic = document.getElementById('background-music'); // load the music using its id
-    backgroundMusic.play(); // play the music
+    fpsCounter = new FpsCounter();
+    
     lastPrint = millis() - 1000;
+
+    if(mousePressed && !startedAudio){
+      userStartAudio();  // starts audio based on user mouse click
+      startedAudio = true
+    }
   }
 
 function draw() {
+     // Check if the audio has started and play it
+    if (startedAudio && !mySound.isPlaying()) {
+      mySound.play();
+    }
 
     if(mode == 0){ // Main menu
       background(0, 204, 255) // set the background to blue
@@ -99,24 +118,32 @@ function draw() {
         OpenShield();
       }
 
-      if(mode == 5){// Invincible Mode
-        for (let enmy of enemies){ // Shield Mode checks each enemy for collision
-          if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size))
-            player.setHitFalse();
+        if(mouseX >= 650 && mouseX <= 715 && mouseY >= 210 && mouseY <= 250 && mouseIsPressed == true && prop == false){// Click on the shield button to turn on the shield if it is off.
+          OpenShield();
         }
-      }else{
-        for (let enmy of enemies){ // checks each enemy for collision
-          if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size)){
-            player.setHitTrue();
-            if(energies > 0 && prop == false){// Death removes shield button if present
-              removeElements(button3);
+
+        if(mode == 5){// Invincible Mode
+          for (let enmy of enemies){ // Shield Mode checks each enemy for collision
+            if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size))
+              player.setHitFalse();
+          }
+        }else{
+          for (let enmy of enemies){ // checks each enemy for collision
+            if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size)){
+              player.setHitTrue();
+              if(energies > 0 && prop == false){// Death removes shield button if present
+                removeElements(button3);
+              }
+              mode = 9;
             }
-            mode = 9;
           }
         }
 
+        //collision between player projectile and enemies
+        //create a standalone function for this
+        checkProjectileHit();
+
       }
-        }
       else{
         // Draws the countdown
         background(0, 204, 255) // Used to remove text, Title
@@ -133,6 +160,15 @@ function draw() {
     if(mode == 9){ // Game Over Screen
       GameOver();
     } 
+
+  //fps counter stuff
+  if(FPS_ON){
+    if(fpsCounter.readyToUpdate())
+      fpsCounter.update();
+
+    fpsCounter.draw();
+  }
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -217,4 +253,14 @@ function mousePressed(){
   }
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function checkProjectileHit() {
+  for (let prjctl of projectiles){
+    for (let enmy of enemies){
+      if (intersect(prjctl.posX, prjctl.posY, prjctl.size, enmy.posX, enmy.posY, enmy.size)){
+        enmy.hit = true;
+        prjctl.hitEnemy(enmy);
+      }
+    }
+  }
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
