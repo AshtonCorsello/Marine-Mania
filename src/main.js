@@ -26,6 +26,13 @@ let enemyOn = new Boolean(true); // For use in debug. Defaults to true in normal
 var time = 0; // Playtime
 var ShieldCT = 0; // Shield time
 
+let mySound; // background music
+let startedAudio = false;
+
+function preload() {
+   mySound = loadSound('./src/BeepBox-Song.wav'); // load music file
+}
+
 
 function setup() {
     createCanvas(CANV_WIDTH, CANV_HEIGHT);
@@ -35,12 +42,20 @@ function setup() {
     enemy1 = new Enemy1()
     projectile1 = new Projectile();
     fpsCounter = new FpsCounter();
-    backgroundMusic = document.getElementById('background-music'); // load the music using its id
-    backgroundMusic.play(); // play the music
+    
     lastPrint = millis() - 1000;
+
+    if(mousePressed && !startedAudio){
+      userStartAudio();  // starts audio based on user mouse click
+      startedAudio = true
+    }
   }
 
 function draw() {
+     // Check if the audio has started and play it
+    if (startedAudio && !mySound.isPlaying()) {
+      mySound.play();
+    }
 
     if(mode == 0){ // Main menu
       background(0, 204, 255) // set the background to blue
