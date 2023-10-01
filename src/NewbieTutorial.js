@@ -1,5 +1,3 @@
-var x = 0;
-
 function Tutorial(){
       removeElements(button1,button2);
       background(0, 204, 255) // set the background to blue
