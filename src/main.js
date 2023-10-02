@@ -1,5 +1,7 @@
-const CANV_WIDTH = 720; 
-const CANV_HEIGHT = 400;
+const CANV_WIDTH = window.innerWidth; //originally 720
+const CANV_HEIGHT = window.innerHeight; //originally 400
+const CANV_AREA = CANV_HEIGHT * CANV_WIDTH;
+const CANV_SCALAR = CANV_AREA/288000;
 
 const MIN_ENMY_DELAY = 50; // least possible spawn delay for enemies in miliseconds
 const STARTING_ENMY_DELAY = 1000;
@@ -38,7 +40,7 @@ function setup() {
     createCanvas(CANV_WIDTH, CANV_HEIGHT);
     fill(240);
     noStroke();
-    player = new Player(CANV_WIDTH/2,(CANV_HEIGHT - CANV_HEIGHT/16),10); // create a new player object
+    player = new Player(CANV_WIDTH/2,(CANV_HEIGHT - CANV_HEIGHT/16),10*CANV_SCALAR); // create a new player object
     enemy1 = new Enemy1()
     projectile1 = new Projectile();
     fpsCounter = new FpsCounter();
@@ -59,19 +61,19 @@ function draw() {
 
     if(mode == 0){ // Main menu
       background(0, 204, 255) // set the background to blue
-      textSize(32);
-      fill('Black');
-      text('Marine Mania', 250, 150); // Name of game
+      textSize(32*CANV_SCALAR);
+      textAlign(CENTER);
+      text('Marine Mania', CANV_WIDTH/2, CANV_HEIGHT/3); // Name of game
       button1 = createButton('Start Game'); // set text of button
-      button1.position(300, 200); // set button position
-      button1.size(100, 20); // sets size of button
+      button1.position(CANV_WIDTH*(5/12), CANV_HEIGHT/2); // set button position
+      button1.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
       button2 = createButton('Debug Room');
-      button2.position(300, 250); // set button position
-      button2.size(100, 20); // sets size of button
-      if(mouseX >= 300 && mouseX <= 400 && mouseY >= 200 && mouseY <= 220 && mouseIsPressed == true){ // If the mouse is at the right spot and clicked
+      button2.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.75); // set button position
+      button2.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
+      if(mouseX >= CANV_WIDTH*(5/12) && mouseX <= CANV_WIDTH*(7/12) && mouseY >= CANV_HEIGHT/2 && mouseY <= CANV_HEIGHT*(11/20) && mouseIsPressed == true){ // If the mouse is at the right spot and clicked
         GameInitialization();
       }
-      if(mouseX >= 300 && mouseX <= 400 && mouseY >= 250 && mouseY <= 270 && mouseIsPressed == true){
+      if(mouseX >= CANV_WIDTH*(5/12) && mouseX <= CANV_WIDTH*(7/12) && mouseY >= CANV_HEIGHT/1.75 && mouseY <= CANV_HEIGHT*(3/5) && mouseIsPressed == true){
         mode = 2;
         removeElements(button1,button2);
       }
@@ -83,7 +85,7 @@ function draw() {
       if(countDown < 0){
         // Drawing the level
         background(145, 240, 243); // set the background to white
-        textSize(18); // determines size of font
+        textSize(18*CANV_SCALAR); // determines size of font
         fill(51); // determines color of text
 
         if(!player.isHit()){ // stops drawing the player if they get hit
@@ -101,16 +103,20 @@ function draw() {
           player.update();
         }
       
-        let calcdDelay = STARTING_ENMY_DELAY - currentTime * DELAY_DECR_MULT; // delay decreases over time
-        let enemySpawnDelay = (calcdDelay > MIN_ENMY_DELAY) ? calcdDelay : MIN_ENMY_DELAY;
-        enemy1.showcase(enemySpawnDelay); //update, draw, and spawn enemies
+      let calcdDelay = STARTING_ENMY_DELAY - currentTime * DELAY_DECR_MULT; // delay decreases over time
+      let enemySpawnDelay = (calcdDelay > MIN_ENMY_DELAY) ? calcdDelay : MIN_ENMY_DELAY;
+      enemy1.showcase(enemySpawnDelay); //update, draw, and spawn enemies
 
-        projectile1.showcase();
-        if (energies == 1 && prop == false){// Start shield button is displayed when the number of energy blocks is greater than 1
-          button3 = createButton('Shield');
-          button3.position(650, 210); // set button position
-          button3.size(55, 40); // sets size of button
-        }
+      projectile1.showcase();
+      if (energies == 1 && prop == false){// Start shield button is displayed when the number of energy blocks is greater than 1
+        button3 = createButton('Shield');
+        button3.position(CANV_WIDTH*(65/72), CANV_HEIGHT*(21/40)); // set button position
+        button3.size(CANV_WIDTH*(55/720), CANV_HEIGHT/10); // sets size of button
+      }
+
+      if(mouseX >= CANV_WIDTH*(65/72) && mouseX <= CANV_WIDTH*(715/720) && mouseY >= CANV_HEIGHT*(21/40) && mouseY <= CANV_HEIGHT*(25/40) && mouseIsPressed == true && prop == false){// Click on the shield button to turn on the shield if it is off.
+        OpenShield();
+      }
 
         if(mouseX >= 650 && mouseX <= 715 && mouseY >= 210 && mouseY <= 250 && mouseIsPressed == true && prop == false){// Click on the shield button to turn on the shield if it is off.
           OpenShield();
@@ -141,9 +147,9 @@ function draw() {
       else{
         // Draws the countdown
         background(0, 204, 255) // Used to remove text, Title
-        textSize(20);
+        textSize(20*CANV_SCALAR);
         fill(0, 0, 0);
-        text("The game will start in: " + countDown, 250, 150);
+        text("The game will start in: " + countDown, CANV_WIDTH/2, CANV_HEIGHT/3);
       }
         
     }
@@ -181,11 +187,11 @@ function GameInitialization(){ // initialization
 
 function GameOver(){ // Game over
       background(0, 0, 0);
-      textSize(64);
+      textSize(64*CANV_SCALAR);
       fill(255, 156, 51);
-      text('Game Over', 200, 150);
-      textSize(32);
-      text('Score: ' + player.score, 300, 250);// determines what is displayed, at what x,y
+      text('Game Over', CANV_WIDTH/2, CANV_HEIGHT/3);
+      textSize(32*CANV_SCALAR);
+      text('Score: ' + player.score, CANV_WIDTH/2, CANV_HEIGHT/2);// determines what is displayed, at what x,y
 }
 
 function Gametime(){// Playtime
