@@ -70,8 +70,8 @@ class Player {
         stroke(58, 214, 134);
         fill(255, 255, 255);
         rect(this.x, this.y, this.size*3, this.size*6, 20); 
-        textSize(5*CANV_SCALAR);
-        text('Shield time: '+(ShieldCT+1)+' sec',CANV_WIDTH*(50/72),CANV_HEIGHT/20); // Shield time
+        textSize(10*CANV_SCALAR);
+        text('Shield time: '+(ShieldCT+1)+' sec',CANV_WIDTH*(60/72),CANV_HEIGHT/20); // Shield time
         }
 
       //Draws wake behind boat
@@ -92,7 +92,7 @@ class Player {
         rectMode(CENTER);
         square(this.x, this.y+this.size/4, this.size/3);
 
-        textSize(5*CANV_SCALAR);
+        textSize(10*CANV_SCALAR);
 
         text('Gametime: '+time+' sec',CANV_WIDTH/2,CANV_HEIGHT/20);// Show game time
         textAlign(LEFT);

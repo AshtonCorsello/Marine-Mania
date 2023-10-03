@@ -22,7 +22,7 @@ class Projectile {
       console.log("Player: " , player.x , "," , player.y);
       console.log(this.initialAngle);
    */
-      this.size = (CANV_WIDTH*CANV_HEIGHT)/(3*this.projectileScalar);
+      this.size = (CANV_WIDTH*CANV_HEIGHT)/this.projectileScalar;
    }
   
   

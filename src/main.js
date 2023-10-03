@@ -45,7 +45,7 @@ function setup() {
     createCanvas(CANV_WIDTH, CANV_HEIGHT);
     fill(240);
     noStroke();
-    player = new Player(CANV_WIDTH/2,(CANV_HEIGHT - CANV_HEIGHT/16),5*CANV_SCALAR); // create a new player object
+    player = new Player(CANV_WIDTH/2,(CANV_HEIGHT - CANV_HEIGHT/16),7*CANV_SCALAR); // create a new player object
     enemy1 = new Enemy1()
     projectile1 = new Projectile();
     fpsCounter = new FpsCounter();
