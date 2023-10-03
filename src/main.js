@@ -29,10 +29,12 @@ var time = 0; // Playtime
 var ShieldCT = 0; // Shield time
 
 let mySound; // background music
+let mainMenu; // main menu gif
 let startedAudio = false;
 
 function preload() {
    mySound = loadSound('./src/BeepBox-Song.wav'); // load music file
+   mainMenu = loadImage('./src/mainMenu.gif'); // load main menu gif
 }
 
 
@@ -60,10 +62,10 @@ function draw() {
     }
 
     if(mode == 0){ // Main menu
-      background(0, 204, 255) // set the background to blue
+      background(mainMenu) // set the background to white
       textSize(32*CANV_SCALAR);
       textAlign(CENTER);
-      text('Marine Mania', CANV_WIDTH/2, CANV_HEIGHT/3); // Name of game
+      //text('Marine Mania', CANV_WIDTH/2, CANV_HEIGHT/3); // Name of game
       button1 = createButton('Start Game'); // set text of button
       button1.position(CANV_WIDTH*(5/12), CANV_HEIGHT/2); // set button position
       button1.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
