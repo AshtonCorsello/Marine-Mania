@@ -32,6 +32,9 @@ let mySound; // background music
 let mainMenu; // main menu gif
 let startedAudio = false;
 
+let startButton;
+let debugButton;
+
 function preload() {
    mySound = loadSound('./src/BeepBox-Song.wav'); // load music file
    mainMenu = loadImage('./src/mainMenu.gif'); // load main menu gif
@@ -42,7 +45,7 @@ function setup() {
     createCanvas(CANV_WIDTH, CANV_HEIGHT);
     fill(240);
     noStroke();
-    player = new Player(CANV_WIDTH/2,(CANV_HEIGHT - CANV_HEIGHT/16),10*CANV_SCALAR); // create a new player object
+    player = new Player(CANV_WIDTH/2,(CANV_HEIGHT - CANV_HEIGHT/16),7*CANV_SCALAR); // create a new player object
     enemy1 = new Enemy1()
     projectile1 = new Projectile();
     fpsCounter = new FpsCounter();
@@ -66,19 +69,14 @@ function draw() {
       textSize(32*CANV_SCALAR);
       textAlign(CENTER);
       //text('Marine Mania', CANV_WIDTH/2, CANV_HEIGHT/3); // Name of game
-      button1 = createButton('Start Game'); // set text of button
-      button1.position(CANV_WIDTH*(5/12), CANV_HEIGHT/2); // set button position
-      button1.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
-      button2 = createButton('Debug Room');
-      button2.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.75); // set button position
-      button2.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
-      if(mouseX >= CANV_WIDTH*(5/12) && mouseX <= CANV_WIDTH*(7/12) && mouseY >= CANV_HEIGHT/2 && mouseY <= CANV_HEIGHT*(11/20) && mouseIsPressed == true){ // If the mouse is at the right spot and clicked
-        GameInitialization();
-      }
-      if(mouseX >= CANV_WIDTH*(5/12) && mouseX <= CANV_WIDTH*(7/12) && mouseY >= CANV_HEIGHT/1.75 && mouseY <= CANV_HEIGHT*(3/5) && mouseIsPressed == true){
-        mode = 2;
-        removeElements(button1,button2);
-      }
+      startButton = createButton('Start Game'); // set text of button
+      startButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.6); // set button position
+      startButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
+      startButton.mousePressed(GameInitialization);
+      debugButton = createButton('Debug Room');
+      debugButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.4); // set button position
+      debugButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
+      debugButton.mousePressed(Debug);
     }
     if(mode == 1 | mode == 5){ // Game has started
       let currentTime = int(millis()/1000) // Converts mil secs into seconds
@@ -114,15 +112,9 @@ function draw() {
         button3 = createButton('Shield');
         button3.position(CANV_WIDTH*(65/72), CANV_HEIGHT*(21/40)); // set button position
         button3.size(CANV_WIDTH*(55/720), CANV_HEIGHT/10); // sets size of button
+        button3.mousePressed(OpenShield);
       }
-
-      if(mouseX >= CANV_WIDTH*(65/72) && mouseX <= CANV_WIDTH*(715/720) && mouseY >= CANV_HEIGHT*(21/40) && mouseY <= CANV_HEIGHT*(25/40) && mouseIsPressed == true && prop == false){// Click on the shield button to turn on the shield if it is off.
-        OpenShield();
-      }
-
-        if(mouseX >= 650 && mouseX <= 715 && mouseY >= 210 && mouseY <= 250 && mouseIsPressed == true && prop == false){// Click on the shield button to turn on the shield if it is off.
-          OpenShield();
-        }
+      
 
         if(mode == 5){// Invincible Mode
           for (let enmy of enemies){ // Shield Mode checks each enemy for collision
@@ -179,7 +171,8 @@ function draw() {
 
 function GameInitialization(){ // initialization
         mode = 1;
-        removeElements(button1,button2); // removes the buttons from the screen
+        //removeElements(button1,button2); // removes the buttons from the screen
+        removeElements(startButton, debugButton);
         energies = 0;// initialization
         energiesarray = [];// initialization
         setTimeout(Gametime, 4000); // start counting
@@ -205,7 +198,13 @@ function changeMode(i){
   mode = i;
 }
 
+function Debug(){
+  mode = 2;
+  removeElements(startButton, debugButton);
+}
+
 function DebugDraw(){ //Draw function specifically for Debug menu (AKA Mode 2)
+  //removeElements(startButton, debugButton);
   background(145, 240, 243); //White background
 
   if(!player.isHit()){ // stops drawing the player if they get hit
