@@ -30,6 +30,7 @@ var ShieldCT = 0; // Shield time
 
 let mySound; // background music
 let mainMenu; // main menu gif
+let level1; // level 1 gif
 let startedAudio = false;
 
 let startButton;
@@ -38,6 +39,7 @@ let debugButton;
 function preload() {
    mySound = loadSound('./src/BeepBox-Song.wav'); // load music file
    mainMenu = loadImage('./src/mainMenu.gif'); // load main menu gif
+   level1 = loadImage('./src/level1.gif'); // load level 1 gif
 }
 
 
@@ -84,7 +86,7 @@ function draw() {
       var timeElapsed = millis() - lastPrint;
       if(countDown < 0){
         // Drawing the level
-        background(145, 240, 243); // set the background to white
+        background(level1); // set the background to white
         textSize(18*CANV_SCALAR); // determines size of font
         fill(51); // determines color of text
 
