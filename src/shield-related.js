@@ -3,7 +3,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function energie(){// Generate an energy block every 5 seconds
-  if(energies<10 && prop == false){
+  if(energies<10 && player.shield == false){
     energiesarray[energies] = 40+energies*17;
     energies++;
     ShieldCT = ShieldCT + 5;
@@ -12,7 +12,8 @@ function energie(){// Generate an energy block every 5 seconds
 }
 
 function Shieldtime(){// Turns off invincibility mode at the end of the energy shield's duration and changes the shield's state
-  player.display(prop = false);
+  player.shield = false
+  player.display();
   mode = 1;
   setTimeout(energie, 5000);
 }
@@ -26,7 +27,8 @@ function ShieldCountdown(){ //Shield Countdown
 
 function OpenShield(){ //  Open Shield
   removeElements(button3); // Disable Shield Button
-  player.display(prop = true);// Change shield status and display shield
+  player.shield = true
+  player.display();// Change shield status and display shield
   mode = 5; //Toggle Invincible Mode
   ShieldCountdown();// Shield Countdown
   setTimeout(Shieldtime, 5000*(energies));// Shield Duration
@@ -47,12 +49,4 @@ function displayShieldInfo() {
      rect(CANV_WIDTH*(677/720), energiesarray[i], CANV_WIDTH*(30/720), CANV_HEIGHT*(15/400), 20);
    }
  
- //Draws Shield
- if(prop == true){
-   stroke(58, 214, 134);
-   fill(255, 255, 255);
-   rect(this.x, this.y, this.size*3, this.size*6, 20); 
-   textSize(10*CANV_SCALAR);
-   text('Shield time: '+(ShieldCT+1)+' sec',CANV_WIDTH*(60/72),CANV_HEIGHT/20); // Shield time
- }
 }
