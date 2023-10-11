@@ -115,6 +115,8 @@ function draw() {
         button3.size(CANV_WIDTH*(55/720), CANV_HEIGHT/10); // sets size of button
         button3.mousePressed(OpenShield);
       }
+
+      displayShieldInfo();
       
 
         if(mode == 5){// Invincible Mode
