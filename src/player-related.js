@@ -54,6 +54,15 @@ class Player {
   
     display() { //Draws the player
 
+      //Draws Shield
+      if(player.shield == true){
+        stroke(58, 214, 134);
+        fill(255, 255, 255);
+        rect(this.x, this.y, this.size*3, this.size*6, 20); 
+        textSize(10*CANV_SCALAR);
+        text('Shield time: '+(ShieldCT+1)+' sec',CANV_WIDTH*(60/72),CANV_HEIGHT/20); // Shield time
+      }
+
       //Draws wake behind boat
         stroke(255,255,250); //Outline color
         fill(220, 250, 253); //Color of shape
@@ -72,21 +81,12 @@ class Player {
         rectMode(CENTER);
         square(this.x, this.y+this.size/4, this.size/3);
 
-        textSize(10*CANV_SCALAR);
+      //  textSize(10*CANV_SCALAR);
 
-        text('Gametime: '+time+' sec',CANV_WIDTH/2,CANV_HEIGHT/20);// Show game time
-        textAlign(LEFT);
-        text('Score: ' + this.score, CANV_WIDTH/20, CANV_HEIGHT/20);// determines what is displayed, at what x,y
-        textAlign(CENTER);
-
-        //Draws Shield
-        if(player.shield == true){
-          stroke(58, 214, 134);
-          fill(255, 255, 255);
-          rect(this.x, this.y, this.size*3, this.size*6, 20); 
-          textSize(10*CANV_SCALAR);
-          text('Shield time: '+(ShieldCT+1)+' sec',CANV_WIDTH*(60/72),CANV_HEIGHT/20); // Shield time
-        }
+      //  text('Gametime: '+time+' sec',CANV_WIDTH/2,CANV_HEIGHT/20);// Show game time
+      //  textAlign(LEFT);
+      //  text('Score: ' + this.score, CANV_WIDTH/20, CANV_HEIGHT/20);// determines what is displayed, at what x,y
+      //  textAlign(CENTER);
     }
 
 

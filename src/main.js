@@ -114,7 +114,7 @@ function draw() {
         button3.size(CANV_WIDTH*(55/720), CANV_HEIGHT/10); // sets size of button
         button3.mousePressed(OpenShield);
       }
-
+      gameUI();
       displayShieldInfo();
       
 
@@ -266,3 +266,11 @@ function checkProjectileHit() {
   }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function gameUI() {
+  textSize(10*CANV_SCALAR);
+  text('Gametime: '+time+' sec',CANV_WIDTH/2,CANV_HEIGHT/20);// Show game time
+  textAlign(LEFT);
+  text('Score: ' + player.score, CANV_WIDTH/20, CANV_HEIGHT/20);// determines what is displayed, at what x,y
+  textAlign(CENTER);
+}
