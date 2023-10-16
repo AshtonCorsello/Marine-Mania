@@ -40,6 +40,7 @@ function preload() {
    mySound = loadSound('./src/BeepBox-Song.wav'); // load music file
    mainMenu = loadImage('./src/mainMenu.gif'); // load main menu gif
    level1 = loadImage('./src/level1.gif'); // load level 1 gif
+   gameover = loadImage('./src/gameover.png');
 }
 
 
@@ -183,12 +184,10 @@ function GameInitialization(){ // initialization
 }
 
 function GameOver(){ // Game over
-      background(0, 0, 0);
-      textSize(64*CANV_SCALAR);
+      background(gameover);
       fill(255, 156, 51);
-      text('Game Over', CANV_WIDTH/2, CANV_HEIGHT/3);
       textSize(32*CANV_SCALAR);
-      text('Score: ' + player.score, CANV_WIDTH/2, CANV_HEIGHT/2);// determines what is displayed, at what x,y
+      text('Score: ' + player.score, CANV_WIDTH/2, CANV_HEIGHT/1.5);// determines what is displayed, at what x,y
 }
 
 function Gametime(){// Playtime
