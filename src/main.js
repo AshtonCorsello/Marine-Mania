@@ -21,7 +21,6 @@ let pressedKeys = {}; // Holding for the pressed keys
 let enemies = []; // array to hold enemy objects
 let projectiles = []; // array to hold projectile objects
 let fpsCounter;
-let prop = false;// Energy shield presence state
 let energiesarray = [];// Array of shield energy cycles
 let energies = 0;// Number of energy blocks
 let enemyOn = new Boolean(true); // For use in debug. Defaults to true in normal mode. Will turn on or off enemy spawning.
@@ -96,7 +95,6 @@ function draw() {
         }
         if (timeElapsed > 1000) {
           player.score++;
-          console.log(player.score);
           lastPrint = millis();
         }
 
@@ -110,12 +108,14 @@ function draw() {
       enemy1.showcase(enemySpawnDelay); //update, draw, and spawn enemies
 
       projectile1.showcase();
-      if (energies == 1 && prop == false){// Start shield button is displayed when the number of energy blocks is greater than 1
+      if (energies == 1 && player.shield == false){// Start shield button is displayed when the number of energy blocks is greater than 1
         button3 = createButton('Shield');
         button3.position(CANV_WIDTH*(65/72), CANV_HEIGHT*(21/40)); // set button position
         button3.size(CANV_WIDTH*(55/720), CANV_HEIGHT/10); // sets size of button
         button3.mousePressed(OpenShield);
       }
+      gameUI();
+      displayShieldInfo();
       
 
         if(mode == 5){// Invincible Mode
@@ -127,7 +127,7 @@ function draw() {
           for (let enmy of enemies){ // checks each enemy for collision
             if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size)){
               player.setHitTrue();
-              if(energies > 0 && prop == false){// Death removes shield button if present
+              if(energies > 0 && player.shield == false){// Death removes shield button if present
                 removeElements(button3);
               }
               mode = 9;
@@ -232,7 +232,6 @@ function DebugDraw(){ //Draw function specifically for Debug menu (AKA Mode 2)
 function keyPressed(){
     pressedKeys[key] = true;
    if(keyCode === 32){  // if spacebar is pressed
-      console.log("Space firing");
       if(!player.isHit()){
         projectiles.push(new Projectile(player.x, player.y+1));
       }
@@ -267,3 +266,11 @@ function checkProjectileHit() {
   }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function gameUI() {
+  textSize(10*CANV_SCALAR);
+  text('Gametime: '+time+' sec',CANV_WIDTH/2,CANV_HEIGHT/20);// Show game time
+  textAlign(LEFT);
+  text('Score: ' + player.score, CANV_WIDTH/20, CANV_HEIGHT/20);// determines what is displayed, at what x,y
+  textAlign(CENTER);
+}
