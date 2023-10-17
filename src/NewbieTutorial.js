@@ -12,22 +12,25 @@ function Tutorial(){
       button_Back.mousePressed(back);
       player.display(); // draw the player
       player.update();
-  if(prop == false){ //on shield
+  if(player.shield == false){ //on shield
     button1 = createButton('Shield');
     button1.position(CANV_WIDTH*(65/72), CANV_HEIGHT*(21/40)); // set button position
     button1.size(CANV_WIDTH*(55/720), CANV_HEIGHT/10); // sets size of button
     button1.mousePressed(onShield);
   }
-  if(prop == false && keyCode == SHIFT){ //shift on shield
+  if(player.shield == false && keyCode == SHIFT){ //shift on shield
     onShield();
   }
-  if(prop == true){ //off shield 
+  if(player.shield == true){ //off shield 
     button2 = createButton('Off Shield');
     button2.position(CANV_WIDTH*(65/72), CANV_HEIGHT*(21/40)); // set button position
     button2.size(CANV_WIDTH*(55/720), CANV_HEIGHT/10); // sets size of button
     button2.mousePressed(offShield);
   }
   projectile1.showcase();
+  stroke(58, 127, 214);
+   fill(205, 205, 205);
+   rect(CANV_WIDTH*(677/720), CANV_HEIGHT*(116/400), CANV_WIDTH*(30/720), CANV_HEIGHT*(176/400), 5);
   for(var i = 0; i < 10; i++){
           stroke(0,0,0);
           fill(255, 156, 51);
@@ -46,17 +49,17 @@ function Tutorial(){
 }
 function onShield(){
   removeElements(button1);
-  prop = true;
+  player.shield = true;
 }
 
 function offShield(){
   removeElements(button2);
-  prop = false;
+  player.shield = false;
 }
 
 function back(){ //back
   removeElements(button_Back);
-  prop = false;
+  player.shield = false;
   mode = 0;
 }
 
