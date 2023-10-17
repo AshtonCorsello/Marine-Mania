@@ -21,6 +21,7 @@ let pressedKeys = {}; // Holding for the pressed keys
 let enemies = []; // array to hold enemy objects
 let projectiles = []; // array to hold projectile objects
 let fpsCounter;
+let prop = false;// Energy shield presence state
 let energiesarray = [];// Array of shield energy cycles
 let energies = 0;// Number of energy blocks
 let enemyOn = new Boolean(true); // For use in debug. Defaults to true in normal mode. Will turn on or off enemy spawning.
@@ -62,7 +63,7 @@ function setup() {
 
 function draw() {
      // Check if the audio has started and play it
-    if (startedAudio && !mySound.isPlaying()) {
+    if (startedAudio && !mySound.isPlaying() && mode != 10 && mode != 0) {
       mySound.play();
     }
 
@@ -79,6 +80,10 @@ function draw() {
       debugButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.4); // set button position
       debugButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
       debugButton.mousePressed(Debug);
+      TutorialButton = createButton('Tutorial');
+      TutorialButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.8); // set button position
+      TutorialButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
+      TutorialButton.mousePressed(Tutorial);
     }
     if(mode == 1 | mode == 5){ // Game has started
       let currentTime = int(millis()/1000) // Converts mil secs into seconds
@@ -96,6 +101,7 @@ function draw() {
         }
         if (timeElapsed > 1000) {
           player.score++;
+          console.log(player.score);
           lastPrint = millis();
         }
 
@@ -109,14 +115,15 @@ function draw() {
       enemy1.showcase(enemySpawnDelay); //update, draw, and spawn enemies
 
       projectile1.showcase();
-      if (energies == 1 && player.shield == false){// Start shield button is displayed when the number of energy blocks is greater than 1
+      if (energies == 1 && prop == false){// Start shield button is displayed when the number of energy blocks is greater than 1
         button3 = createButton('Shield');
         button3.position(CANV_WIDTH*(65/72), CANV_HEIGHT*(21/40)); // set button position
         button3.size(CANV_WIDTH*(55/720), CANV_HEIGHT/10); // sets size of button
         button3.mousePressed(OpenShield);
       }
-      gameUI();
-      displayShieldInfo();
+      if(energies > 0 && keyCode == SHIFT){
+        OpenShield();
+      }
       
 
         if(mode == 5){// Invincible Mode
@@ -128,7 +135,7 @@ function draw() {
           for (let enmy of enemies){ // checks each enemy for collision
             if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size)){
               player.setHitTrue();
-              if(energies > 0 && player.shield == false){// Death removes shield button if present
+              if(energies > 0 && prop == false){// Death removes shield button if present
                 removeElements(button3);
               }
               mode = 9;
@@ -157,6 +164,9 @@ function draw() {
     if(mode == 9){ // Game Over Screen
       GameOver();
     } 
+    if(mode == 10){
+      Tutorial();
+    }
 
   //fps counter stuff
   if(FPS_ON){
@@ -175,7 +185,7 @@ function draw() {
 function GameInitialization(){ // initialization
         mode = 1;
         //removeElements(button1,button2); // removes the buttons from the screen
-        removeElements(startButton, debugButton);
+        removeElements(startButton, debugButton, TutorialButton);
         energies = 0;// initialization
         energiesarray = [];// initialization
         setTimeout(Gametime, 4000); // start counting
@@ -184,11 +194,12 @@ function GameInitialization(){ // initialization
 }
 
 function GameOver(){ // Game over
-      background(gameover); // sets the gameover image as the background
-      fill(255, 156, 51);
-      textSize(32*CANV_SCALAR);
-      text('Score: ' + player.score, CANV_WIDTH/2, CANV_HEIGHT/1.5);// determines what is displayed, at what x,y
+  background(gameover); // sets the gameover image as the background
+  fill(255, 156, 51);
+  textSize(32*CANV_SCALAR);
+  text('Score: ' + player.score, CANV_WIDTH/2, CANV_HEIGHT/1.5);// determines what is displayed, at what x,y
 }
+
 
 function Gametime(){// Playtime
   time++;
@@ -201,7 +212,7 @@ function changeMode(i){
 
 function Debug(){
   mode = 2;
-  removeElements(startButton, debugButton);
+  removeElements(startButton, debugButton, TutorialButton);
 }
 
 function DebugDraw(){ //Draw function specifically for Debug menu (AKA Mode 2)
@@ -231,6 +242,7 @@ function DebugDraw(){ //Draw function specifically for Debug menu (AKA Mode 2)
 function keyPressed(){
     pressedKeys[key] = true;
    if(keyCode === 32){  // if spacebar is pressed
+      console.log("Space firing");
       if(!player.isHit()){
         projectiles.push(new Projectile(player.x, player.y+1));
       }
@@ -265,11 +277,3 @@ function checkProjectileHit() {
   }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-function gameUI() {
-  textSize(10*CANV_SCALAR);
-  text('Gametime: '+time+' sec',CANV_WIDTH/2,CANV_HEIGHT/20);// Show game time
-  textAlign(LEFT);
-  text('Score: ' + player.score, CANV_WIDTH/20, CANV_HEIGHT/20);// determines what is displayed, at what x,y
-  textAlign(CENTER);
-}
