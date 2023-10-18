@@ -42,7 +42,8 @@ function preload() {
 
 
 function setup() {
-    createCanvas(CANV_WIDTH, CANV_HEIGHT);
+    let cnv = createCanvas(CANV_WIDTH, CANV_HEIGHT);
+    cnv.id('game-canvas');
     fill(240);
     noStroke();
     player = new Player(CANV_WIDTH/2,(CANV_HEIGHT - CANV_HEIGHT/16),7*CANV_SCALAR); // create a new player object
@@ -70,6 +71,7 @@ function draw() {
       textAlign(CENTER);
       //text('Marine Mania', CANV_WIDTH/2, CANV_HEIGHT/3); // Name of game
       startButton = createButton('Start Game'); // set text of button
+      startButton.id('start-game')
       startButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.6); // set button position
       startButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
       startButton.mousePressed(GameInitialization);
@@ -110,6 +112,7 @@ function draw() {
       projectile1.showcase();
       if (energies == 1 && prop == false){// Start shield button is displayed when the number of energy blocks is greater than 1
         button3 = createButton('Shield');
+        button3.id('shield-button')
         button3.position(CANV_WIDTH*(65/72), CANV_HEIGHT*(21/40)); // set button position
         button3.size(CANV_WIDTH*(55/720), CANV_HEIGHT/10); // sets size of button
         button3.mousePressed(OpenShield);
