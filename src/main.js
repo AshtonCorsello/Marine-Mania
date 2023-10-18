@@ -105,7 +105,7 @@ function draw() {
           player.update();
         }
       
-      let calcdDelay = STARTING_ENMY_DELAY - currentTime * DELAY_DECR_MULT; // delay decreases over time
+      let calcdDelay = STARTING_ENMY_DELAY - time * DELAY_DECR_MULT; // delay decreases over time
       let enemySpawnDelay = (calcdDelay > MIN_ENMY_DELAY) ? calcdDelay : MIN_ENMY_DELAY;
       enemy1.showcase(enemySpawnDelay); //update, draw, and spawn enemies
 
@@ -187,8 +187,10 @@ function GameInitialization(){ // initialization
         player.score = 0; // resets score on retry
         time = 0; // resets game time
         calcdDelay = STARTING_ENMY_DELAY; // resets enemy difficulty
-        currentTime = 0; // resets another time var
+        enemySpawnDelay = STARTING_ENMY_DELAY;
         setTimeout(gameOverFlag = false, 1500); // resets flag to false on retry. Timer prevents previous Gametime func from not being stopped
+        player.x = CANV_WIDTH/2;
+        player.y = (CANV_HEIGHT - CANV_HEIGHT/16);
 
         setTimeout(Gametime, 4000); // start counting
         setTimeout(energie, 8000); // start shield charge
