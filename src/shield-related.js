@@ -4,7 +4,7 @@
 
 function energie(){// Generate an energy block every 5 seconds
   if(energies<10 && player.shield == false){
-    energiesarray[energies] = 75+energies*32;
+    energiesarray[energies] = CANV_HEIGHT*(37/400)+energies*CANV_HEIGHT*(17/400);
     energies++;
     ShieldCT = ShieldCT + 5;
     setTimeout(energie, 5000);

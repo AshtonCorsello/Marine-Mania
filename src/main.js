@@ -63,7 +63,7 @@ function setup() {
 
 function draw() {
      // Check if the audio has started and play it
-    if (startedAudio && !mySound.isPlaying()) {
+    if (startedAudio && !mySound.isPlaying() && mode != 10 && mode != 0) {
       mySound.play();
     }
 
@@ -80,6 +80,10 @@ function draw() {
       debugButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.4); // set button position
       debugButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
       debugButton.mousePressed(Debug);
+      TutorialButton = createButton('Tutorial');
+      TutorialButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.8); // set button position
+      TutorialButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
+      TutorialButton.mousePressed(Tutorial);
     }
     if(mode == 1 | mode == 5){ // Game has started
       let currentTime = int(millis()/1000) // Converts mil secs into seconds
@@ -115,6 +119,9 @@ function draw() {
         button3.position(CANV_WIDTH*(65/72), CANV_HEIGHT*(21/40)); // set button position
         button3.size(CANV_WIDTH*(55/720), CANV_HEIGHT/10); // sets size of button
         button3.mousePressed(OpenShield);
+      }
+      if(energies > 0 && keyCode == SHIFT){
+        OpenShield();
       }
       gameUI();
       displayShieldInfo();
@@ -158,6 +165,9 @@ function draw() {
     if(mode == 9){ // Game Over Screen
       GameOver();
     } 
+    if(mode == 10){
+      Tutorial();
+    }
 
   //fps counter stuff
   if(FPS_ON){
@@ -224,7 +234,7 @@ function changeMode(i){
 
 function Debug(){
   mode = 2;
-  removeElements(startButton, debugButton);
+  emoveElements(startButton, debugButton, TutorialButton);
 }
 
 function DebugDraw(){ //Draw function specifically for Debug menu (AKA Mode 2)
