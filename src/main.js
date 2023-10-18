@@ -26,6 +26,7 @@ let energies = 0;// Number of energy blocks
 let enemyOn = new Boolean(true); // For use in debug. Defaults to true in normal mode. Will turn on or off enemy spawning.
 var time = 0; // Playtime
 var ShieldCT = 0; // Shield time
+let gameOverFlag = false; // flag for being on game over screen
 
 let mySound; // background music
 let mainMenu; // main menu gif
@@ -178,8 +179,20 @@ function GameInitialization(){ // initialization
         removeElements(startButton, debugButton);
         energies = 0;// initialization
         energiesarray = [];// initialization
+
+        //could make retry initializations in a separate function and do them depending on a flag
+        player.setHitFalse(); // draws player again when retrying
+        currentTime = 0; // resets difficulty on retry
+        enemies = []; // resets enemies on retry
+        player.score = 0; // resets score on retry
+        time = 0; // resets game time
+        calcdDelay = STARTING_ENMY_DELAY; // resets enemy difficulty
+        currentTime = 0; // resets another time var
+        setTimeout(gameOverFlag = false, 1500); // resets flag to false on retry. Timer prevents previous Gametime func from not being stopped
+
         setTimeout(Gametime, 4000); // start counting
         setTimeout(energie, 8000); // start shield charge
+        loadTime = 3;
         loadTime =  int(millis()/1000) + loadTime;// Sets the load time to be the loadtime + whenever the button was pressed
 }
 
@@ -188,10 +201,18 @@ function GameOver(){ // Game over
       fill(255, 156, 51);
       textSize(32*CANV_SCALAR);
       text('Score: ' + player.score, CANV_WIDTH/2, CANV_HEIGHT/1.5);// determines what is displayed, at what x,y
+      
+      gameOverFlag = true;
+      retryButton = createButton('Try Again?'); // set text of button
+      retryButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/(1.3)); // set button position
+      retryButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
+      retryButton.mousePressed(GameInitialization);
+      
 }
 
 function Gametime(){// Playtime
   time++;
+  if(gameOverFlag == true) {return;} 
   setTimeout(Gametime, 1000);
 }
 
