@@ -63,7 +63,7 @@ function setup() {
 
 function draw() {
      // Check if the audio has started and play it
-     if (startedAudio && !mySound.isPlaying() && mode != 10 && mode != 0) {
+    if (startedAudio && !mySound.isPlaying()) {
       mySound.play();
     }
 
@@ -80,11 +80,6 @@ function draw() {
       debugButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.4); // set button position
       debugButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
       debugButton.mousePressed(Debug);
-
-      TutorialButton = createButton('Tutorial');
-      TutorialButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.8); // set button position
-      TutorialButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
-      TutorialButton.mousePressed(Tutorial);
     }
     if(mode == 1 | mode == 5){ // Game has started
       let currentTime = int(millis()/1000) // Converts mil secs into seconds
@@ -121,11 +116,6 @@ function draw() {
         button3.size(CANV_WIDTH*(55/720), CANV_HEIGHT/10); // sets size of button
         button3.mousePressed(OpenShield);
       }
-
-      if(energies > 0 && keyCode == SHIFT){
-        OpenShield();
-      }
-
       gameUI();
       displayShieldInfo();
       
@@ -169,10 +159,6 @@ function draw() {
       GameOver();
     } 
 
-    if(mode == 10){
-      Tutorial();
-    }
-
   //fps counter stuff
   if(FPS_ON){
     if(fpsCounter.readyToUpdate())
@@ -190,7 +176,7 @@ function draw() {
 function GameInitialization(){ // initialization
         mode = 1;
         //removeElements(button1,button2); // removes the buttons from the screen
-        removeElements(startButton, debugButton, TutorialButton);
+        removeElements(startButton, debugButton);
         energies = 0;// initialization
         energiesarray = [];// initialization
 
@@ -214,7 +200,7 @@ function GameInitialization(){ // initialization
 
 function GameOver(){ // Game over
       background(gameover); // sets the gameover image as the background
-      fill(220, 250, 253);
+      fill(255, 156, 51);
       textSize(32*CANV_SCALAR);
       text('Score: ' + player.score, CANV_WIDTH/2, CANV_HEIGHT/1.5);// determines what is displayed, at what x,y
       
@@ -238,7 +224,7 @@ function changeMode(i){
 
 function Debug(){
   mode = 2;
-  removeElements(startButton, debugButton, TutorialButton);
+  removeElements(startButton, debugButton);
 }
 
 function DebugDraw(){ //Draw function specifically for Debug menu (AKA Mode 2)
