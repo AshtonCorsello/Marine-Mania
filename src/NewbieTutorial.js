@@ -38,13 +38,17 @@ function Tutorial(){
         }
   textSize(10*CANV_SCALAR);
   fill(0);
-      text('Shields can be triggered using ', CANV_WIDTH*(400/720), CANV_HEIGHT*(95/400));
-      text('a click on the right shield ', CANV_WIDTH*(400/720), CANV_HEIGHT*(120/400));
-      text('button or shield button or by ', CANV_WIDTH*(400/720), CANV_HEIGHT*(145/400));
-      text('pressing shift on your keyboard', CANV_WIDTH*(400/720), CANV_HEIGHT*(170/400));
-      text('Each energy block = 5sec shield ', CANV_WIDTH*(400/720), CANV_HEIGHT*(195/400));
-      text('"W" "A" "S" "D" ', CANV_WIDTH*(100/720), CANV_HEIGHT*(170/400));
-      text('control the boat movement ', CANV_WIDTH*(120/720), CANV_HEIGHT*(195/400));
+      text('Shields can be triggered using ', CANV_WIDTH*(500/720), CANV_HEIGHT*(20/400));
+      text('a click on the right shield ', CANV_WIDTH*(500/720), CANV_HEIGHT*(40/400));
+      text('button or shield button or by ', CANV_WIDTH*(500/720), CANV_HEIGHT*(60/400));
+      text('pressing shift on your keyboard', CANV_WIDTH*(500/720), CANV_HEIGHT*(80/400));
+      text('Each energy block = 5sec shield ', CANV_WIDTH*(500/720), CANV_HEIGHT*(100/400));
+      text(' ', CANV_WIDTH*(500/720), CANV_HEIGHT*(120/400));
+      text('Kill Enemy by pressing mouse ', CANV_WIDTH*(500/720), CANV_HEIGHT*(140/400));
+      text('Equals 5 additional points', CANV_WIDTH*(500/720), CANV_HEIGHT*(160/400));
+      text('"W" "A" "S" "D" ', CANV_WIDTH*(150/720), CANV_HEIGHT*(340/400));
+      text('control the boat movement ', CANV_WIDTH*(170/720), CANV_HEIGHT*(360/400));
+      text('(or arrow keys)', CANV_WIDTH*(170/720), CANV_HEIGHT*(380/400));
       Button();
 }
 function onShield(){
@@ -66,67 +70,67 @@ function back(){ //back
 function Button(){ //Print 3d WASD buttons
   if(keyIsPressed == true && key == 'a') {
     fill(150);
-    rect(CANV_WIDTH*(100/720), CANV_HEIGHT*(130/400), 55, 55, 20);
+    rect(CANV_WIDTH*(100/720), CANV_HEIGHT*(300/400), 55, 55, 20);
     textSize(30);
     stroke(0,0,0);
     fill(0);
-    text('A',CANV_WIDTH*(100/720), CANV_HEIGHT*(135/400))
+    text('A',CANV_WIDTH*(100/720), CANV_HEIGHT*(300/400))
   }else{
     fill(150);
-    rect(CANV_WIDTH*(100/720), CANV_HEIGHT*(130/400), 55, 55, 20);
+    rect(CANV_WIDTH*(100/720), CANV_HEIGHT*(300/400), 55, 55, 20);
     fill(225);
-    rect(CANV_WIDTH*(97/720), CANV_HEIGHT*(133/400), 55, 55, 20);
+    rect(CANV_WIDTH*(97/720), CANV_HEIGHT*(300/400), 55, 55, 20);
     stroke(0,0,0);
     textSize(30);
     fill(0);
-    text('A',CANV_WIDTH*(97/720), CANV_HEIGHT*(138/400))
+    text('A',CANV_WIDTH*(97/720), CANV_HEIGHT*(300/400))
   }
   if(keyIsPressed == true && key == 's') {
     fill(150);
-    rect(CANV_WIDTH*(155/720), CANV_HEIGHT*(130/400), 55, 55, 20);
+    rect(CANV_WIDTH*(155/720), CANV_HEIGHT*(300/400), 55, 55, 20);
     textSize(30);
     fill(0);
-    text('S',CANV_WIDTH*(155/720), CANV_HEIGHT*(135/400))
+    text('S',CANV_WIDTH*(155/720), CANV_HEIGHT*(300/400))
   }else{
     fill(150);
-    rect(CANV_WIDTH*(155/720), CANV_HEIGHT*(130/400), 55, 55, 20);
+    rect(CANV_WIDTH*(155/720), CANV_HEIGHT*(300/400), 55, 55, 20);
     fill(225);
-    rect(CANV_WIDTH*(152/720), CANV_HEIGHT*(133/400), 55, 55, 20);
+    rect(CANV_WIDTH*(152/720), CANV_HEIGHT*(300/400), 55, 55, 20);
     stroke(0,0,0);
     textSize(30);
     fill(0);
-    text('S',CANV_WIDTH*(152/720), CANV_HEIGHT*(138/400))
+    text('S',CANV_WIDTH*(152/720), CANV_HEIGHT*(300/400))
   }
   if(keyIsPressed == true && key == 'd') {
     fill(150);
-    rect(CANV_WIDTH*(210/720), CANV_HEIGHT*(130/400), 55, 55, 20);
+    rect(CANV_WIDTH*(210/720), CANV_HEIGHT*(300/400), 55, 55, 20);
     textSize(30);
     fill(0);
-    text('D',CANV_WIDTH*(212/720), CANV_HEIGHT*(135/400))
+    text('D',CANV_WIDTH*(212/720), CANV_HEIGHT*(300/400))
   }else{
     fill(150);
-    rect(CANV_WIDTH*(210/720), CANV_HEIGHT*(130/400), 55, 55, 20);
+    rect(CANV_WIDTH*(210/720), CANV_HEIGHT*(300/400), 55, 55, 20);
     fill(225);
-    rect(CANV_WIDTH*(207/720), CANV_HEIGHT*(133/400), 55, 55, 20);
+    rect(CANV_WIDTH*(207/720), CANV_HEIGHT*(300/400), 55, 55, 20);
     stroke(0,0,0);
     textSize(30);
     fill(0);
-    text('D',CANV_WIDTH*(207/720), CANV_HEIGHT*(138/400))
+    text('D',CANV_WIDTH*(207/720), CANV_HEIGHT*(300/400))
   }
   if(keyIsPressed == true && key == 'w') {
     fill(150);
-    rect(CANV_WIDTH*(155/720), CANV_HEIGHT*(75/400), 55, 55, 20);
+    rect(CANV_WIDTH*(155/720), CANV_HEIGHT*(250/400), 55, 55, 20);
     textSize(30);
     fill(0);
-    text('W',CANV_WIDTH*(156/720), CANV_HEIGHT*(81/400))
+    text('W',CANV_WIDTH*(156/720), CANV_HEIGHT*(250/400))
   }else{
     fill(150);
-    rect(CANV_WIDTH*(155/720), CANV_HEIGHT*(75/400), 55, 55, 20);
+    rect(CANV_WIDTH*(155/720), CANV_HEIGHT*(250/400), 55, 55, 20);
     fill(225);
-    rect(CANV_WIDTH*(152/720), CANV_HEIGHT*(78/400), 55, 55, 20);
+    rect(CANV_WIDTH*(152/720), CANV_HEIGHT*(250/400), 55, 55, 20);
     stroke(0,0,0);
     textSize(30);
     fill(0);
-    text('W',CANV_WIDTH*(151/720), CANV_HEIGHT*(84/400))
+    text('W',CANV_WIDTH*(151/720), CANV_HEIGHT*(250/400))
   }
 }

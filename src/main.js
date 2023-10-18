@@ -63,7 +63,7 @@ function setup() {
 
 function draw() {
      // Check if the audio has started and play it
-    if (startedAudio && !mySound.isPlaying() && mode != 10 && mode != 0) {
+     if (startedAudio && !mySound.isPlaying() && mode != 10 && mode != 0) {
       mySound.play();
     }
 
@@ -80,6 +80,7 @@ function draw() {
       debugButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.4); // set button position
       debugButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
       debugButton.mousePressed(Debug);
+
       TutorialButton = createButton('Tutorial');
       TutorialButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.8); // set button position
       TutorialButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
@@ -120,9 +121,11 @@ function draw() {
         button3.size(CANV_WIDTH*(55/720), CANV_HEIGHT/10); // sets size of button
         button3.mousePressed(OpenShield);
       }
+
       if(energies > 0 && keyCode == SHIFT){
         OpenShield();
       }
+
       gameUI();
       displayShieldInfo();
       
@@ -165,6 +168,7 @@ function draw() {
     if(mode == 9){ // Game Over Screen
       GameOver();
     } 
+
     if(mode == 10){
       Tutorial();
     }
@@ -186,7 +190,7 @@ function draw() {
 function GameInitialization(){ // initialization
         mode = 1;
         //removeElements(button1,button2); // removes the buttons from the screen
-        removeElements(startButton, debugButton);
+        removeElements(startButton, debugButton, TutorialButton);
         energies = 0;// initialization
         energiesarray = [];// initialization
 
@@ -210,7 +214,7 @@ function GameInitialization(){ // initialization
 
 function GameOver(){ // Game over
       background(gameover); // sets the gameover image as the background
-      fill(255, 156, 51);
+      fill(220, 250, 253);
       textSize(32*CANV_SCALAR);
       text('Score: ' + player.score, CANV_WIDTH/2, CANV_HEIGHT/1.5);// determines what is displayed, at what x,y
       
@@ -234,7 +238,7 @@ function changeMode(i){
 
 function Debug(){
   mode = 2;
-  emoveElements(startButton, debugButton, TutorialButton);
+  removeElements(startButton, debugButton, TutorialButton);
 }
 
 function DebugDraw(){ //Draw function specifically for Debug menu (AKA Mode 2)
@@ -268,6 +272,43 @@ function keyPressed(){
         projectiles.push(new Projectile(player.x, player.y+1));
       }
     }
+}
+
+function keyReleased(){
+    delete pressedKeys[key];
+}
+
+//checks if two objects intersect using (x,y) and radius
+function intersect(obj1X, obj1Y, obj1R, obj2X, obj2Y, obj2R){
+    if (sqrt(pow((obj1X - obj2X),2) + pow((obj1Y - obj2Y),2)) < (obj1R + obj2R)) {return true;}
+    else {return false;}
+}
+
+function mousePressed(){
+   //console.log("Firing from mouse press");
+  if(!player.isHit()) { // Checks if the player is hit before firing.
+    projectiles.push(new Projectile(mouseX, mouseY));
+  }
+}
+
+function checkProjectileHit() {
+  for (let prjctl of projectiles){
+    for (let enmy of enemies){
+      if (intersect(prjctl.posX, prjctl.posY, prjctl.size, enmy.posX, enmy.posY, enmy.size)){
+        enmy.hit = true;
+        prjctl.hitEnemy(enmy);
+      }
+    }
+  }
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function gameUI() {
+  textSize(10*CANV_SCALAR);
+  text('Gametime: '+time+' sec',CANV_WIDTH/2,CANV_HEIGHT/20);// Show game time
+  textAlign(LEFT);
+  text('Score: ' + player.score, CANV_WIDTH/20, CANV_HEIGHT/20);// determines what is displayed, at what x,y
+  textAlign(CENTER);
 }
 
 function keyReleased(){
