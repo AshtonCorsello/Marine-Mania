@@ -28,19 +28,40 @@ var time = 0; // Playtime
 var ShieldCT = 0; // Shield time
 let gameOverFlag = false; // flag for being on game over screen
 
-let mySound; // background music
+////// all SFX /////////////////////////////////////////////////
+// background music, 321, go, wavesambiance, shield sounds    //
+let mySound; let startSound1; let startSound2; let wavesSound;//
+let shieldOnSound; let shieldOffSound;                        //
+let cannonSounds = []; let enemyDieSounds = [];               // 
+let gameOverSound; let startedAudio = false;                  //
+////////////////////////////////////////////////////////////////
+
 let mainMenu; // main menu gif
 let level1; // level 1 gif
-let startedAudio = false;
 
 let startButton;
 let debugButton;
 
 function preload() {
    mySound = loadSound('./src/BeepBox-Song.wav'); // load music file
+   //mySound = loadSound('./src/SFX/bgm1.wav');  // alternative BGM choice.  uncomment, and comment the above line.
+   mySound.SetVolume(0.4);
    mainMenu = loadImage('./src/mainMenu.gif'); // load main menu gif
    level1 = loadImage('./src/level1.gif'); // load level 1 gif
    gameover = loadImage('./src/gameover.png'); // load gameover file
+  
+  countdownSound = loadSound('./src/SFX/start/321.wav');          // load 321 sound : line 230
+  goSound = loadSound('./src/SFX/start/go.wav');                  // load go sound : line 231-233
+  wavesSound = loadSound('./src/SFX/waves.wav');                  // load waves ambiance : line 228-229
+  shieldOnSound = loadSound('./src/SFX/shield/shield-on.wav');    // load shieldon sound : in OpenShield()
+  shieldOffSound = loadSound('./src/SFX/shield/shield-fail.wav'); // load shieldfail sound : in Shieldtime()
+  gameOverSound = loadSound('./src/SFX/died.wav');                // load gameover sound : line248
+  for (let i = 1; i <= 8; i++) {  // load sounds into array       // used in Projectile Class definition
+    cannonSounds.push(loadSound('./src/SFX/cannon/cannon' + i + '.wav'));
+  }
+  for (let i = 1; i <= 8; i++) {  // load sounds into array       // used in projectile func hitEnemy()
+    enemyDieSounds.push(loadSound('./src/SFX/enemy-die/exp' + i + '.wav'));
+  }
 }
 
 
@@ -206,6 +227,13 @@ function GameInitialization(){ // initialization
         player.x = CANV_WIDTH/2;
         player.y = (CANV_HEIGHT - CANV_HEIGHT/16);
 
+        wavesSound.setLoop(true); // loop waves ambiance
+        wavesSound.play();        // play ambiance
+        countdownSound.play();       // countdown321 sfx
+        setTimeout(function() {
+            goSound.play();   // "go!" plays after 3.5 seconds
+        }, 3500);
+
         setTimeout(Gametime, 4000); // start counting
         setTimeout(energie, 8000); // start shield charge
         loadTime = 3;
@@ -219,6 +247,7 @@ function GameOver(){ // Game over
       text('Score: ' + player.score, CANV_WIDTH/2, CANV_HEIGHT/1.5);// determines what is displayed, at what x,y
       
       gameOverFlag = true;
+      gameOverSound.play();                     // play gameover sound
       retryButton = createButton('Try Again?'); // set text of button
       retryButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/(1.3)); // set button position
       retryButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
