@@ -142,7 +142,7 @@ function draw() {
               if(energies > 0 && player.shield == false){// Death removes shield button if present
                 removeElements(button3);
               }
-              mode = 9;
+              changeMode(9);
             }
           }
         }
@@ -247,7 +247,7 @@ function changeMode(i){
 }
 
 function Debug(){
-  mode = 2;
+  changeMode(2);
   removeElements(startButton, debugButton, TutorialButton);
 }
 
