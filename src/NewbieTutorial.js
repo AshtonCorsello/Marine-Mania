@@ -68,7 +68,7 @@ function back(){ //back
 }
 
 function Button(){ //Print 3d WASD buttons
-  if(keyIsPressed == true && key == 'a') {
+  if(keyIsDown(65) || keyIsDown(LEFT_ARROW)) {
     fill(150);
     rect(CANV_WIDTH*(100/720), CANV_HEIGHT*(300/400), 55, 55, 20);
     textSize(30);
@@ -85,7 +85,7 @@ function Button(){ //Print 3d WASD buttons
     fill(0);
     text('A',CANV_WIDTH*(97/720), CANV_HEIGHT*(300/400))
   }
-  if(keyIsPressed == true && key == 's') {
+  if(keyIsDown(83) || keyIsDown(DOWN_ARROW)) {
     fill(150);
     rect(CANV_WIDTH*(155/720), CANV_HEIGHT*(300/400), 55, 55, 20);
     textSize(30);
@@ -101,7 +101,7 @@ function Button(){ //Print 3d WASD buttons
     fill(0);
     text('S',CANV_WIDTH*(152/720), CANV_HEIGHT*(300/400))
   }
-  if(keyIsPressed == true && key == 'd') {
+  if(keyIsDown(68) || keyIsDown(RIGHT_ARROW)) {
     fill(150);
     rect(CANV_WIDTH*(210/720), CANV_HEIGHT*(300/400), 55, 55, 20);
     textSize(30);
@@ -117,7 +117,7 @@ function Button(){ //Print 3d WASD buttons
     fill(0);
     text('D',CANV_WIDTH*(207/720), CANV_HEIGHT*(300/400))
   }
-  if(keyIsPressed == true && key == 'w') {
+  if(keyIsDown(87) || keyIsDown(UP_ARROW)) {
     fill(150);
     rect(CANV_WIDTH*(155/720), CANV_HEIGHT*(250/400), 55, 55, 20);
     textSize(30);
