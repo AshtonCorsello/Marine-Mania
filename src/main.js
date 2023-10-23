@@ -52,7 +52,7 @@ function setup() {
     enemy1 = new Enemy1()
     projectile1 = new Projectile();
     fpsCounter = new FpsCounter();
-    
+
     lastPrint = millis() - 1000;
 
     if(mousePressed && !startedAudio){
@@ -109,7 +109,7 @@ function draw() {
           player.display(); // draw the player
           player.update();
         }
-      
+
       let calcdDelay = STARTING_ENMY_DELAY - time * DELAY_DECR_MULT; // delay decreases over time
       let enemySpawnDelay = (calcdDelay > MIN_ENMY_DELAY) ? calcdDelay : MIN_ENMY_DELAY;
       enemy1.showcase(enemySpawnDelay); //update, draw, and spawn enemies
@@ -128,7 +128,7 @@ function draw() {
 
       gameUI();
       displayShieldInfo();
-      
+
 
         if(mode == 5){// Invincible Mode
           for (let enmy of enemies){ // Shield Mode checks each enemy for collision
@@ -159,7 +159,7 @@ function draw() {
         fill(0, 0, 0);
         text("The game will start in: " + countDown, CANV_WIDTH/2, CANV_HEIGHT/3);
       }
-        
+
     }
     if(mode == 2){ // debug room implementation
       DebugDraw();
@@ -217,13 +217,23 @@ function GameOver(){ // Game over
       fill(220, 250, 253);
       textSize(32*CANV_SCALAR);
       text('Score: ' + player.score, CANV_WIDTH/2, CANV_HEIGHT/1.5);// determines what is displayed, at what x,y
-      
+
       gameOverFlag = true;
       retryButton = createButton('Try Again?'); // set text of button
       retryButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/(1.3)); // set button position
       retryButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
       retryButton.mousePressed(GameInitialization);
-      
+
+      returntoMenuButton = createButton('Return to Main Menu'); // Sets the text of the button
+      returntoMenuButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/(1.2)); // Sets the button position
+      returntoMenuButton.size(CANV_WIDTH/6, CANV_HEIGHT/18); // Sets the size of the button
+      returntoMenuButton.mousePressed(returntoMenu); // Calls the return to menu function
+
+}
+
+function returntoMenu(){ // used to return to the main menu
+  removeElements(retryButton, returntoMenuButton); // removes the buttons from the screen
+  changeMode(0);
 }
 
 function Gametime(){// Playtime
