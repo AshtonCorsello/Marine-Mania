@@ -202,12 +202,13 @@ function GameInitialization(){ // initialization
         time = 0; // resets game time
         calcdDelay = STARTING_ENMY_DELAY; // resets enemy difficulty
         enemySpawnDelay = STARTING_ENMY_DELAY;
-        setTimeout(gameOverFlag = false, 1500); // resets flag to false on retry. Timer prevents previous Gametime func from not being stopped
+        setTimeout("gameOverFlag = false", 2000); // resets flag to false on retry. Timer prevents previous Gametime func from not being stopped
         player.x = CANV_WIDTH/2;
         player.y = (CANV_HEIGHT - CANV_HEIGHT/16);
+        shieldCounter = 0;
 
         setTimeout(Gametime, 4000); // start counting
-        setTimeout(energie, 8000); // start shield charge
+        setTimeout(energie, 4000); // start shield charge
         loadTime = 3;
         loadTime =  int(millis()/1000) + loadTime;// Sets the load time to be the loadtime + whenever the button was pressed
 }
@@ -219,6 +220,7 @@ function GameOver(){ // Game over
       text('Score: ' + player.score, CANV_WIDTH/2, CANV_HEIGHT/1.5);// determines what is displayed, at what x,y
 
       gameOverFlag = true;
+      
       retryButton = createButton('Try Again?'); // set text of button
       retryButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/(1.3)); // set button position
       retryButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
