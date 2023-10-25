@@ -9,6 +9,7 @@ class Player {
         this.size = size; // size of the player
         this.speed = 3;
         this.score = 0; // Used to keep track of player score
+        this.level = 1;
         this.task_done = false;
         this.last_done = 0;
         this.shield = false

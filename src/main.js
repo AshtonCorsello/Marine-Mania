@@ -110,6 +110,8 @@ function draw() {
           player.update();
         }
 
+        if (player.level == 1 && player.score >= 100) { ++player.level;}
+
       let calcdDelay = STARTING_ENMY_DELAY - time * DELAY_DECR_MULT; // delay decreases over time
       let enemySpawnDelay = (calcdDelay > MIN_ENMY_DELAY) ? calcdDelay : MIN_ENMY_DELAY;
       enemy1.showcase(enemySpawnDelay); //update, draw, and spawn enemies
@@ -199,6 +201,7 @@ function GameInitialization(){ // initialization
         currentTime = 0; // resets difficulty on retry
         enemies = []; // resets enemies on retry
         player.score = 0; // resets score on retry
+        player.level = 1; // reset level
         time = 0; // resets game time
         calcdDelay = STARTING_ENMY_DELAY; // resets enemy difficulty
         enemySpawnDelay = STARTING_ENMY_DELAY;
@@ -318,6 +321,7 @@ function gameUI() {
   text('Gametime: '+time+' sec',CANV_WIDTH/2,CANV_HEIGHT/20);// Show game time
   textAlign(LEFT);
   text('Score: ' + player.score, CANV_WIDTH/20, CANV_HEIGHT/20);// determines what is displayed, at what x,y
+  text('Level: ' + player.level, CANV_WIDTH/20, CANV_HEIGHT/10); // ... 
   textAlign(CENTER);
 }
 
@@ -355,5 +359,6 @@ function gameUI() {
   text('Gametime: '+time+' sec',CANV_WIDTH/2,CANV_HEIGHT/20);// Show game time
   textAlign(LEFT);
   text('Score: ' + player.score, CANV_WIDTH/20, CANV_HEIGHT/20);// determines what is displayed, at what x,y
+  text('Level: ' + player.level, CANV_WIDTH/20, CANV_HEIGHT/10); // ... 
   textAlign(CENTER);
 }
