@@ -9,8 +9,10 @@ class Player {
         this.size = size; // size of the player
         this.speed = 3;
         this.score = 0; // Used to keep track of player score
+        this.level = 1;
         this.task_done = false;
         this.last_done = 0;
+        this.shield = false
         //creates private hit flag
         let hit = false;
         this.isHit = function() { return hit; };
@@ -52,26 +54,15 @@ class Player {
     }
   
     display() { //Draws the player
-      
-      //Draws energy tanks
-        stroke(58, 127, 214);
-        fill(205, 205, 205);
-        rect(CANV_WIDTH*(677/720), CANV_HEIGHT*(116/400), CANV_WIDTH*(30/720), CANV_HEIGHT*(176/400), 5);
-      
-      // Draws Energy Blocks
-        for(var i = 0; i < 10; i++){
-          stroke(0,0,0);
-          fill(255, 156, 51);
-          rect(CANV_WIDTH*(677/720), energiesarray[i], CANV_WIDTH*(30/720), CANV_HEIGHT*(15/400), 20);
-        }
-      
+
       //Draws Shield
-      if(prop == true){
+      if(player.shield == true){
         stroke(58, 214, 134);
         fill(255, 255, 255);
         rect(this.x, this.y, this.size*3, this.size*6, 20); 
-        text('Shield time: '+(ShieldCT+1)+' sec',CANV_WIDTH*(50/72),CANV_HEIGHT/20); // Shield time
-        }
+        textSize(10*CANV_SCALAR);
+        text('Shield time: '+(ShieldCT+1)+' sec',CANV_WIDTH*(60/72),CANV_HEIGHT/20); // Shield time
+      }
 
       //Draws wake behind boat
         stroke(255,255,250); //Outline color
@@ -91,11 +82,14 @@ class Player {
         rectMode(CENTER);
         square(this.x, this.y+this.size/4, this.size/3);
 
-      
-        text('Gametime: '+time+' sec',CANV_WIDTH/2,CANV_HEIGHT/20);// Show game time
-        textAlign(LEFT);
-        text('Score: ' + this.score, CANV_WIDTH/20, CANV_HEIGHT/20);// determines what is displayed, at what x,y
-        textAlign(CENTER);
+      //  textSize(10*CANV_SCALAR);
+
+      //  text('Gametime: '+time+' sec',CANV_WIDTH/2,CANV_HEIGHT/20);// Show game time
+      //  textAlign(LEFT);
+      //  text('Score: ' + this.score, CANV_WIDTH/20, CANV_HEIGHT/20);// determines what is displayed, at what x,y
+      //  textAlign(CENTER);
     }
+
+
 
 }
