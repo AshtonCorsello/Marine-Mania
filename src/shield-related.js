@@ -13,7 +13,7 @@ function energie(){// Generate an energy block every 5 seconds
 
 function Shieldtime(){// Turns off invincibility mode at the end of the energy shield's duration and changes the shield's state
   player.shield = false
-  shieldOffSound.play();
+  shieldOffSound.play(0, 1, 3);
   player.display();
   mode = 1;
   setTimeout(energie, 5000);
