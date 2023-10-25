@@ -43,9 +43,8 @@ let startButton;
 let debugButton;
 
 function preload() {
-   mySound = loadSound('./src/BeepBox-Song.wav'); // load music file
-   //mySound = loadSound('./src/SFX/bgm1.wav');  // alternative BGM choice.  uncomment, and comment the above line.
-   mySound.SetVolume(0.4);
+   //mySound = loadSound('./src/BeepBox-Song.wav'); // load music file
+   mySound = loadSound('./src/SFX/bgm1.wav');  // alternative BGM choice.  comment, and uncomment the above line to get other back.
    mainMenu = loadImage('./src/mainMenu.gif'); // load main menu gif
    level1 = loadImage('./src/level1.gif'); // load level 1 gif
    gameover = loadImage('./src/gameover.png'); // load gameover file
@@ -86,6 +85,7 @@ function draw() {
      // Check if the audio has started and play it
      if (startedAudio && !mySound.isPlaying() && mode != 10 && mode != 0) {
       mySound.play();
+      mySound.SetVolume(0.4);
     }
 
     if(mode == 0){ // Main menu
