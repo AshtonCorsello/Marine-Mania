@@ -2,12 +2,19 @@
 //////////////////////////////////////////  SHIELD FUNCTIONS  /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+let shieldCounter = 0;
 function energie(){// Generate an energy block every 5 seconds
   if(energies<10 && player.shield == false){
-    energiesarray[energies] = CANV_HEIGHT*(37/400)+energies*CANV_HEIGHT*(17/400);
-    energies++;
+
+    ++shieldCounter; //done so the game over check can be done per second
+    if (shieldCounter >= 5) energiesarray[energies] = CANV_HEIGHT*(37/400)+energies*CANV_HEIGHT*(17/400);
+
+    if (shieldCounter >= 5) {energies++; shieldCounter = 0;}
     ShieldCT = ShieldCT + 5;
-    setTimeout(energie, 5000);
+
+    // end if game ends for retry
+    if (gameOverFlag) return;
+    setTimeout(energie, 1000);
   }
 }
 
