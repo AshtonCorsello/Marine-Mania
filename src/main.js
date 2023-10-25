@@ -82,12 +82,6 @@ function setup() {
   }
 
 function draw() {
-     // Check if the audio has started and play it
-     if (startedAudio && !mySound.isPlaying() && mode != 10 && mode != 0) {
-      mySound.play();
-      mySound.SetVolume(0.4);
-    }
-
     if(mode == 0){ // Main menu
       background(mainMenu) // set the background to white
       textSize(32*CANV_SCALAR);
@@ -214,6 +208,10 @@ function GameInitialization(){ // initialization
         removeElements(startButton, debugButton, TutorialButton);
         energies = 0;// initialization
         energiesarray = [];// initialization
+
+        mySound.play();
+        mySound.loop();
+        mySound.SetVolume(0.2);
 
         //could make retry initializations in a separate function and do them depending on a flag
         player.setHitFalse(); // draws player again when retrying
