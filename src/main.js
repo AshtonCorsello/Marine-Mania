@@ -93,6 +93,8 @@ function draw() {
       if(countDown < 0){
         // Drawing the level
         background(level1); // set the background to the level 1 gif
+        fill('rgb(173, 216, 230)');// determines the color of the rectangle
+        rect(0,0,CANV_WIDTH*2, CANV_HEIGHT/4.8);// Used to block out the background for the score
         textSize(18*CANV_SCALAR); // determines size of font
         fill(51); // determines color of text
 
@@ -319,8 +321,6 @@ function checkProjectileHit() {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function gameUI() {
-  fill('rgb(173, 216, 230)');// determines the color of the rectangle
-  rect(0,0,CANV_WIDTH*2, CANV_HEIGHT/4.8);// Used to block out the background for the score
   textSize(10*CANV_SCALAR);
   fill('black');
   stroke(0,0,0);
