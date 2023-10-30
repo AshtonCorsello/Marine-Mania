@@ -92,7 +92,7 @@ function draw() {
       var timeElapsed = millis() - lastPrint;
       if(countDown < 0){
         // Drawing the level
-        background(level1); // set the background to white
+        background(level1); // set the background to the level 1 gif
         textSize(18*CANV_SCALAR); // determines size of font
         fill(51); // determines color of text
 
@@ -319,7 +319,11 @@ function checkProjectileHit() {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function gameUI() {
+  fill('rgb(173, 216, 230)');// determines the color of the rectangle
+  rect(0,0,CANV_WIDTH*2, CANV_HEIGHT/4.8);// Used to block out the background for the score
   textSize(10*CANV_SCALAR);
+  fill('black');
+  stroke(0,0,0);
   text('Gametime: '+time+' sec',CANV_WIDTH/2,CANV_HEIGHT/20);// Show game time
   textAlign(LEFT);
   text('Score: ' + player.score, CANV_WIDTH/20, CANV_HEIGHT/20);// determines what is displayed, at what x,y
