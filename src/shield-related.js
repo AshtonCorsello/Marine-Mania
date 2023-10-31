@@ -8,10 +8,7 @@ function energie(){// Generate an energy block every 5 seconds
 
     ++shieldCounter; //done so the game over check can be done per second
     if (shieldCounter >= 5) energiesarray[energies] = CANV_HEIGHT*(37/400)+energies*CANV_HEIGHT*(17/400);
-
     if (shieldCounter >= 5) {energies++; shieldCounter = 0;}
-    ShieldCT = ShieldCT + 5;
-
     // end if game ends for retry
     if (gameOverFlag) return;
     setTimeout(energie, 1000);
@@ -23,6 +20,8 @@ function Shieldtime(){// Turns off invincibility mode at the end of the energy s
   player.display();
   mode = 1;
   setTimeout(energie, 5000);
+  ShieldCT = 0;
+  //shieldCounter = 0;
 }
 
 function ShieldCountdown(){ //Shield Countdown
@@ -37,6 +36,7 @@ function OpenShield(){ //  Open Shield
   player.shield = true
   player.display();// Change shield status and display shield
   mode = 5; //Toggle Invincible Mode
+  ShieldCT = energies * 5;
   ShieldCountdown();// Shield Countdown
   setTimeout(Shieldtime, 5000*(energies));// Shield Duration
   energies = 0;// Empty energy
