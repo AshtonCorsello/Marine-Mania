@@ -8,9 +8,8 @@ function energie(){// Generate an energy block every 5 seconds
 
     ++shieldCounter; //done so the game over check can be done per second
     if (shieldCounter >= 5) energiesarray[energies] = CANV_HEIGHT*(37/400)+energies*CANV_HEIGHT*(17/400);
-
+    if (shieldCounter >= 5) ShieldCT = ShieldCT + 5;
     if (shieldCounter >= 5) {energies++; shieldCounter = 0;}
-    ShieldCT = ShieldCT + 5;
 
     // end if game ends for retry
     if (gameOverFlag) return;
