@@ -205,9 +205,11 @@ function GameInitialization(){ // initialization
         player.score = 0; // resets score on retry
         player.level = 1; // reset level
         time = 0; // resets game time
+        ShieldCT = 0;
         calcdDelay = STARTING_ENMY_DELAY; // resets enemy difficulty
         enemySpawnDelay = STARTING_ENMY_DELAY;
         setTimeout("gameOverFlag = false", 2000); // resets flag to false on retry. Timer prevents previous Gametime func from not being stopped
+        setTimeout("shieldCounter = 0", 2000);
         player.x = CANV_WIDTH/2;
         player.y = (CANV_HEIGHT - CANV_HEIGHT/16);
         shieldCounter = 0;
