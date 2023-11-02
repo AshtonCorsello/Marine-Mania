@@ -72,7 +72,7 @@ function setup() {
     enemy1 = new Enemy1()
     projectile1 = new Projectile();
     fpsCounter = new FpsCounter();
-    
+
     lastPrint = millis() - 1000;
 
     if(mousePressed && !startedAudio){
@@ -128,7 +128,7 @@ function draw() {
         }
 
         if (player.level == 1 && player.score >= 100) { ++player.level;}
-      
+
       let calcdDelay = STARTING_ENMY_DELAY - time * DELAY_DECR_MULT; // delay decreases over time
       let enemySpawnDelay = (calcdDelay > MIN_ENMY_DELAY) ? calcdDelay : MIN_ENMY_DELAY;
       enemy1.showcase(enemySpawnDelay); //update, draw, and spawn enemies
@@ -147,7 +147,7 @@ function draw() {
 
       gameUI();
       displayShieldInfo();
-      
+
 
         if(mode == 5){// Invincible Mode
           for (let enmy of enemies){ // Shield Mode checks each enemy for collision
@@ -161,6 +161,7 @@ function draw() {
               if(energies > 0 && player.shield == false){// Death removes shield button if present
                 removeElements(button3);
               }
+              
               gameOverSound.play(0, 0.5, 4);             // play gameover sound
               changeMode(9);
             }
@@ -179,7 +180,7 @@ function draw() {
         fill(0, 0, 0);
         text("The game will start in: " + countDown, CANV_WIDTH/2, CANV_HEIGHT/3);
       }
-        
+
     }
     if(mode == 2){ // debug room implementation
       DebugDraw();
@@ -214,7 +215,6 @@ function GameInitialization(){ // initialization
        
         //could make retry initializations in a separate function and do them depending on a flag
         RoundSetup(); // done, it was required for sound reasons. but i dont think we need a flag - mike A
-
         
         if(mode != 1)
           mode = 1;                 // change mode at the end to ensure all this code is processed before the code in draw:mode1 is ran.
@@ -262,7 +262,6 @@ function RoundSetup(){
 
   if(mode != 1)
     mode = 1;
-
 }
 
 function GameOver(){ // Game over
@@ -270,13 +269,15 @@ function GameOver(){ // Game over
       fill(220, 250, 253);
       textSize(32*CANV_SCALAR);
       text('Score: ' + player.score, CANV_WIDTH/2, CANV_HEIGHT/1.5);// determines what is displayed, at what x,y
-      
+
       gameOverFlag = true;
+      
       retryButton = createButton('Try Again?'); // set text of button
       retryButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/(1.3)); // set button position
       retryButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
+
       retryButton.mousePressed(RoundSetup);
-      
+ 
       returntoMenuButton = createButton('Return to Main Menu'); // Sets the text of the button
       returntoMenuButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/(1.2)); // Sets the button position
       returntoMenuButton.size(CANV_WIDTH/6, CANV_HEIGHT/18); // Sets the size of the button
