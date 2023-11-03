@@ -27,7 +27,12 @@ function Tutorial(){
     button2.size(CANV_WIDTH*(55/720), CANV_HEIGHT/10); // sets size of button
     button2.mousePressed(offShield);
   }
-  projectile1.showcase();
+
+  //update and draw any projectiles
+  for(let i = 0; i < projectiles.length; ++i){
+    projectiles[i].showcase();
+  }
+
   stroke(58, 127, 214);
    fill(205, 205, 205);
    rect(CANV_WIDTH*(677/720), CANV_HEIGHT*(116/400), CANV_WIDTH*(30/720), CANV_HEIGHT*(176/400), 5);

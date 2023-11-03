@@ -32,7 +32,7 @@ class Projectile {
       this.posX += cos(this.initialAngle)*this.dirMult*this.speed;
 
       // delete projectile if past end of screen or if it hits an enemy
-      if (this.posY > CANV_HEIGHT || this.posX > CANV_WIDTH || this.posX < 0 || this.hit == true) {
+      if (this.posY > CANV_HEIGHT || this.posY < 0 || this.posX > CANV_WIDTH || this.posX < 0 || this.hit == true) {
       let index = projectiles.indexOf(this);
       projectiles.splice(index, 1);
       }
@@ -47,14 +47,8 @@ class Projectile {
    showcase() {
       const delay = 2500 //ms
       let t = frameCount / 60; // update time
-
-      for (let prjctl of projectiles) {
-         prjctl.update(t); // update projectile position
-      }
-
-      for (let prjctl of projectiles) {
-         prjctl.display(); // draw projectile
-      }
+      this.update(t); // update projectile position
+      this.display(); // draw projectile
    }
 
    hitEnemy(enemy) {

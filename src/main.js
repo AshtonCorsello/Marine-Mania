@@ -50,7 +50,6 @@ function setup() {
     noStroke();
     player = new Player(CANV_WIDTH/2,(CANV_HEIGHT - CANV_HEIGHT/16),7*CANV_SCALAR); // create a new player object
     enemy1 = new Enemy1()
-    projectile1 = new Projectile();
     fpsCounter = new FpsCounter();
 
     lastPrint = millis() - 1000;
@@ -118,7 +117,12 @@ function draw() {
       let enemySpawnDelay = (calcdDelay > MIN_ENMY_DELAY) ? calcdDelay : MIN_ENMY_DELAY;
       enemy1.showcase(enemySpawnDelay); //update, draw, and spawn enemies
 
-      projectile1.showcase();
+
+      //update and draw any projectiles
+      for(let i = 0; i < projectiles.length; ++i){
+        projectiles[i].showcase();
+      }
+
       if (energies == 1 && player.shield == false){// Start shield button is displayed when the number of energy blocks is greater than 1
         button3 = createButton('Shield');
         button3.position(CANV_WIDTH*(65/72), CANV_HEIGHT*(21/40)); // set button position
@@ -192,7 +196,6 @@ function draw() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function GameInitialization(){ // initialization
-        mode = 1;
         //removeElements(button1,button2); // removes the buttons from the screen
         removeElements(startButton, debugButton, TutorialButton);
         energies = 0;// initialization
@@ -218,6 +221,8 @@ function GameInitialization(){ // initialization
         setTimeout(energie, 4000); // start shield charge
         loadTime = 3;
         loadTime =  int(millis()/1000) + loadTime;// Sets the load time to be the loadtime + whenever the button was pressed
+
+        mode = 1;
 }
 
 function GameOver(){ // Game over
@@ -269,7 +274,11 @@ function DebugDraw(){ //Draw function specifically for Debug menu (AKA Mode 2)
     player.update();
   }
 
-  projectile1.showcase();
+  //update and draw any projectiles
+  for(let i = 0; i < projectiles.length; ++i){
+    projectiles[i].showcase();
+  }
+
   enemy1.showcase();
 
   if (keyCode === 49){
@@ -286,7 +295,7 @@ function DebugDraw(){ //Draw function specifically for Debug menu (AKA Mode 2)
 
 function keyPressed(){
     pressedKeys[key] = true;
-   if(keyCode === 32){  // if spacebar is pressed
+   if(keyCode === 32 && (mode == 5 || mode == 1)){  // if spacebar is pressed && playing game
       if(!player.isHit()){
         projectiles.push(new Projectile(player.x, player.y+1));
       }
@@ -301,13 +310,6 @@ function keyReleased(){
 function intersect(obj1X, obj1Y, obj1R, obj2X, obj2Y, obj2R){
     if (sqrt(pow((obj1X - obj2X),2) + pow((obj1Y - obj2Y),2)) < (obj1R + obj2R)) {return true;}
     else {return false;}
-}
-
-function mousePressed(){
-   //console.log("Firing from mouse press");
-  if(!player.isHit()) { // Checks if the player is hit before firing.
-    projectiles.push(new Projectile(mouseX, mouseY));
-  }
 }
 
 function checkProjectileHit() {
@@ -344,8 +346,7 @@ function intersect(obj1X, obj1Y, obj1R, obj2X, obj2Y, obj2R){
 }
 
 function mousePressed(){
-   //console.log("Firing from mouse press");
-  if(!player.isHit()) { // Checks if the player is hit before firing.
+  if(!player.isHit() && (mode == 5 || mode == 1)) { // if playing game and not hit
     projectiles.push(new Projectile(mouseX, mouseY));
   }
 }
