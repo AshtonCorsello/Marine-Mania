@@ -15,7 +15,6 @@ class Projectile {
       this.dirMult = (targetX<player.x ? -1: 1);
       this.slope = this.dirMult * (player.y-targetY)/(player.x-targetX);
       this.speed = (CANV_WIDTH*CANV_HEIGHT)/this.projectileScalar;
-      angleMode(DEGREES);
       this.initialAngle = atan(this.slope);
    /* debug messages
       console.log("Target: " , targetX , "," , targetY);
@@ -23,6 +22,10 @@ class Projectile {
       console.log(this.initialAngle);
    */
       this.size = (CANV_WIDTH*CANV_HEIGHT)/this.projectileScalar;
+
+      // play sound when a proj is created
+      let randomCannonSound = random(cannonSounds);
+      randomCannonSound.play();
    }
   
   
@@ -54,5 +57,9 @@ class Projectile {
    hitEnemy(enemy) {
       this.hit = true;
       player.score += enemy.scoreIncrease;
+
+      let randomDieSound = random(enemyDieSounds);
+      //randomDieSound.SetVolume(0.2);
+      randomDieSound.play();
    }
 }
