@@ -23,6 +23,10 @@ class Projectile {
       console.log(this.initialAngle);
    */
       this.size = (CANV_WIDTH*CANV_HEIGHT)/this.projectileScalar;
+
+      // play sound when a proj is created
+      let randomCannonSound = random(cannonSounds);
+      randomCannonSound.play();
    }
   
   
@@ -60,5 +64,9 @@ class Projectile {
    hitEnemy(enemy) {
       this.hit = true;
       player.score += enemy.scoreIncrease;
+
+      let randomDieSound = random(enemyDieSounds);
+      //randomDieSound.SetVolume(0.2);
+      randomDieSound.play();
    }
 }

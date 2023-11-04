@@ -28,19 +28,39 @@ var time = 0; // Playtime
 var ShieldCT = 0; // Shield time
 let gameOverFlag = false; // flag for being on game over screen
 
-let mySound; // background music
+////// all SFX /////////////////////////////////////////////////
+// background music, 321, go, wavesambiance, shield sounds    //
+let mySound; let startSound1; let startSound2; let wavesSound;//
+let shieldOnSound; let shieldOffSound;                        //
+let cannonSounds = []; let enemyDieSounds = [];               // 
+let gameOverSound; let startedAudio = false;                  //
+////////////////////////////////////////////////////////////////
+
 let mainMenu; // main menu gif
 let level1; // level 1 gif
-let startedAudio = false;
 
 let startButton;
 let debugButton;
 
 function preload() {
-   mySound = loadSound('./src/BeepBox-Song.wav'); // load music file
+   //mySound = loadSound('./src/BeepBox-Song.wav'); // load music file
+   mySound = loadSound('./src/SFX/bgm1.wav');  // alternative BGM choice.  comment, and uncomment the above line to get other back.
    mainMenu = loadImage('./src/mainMenu.gif'); // load main menu gif
    level1 = loadImage('./src/level1.gif'); // load level 1 gif
    gameover = loadImage('./src/gameover.png'); // load gameover file
+  
+  countdownSound = loadSound('./src/SFX/start/321.wav');          // load 321 sound : bottom of GameInitialization()
+  goSound = loadSound('./src/SFX/start/go.wav');                  // load go sound : bottom of GameInitialization()
+  wavesSound = loadSound('./src/SFX/waves.wav');                  // load waves ambiance : bottom of GameInitialization()
+  shieldOnSound = loadSound('./src/SFX/shield/shield-on.wav');    // load shieldon sound : in OpenShield()
+  shieldOffSound = loadSound('./src/SFX/shield/shield-fail.wav'); // load shieldfail sound : in Shieldtime()
+  gameOverSound = loadSound('./src/SFX/died.wav');                // load gameover sound : ~line161
+  for (let i = 1; i <= 8; i++) {  // load sounds into array       // used in Projectile Class definition
+    cannonSounds.push(loadSound('./src/SFX/cannon/cannon' + i + '.wav'));
+  }
+  for (let i = 1; i <= 8; i++) {  // load sounds into array       // used in projectile func hitEnemy()
+    enemyDieSounds.push(loadSound('./src/SFX/enemy-die/exp' + i + '.wav'));
+  }
 }
 
 
@@ -62,11 +82,6 @@ function setup() {
   }
 
 function draw() {
-     // Check if the audio has started and play it
-     if (startedAudio && !mySound.isPlaying() && mode != 10 && mode != 0) {
-      mySound.play();
-    }
-
     if(mode == 0){ // Main menu
       background(mainMenu) // set the background to white
       textSize(32*CANV_SCALAR);
@@ -140,12 +155,14 @@ function draw() {
               player.setHitFalse();
           }
         }else{
-          for (let enmy of enemies){ // checks each enemy for collision
+          for (let enmy of enemies){                     // checks each enemy for collision
             if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size)){
               player.setHitTrue();
               if(energies > 0 && player.shield == false){// Death removes shield button if present
                 removeElements(button3);
               }
+              
+              gameOverSound.play(0, 0.5, 4);             // play gameover sound
               changeMode(9);
             }
           }
@@ -192,32 +209,59 @@ function draw() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function GameInitialization(){ // initialization
-        mode = 1;
+      
         //removeElements(button1,button2); // removes the buttons from the screen
         removeElements(startButton, debugButton, TutorialButton);
-        energies = 0;// initialization
-        energiesarray = [];// initialization
-
+       
         //could make retry initializations in a separate function and do them depending on a flag
-        player.setHitFalse(); // draws player again when retrying
-        currentTime = 0; // resets difficulty on retry
-        enemies = []; // resets enemies on retry
-        player.score = 0; // resets score on retry
-        player.level = 1; // reset level
-        time = 0; // resets game time
-        ShieldCT = 0;
-        calcdDelay = STARTING_ENMY_DELAY; // resets enemy difficulty
-        enemySpawnDelay = STARTING_ENMY_DELAY;
-        setTimeout("gameOverFlag = false", 2000); // resets flag to false on retry. Timer prevents previous Gametime func from not being stopped
-        setTimeout("shieldCounter = 0", 2000);
-        player.x = CANV_WIDTH/2;
-        player.y = (CANV_HEIGHT - CANV_HEIGHT/16);
-        shieldCounter = 0;
+        RoundSetup(); // done, it was required for sound reasons. but i dont think we need a flag - mike A
+        
+        if(mode != 1)
+          mode = 1;                 // change mode at the end to ensure all this code is processed before the code in draw:mode1 is ran.
+                                  // eg, LoadTime is uninitialized until 3 lines above here, while it is being used 2 lines into draw():mode1
 
-        setTimeout(Gametime, 4000); // start counting
-        setTimeout(energie, 4000); // start shield charge
-        loadTime = 3;
-        loadTime =  int(millis()/1000) + loadTime;// Sets the load time to be the loadtime + whenever the button was pressed
+////// SFX-related  ////////////////////////////////////////////////
+//                                                                //
+        mySound.loop(0, 1, 0.2);                                  //
+        wavesSound.loop();        // loop waves ambiance          //
+                                                                  //
+////////////////////////////////////////////////////////////////////   
+}        
+
+// this function runs every time the rety button is clicked. it also runs with GameInitialization()
+function RoundSetup(){
+
+  if (gameOverFlag)
+    removeElements(retryButton);
+
+  player.setHitFalse();             // draws player again when retrying
+  currentTime = 0;                  // resets difficulty on retry
+  enemies = [];                     // resets enemies on retry
+  energies = 0;                     // initialization
+  energiesarray = [];               // initialization
+  player.score = 0;                 // resets score on retry
+  time = 0;                         // resets game time
+  ShieldCT = 0;
+  calcdDelay = STARTING_ENMY_DELAY; // resets enemy difficulty
+  enemySpawnDelay = STARTING_ENMY_DELAY;
+  setTimeout(gameOverFlag = false, 1500); // resets flag to false on retry. Timer prevents previous Gametime func from not being stopped
+  setTimeout("shieldCounter = 0", 2000);
+  player.x = CANV_WIDTH/2;
+  player.y = (CANV_HEIGHT - CANV_HEIGHT/16);
+
+  setTimeout(Gametime, 4000);       // start counting
+  setTimeout(energie, 8000);        // start shield charge
+
+  loadTime = 3;
+  loadTime =  int(millis()/1000) + loadTime;// Sets the load time to be the loadtime + whenever the button was pressed
+
+  countdownSound.play();    // countdown321 sfx            
+  setTimeout(function() {                                  
+      goSound.play();   // "go!" plays after 3.5 seconds   
+  }, 3500); 
+
+  if(mode != 1)
+    mode = 1;
 }
 
 function GameOver(){ // Game over
@@ -231,8 +275,9 @@ function GameOver(){ // Game over
       retryButton = createButton('Try Again?'); // set text of button
       retryButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/(1.3)); // set button position
       retryButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
-      retryButton.mousePressed(GameInitialization);
 
+      retryButton.mousePressed(RoundSetup);
+ 
       returntoMenuButton = createButton('Return to Main Menu'); // Sets the text of the button
       returntoMenuButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/(1.2)); // Sets the button position
       returntoMenuButton.size(CANV_WIDTH/6, CANV_HEIGHT/18); // Sets the size of the button
