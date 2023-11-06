@@ -41,6 +41,7 @@ let level1; // level 1 gif
 
 let startButton;
 let debugButton;
+let pauseButton;
 
 function preload() {
    //mySound = loadSound('./src/BeepBox-Song.wav'); // load music file
@@ -102,86 +103,95 @@ function draw() {
       TutorialButton.mousePressed(Tutorial);
     }
     if(mode == 1 | mode == 5){ // Game has started
-      let currentTime = int(millis()/1000) // Converts mil secs into seconds
-      let countDown = loadTime - currentTime; // Amount of time passed
-      var timeElapsed = millis() - lastPrint;
-      if(countDown < 0){
-        // Drawing the level
-        background(level1); // set the background to the level 1 gif
-        fill('rgb(173, 216, 230)');// determines the color of the rectangle
-        rect(0,0,CANV_WIDTH*2, CANV_HEIGHT/4.8);// Used to block out the background for the score
-        textSize(18*CANV_SCALAR); // determines size of font
-        fill(51); // determines color of text
-
-        if(!player.isHit()){ // stops drawing the player if they get hit
-          player.display(); // draw the player
-          player.update();
-        }
-        if (timeElapsed > 1000) {
-          player.score++;
-          lastPrint = millis();
-        }
-
-        if(!player.isHit()){ // stops drawing the player if they get hit
-          player.display(); // draw the player
-          player.update();
-        }
-
-        if (player.level == 1 && player.score >= 100) { ++player.level;}
-
-      let calcdDelay = STARTING_ENMY_DELAY - time * DELAY_DECR_MULT; // delay decreases over time
-      let enemySpawnDelay = (calcdDelay > MIN_ENMY_DELAY) ? calcdDelay : MIN_ENMY_DELAY;
-      enemy1.showcase(enemySpawnDelay); //update, draw, and spawn enemies
-
-      projectile1.showcase();
-      if (energies == 1 && player.shield == false){// Start shield button is displayed when the number of energy blocks is greater than 1
-        button3 = createButton('Shield');
-        button3.position(CANV_WIDTH*(65/72), CANV_HEIGHT*(21/40)); // set button position
-        button3.size(CANV_WIDTH*(55/720), CANV_HEIGHT/10); // sets size of button
-        button3.mousePressed(OpenShield);
-      }
-
-      if(energies > 0 && keyCode == SHIFT){
-        OpenShield();
-      }
-
-      gameUI();
-      displayShieldInfo();
-
-
-        if(mode == 5){// Invincible Mode
-          for (let enmy of enemies){ // Shield Mode checks each enemy for collision
-            if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size))
-              player.setHitFalse();
-          }
-        }else{
-          for (let enmy of enemies){                     // checks each enemy for collision
-            if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size)){
-              player.setHitTrue();
-              if(energies > 0 && player.shield == false){// Death removes shield button if present
-                removeElements(button3);
-              }
-              
-              gameOverSound.play(0, 0.5, 4);             // play gameover sound
-              changeMode(9);
-            }
-          }
-        }
-
-        //collision between player projectile and enemies
-        //create a standalone function for this
-        checkProjectileHit();
-
+      if(isPaused() == true){
+        pauseDisplay();
       }
       else{
-        // Draws the countdown
-        background(0, 204, 255) // Used to remove text, Title
-        textSize(20*CANV_SCALAR);
-        fill(0, 0, 0);
-        text("The game will start in: " + countDown, CANV_WIDTH/2, CANV_HEIGHT/3);
-      }
+        let currentTime = int(millis()/1000) // Converts mil secs into seconds
+          let countDown = loadTime - currentTime; // Amount of time passed
+          var timeElapsed = millis() - lastPrint;
+          if(countDown < 0){
+            // Drawing the level
+            background(level1); // set the background to the level 1 gif
+            fill('rgb(173, 216, 230)');// determines the color of the rectangle
+            rect(0,0,CANV_WIDTH*2, CANV_HEIGHT/4.8);// Used to block out the background for the score
+            textSize(18*CANV_SCALAR); // determines size of font
+            fill(51); // determines color of text
 
-    }
+            if(!player.isHit()){ // stops drawing the player if they get hit
+              player.display(); // draw the player
+              player.update();
+            }
+            if (timeElapsed > 1000) {
+              player.score++;
+              lastPrint = millis();
+            }
+
+            if(pressedKeys.Escape){
+              pause();
+            }
+
+            if(!player.isHit()){ // stops drawing the player if they get hit
+              player.display(); // draw the player
+              player.update();
+            }
+
+            if (player.level == 1 && player.score >= 100) { ++player.level;}
+
+          let calcdDelay = STARTING_ENMY_DELAY - time * DELAY_DECR_MULT; // delay decreases over time
+          let enemySpawnDelay = (calcdDelay > MIN_ENMY_DELAY) ? calcdDelay : MIN_ENMY_DELAY;
+          enemy1.showcase(enemySpawnDelay); //update, draw, and spawn enemies
+
+          projectile1.showcase();
+          if (energies >= 1 && player.shield == false){// Start shield button is displayed when the number of energy blocks is greater than 1
+            button3 = createButton('Shield');
+            button3.position(CANV_WIDTH*(65/72), CANV_HEIGHT*(21/40)); // set button position
+            button3.size(CANV_WIDTH*(55/720), CANV_HEIGHT/10); // sets size of button
+            button3.mousePressed(OpenShield);
+          }
+
+          if(energies > 0 && keyCode == SHIFT){
+            OpenShield();
+          }
+
+          gameUI();
+          displayShieldInfo();
+
+
+            if(mode == 5){// Invincible Mode
+              for (let enmy of enemies){ // Shield Mode checks each enemy for collision
+                if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size))
+                  player.setHitFalse();
+              }
+            }else{
+              for (let enmy of enemies){                     // checks each enemy for collision
+                if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size)){
+                  player.setHitTrue();
+                  if(energies > 0 && player.shield == false){// Death removes shield button if present
+                    removeElements(button3);
+                  }
+
+                  gameOverSound.play(0, 0.5, 4);             // play gameover sound
+                  changeMode(9);
+                }
+              }
+            }
+
+            //collision between player projectile and enemies
+            //create a standalone function for this
+            checkProjectileHit();
+
+          }
+          else{
+            // Draws the countdown
+            background(0, 204, 255) // Used to remove text, Title
+            textSize(20*CANV_SCALAR);
+            fill(0, 0, 0);
+            text("The game will start in: " + countDown, CANV_WIDTH/2, CANV_HEIGHT/3);
+          }
+
+        }
+      }
     if(mode == 2){ // debug room implementation
       DebugDraw();
     }
@@ -195,7 +205,7 @@ function draw() {
     }
 
   //fps counter stuff
-  if(FPS_ON){
+  if(FPS_ON && isPaused() == false){
     if(fpsCounter.readyToUpdate())
       fpsCounter.update();
 
@@ -376,10 +386,6 @@ function gameUI() {
   text('Score: ' + player.score, CANV_WIDTH/20, CANV_HEIGHT/20);// determines what is displayed, at what x,y
   text('Level: ' + player.level, CANV_WIDTH/20, CANV_HEIGHT/10); // ... 
   textAlign(CENTER);
-}
-
-function keyReleased(){
-    delete pressedKeys[key];
 }
 
 //checks if two objects intersect using (x,y) and radius
