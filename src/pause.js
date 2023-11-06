@@ -1,19 +1,19 @@
 
-var pausedTime = 0;
-var paused = false;
-var pauseScore = 0;
-var pausedShieldCells = 0;
-var pausedEnergy = 0;
-var pausedShieldCD = 0;
-var pausedEnergyArray = [];
-var pausedEnemies1 = [];
-var pausedProjectiles = [];
+var pausedTime = 0; // Keeps track of gametime
+var paused = false; // If the game is paused
+var pauseScore = 0; // Keeps track of gamescore
+var pausedShieldCells = 0; // Keeps track of the energy cells
+var pausedEnergy = 0; // Keeps track of the energy
+var pausedShieldCD = 0; // Keeps track of the shield count down
+var pausedEnergyArray = []; // Keeps track of the energy array
+var pausedEnemies = []; // Keeps track of the enemies
+var pausedProjectiles = []; // Keeps track of the projectiles
 
-function isPaused(){
+function isPaused(){ // Checks to see if the game is paused
   return paused;
 }
   
-function pause(){
+function pause(){ // Pauses the game
   paused = true;
   pausedTime = time;
   pausedScore = player.score;
@@ -26,7 +26,7 @@ function pause(){
   keyReleased();
 }
 
- function unpause(){
+ function unpause(){ // Unpauses the game
   paused = false;
   time = pausedTime;
   player.score = pausedScore;
@@ -40,7 +40,7 @@ function pause(){
   keyReleased();
 }
 
-function pauseDisplay(){
+function pauseDisplay(){ // Displays the Pause text when game is paused
   textSize(32);
   textAlign(CENTER, CENTER);
   fill(255, 0, 0); // Set the text color to red
