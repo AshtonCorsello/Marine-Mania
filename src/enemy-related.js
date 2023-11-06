@@ -28,23 +28,25 @@ class Enemy1 {
     }
   
   
-    update(time) {
+    update(time){
+      if(isPaused() == false){
       // x position follows a circle
-      let w = 50; // angular speed
-      let angle = w * time + this.initialangle;
+        let w = 50; // angular speed
+        let angle = w * time + this.initialangle;
 
-      if(this.curveType === "sin"){
-        this.posX = width / 2 + this.radius * sin(angle);
-      }
-      else if(this.curveType === "cos"){ 
-        this.posX = width / 2 + this.radius * cos(angle);
-      }
+        if(this.curveType === "sin"){
+          this.posX = width / 2 + this.radius * sin(angle);
+        }
+        else if(this.curveType === "cos"){ 
+          this.posX = width / 2 + this.radius * cos(angle);
+        }
       
-      this.posY += pow(this.size, 0.5);
-      // delete enemy if past end of screen or if hit by projectile
-      if (this.posY > height || this.hit == true) {
-        let index = enemies.indexOf(this);
-        enemies.splice(index, 1);
+        this.posY += pow(this.size, 0.5);
+        // delete enemy if past end of screen or if hit by projectile
+        if (this.posY > height || this.hit == true) {
+          let index = enemies.indexOf(this);
+          enemies.splice(index, 1);
+        }
       }
     }
   
