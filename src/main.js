@@ -103,7 +103,7 @@ function draw() {
       TutorialButton.mousePressed(Tutorial);
     }
     if(mode == 1 | mode == 5){ // Game has started
-      if(isPaused() == true){
+      if(isPaused() == true){ // If the game is paused display the pause menu
         pauseDisplay();
       }
       else{
@@ -127,7 +127,7 @@ function draw() {
               lastPrint = millis();
             }
 
-            if(pressedKeys.Escape){
+            if(pressedKeys.Escape){// Checks to see if the escape key was pressed to pause the game
               pause();
             }
 
