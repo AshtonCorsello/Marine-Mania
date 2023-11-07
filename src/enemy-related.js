@@ -28,7 +28,7 @@ class Enemy1 {
     }
   
   
-    update(time) {
+    update(time){
       // x position follows a circle
       let w = 50; // angular speed
       let angle = w * time + this.initialangle;
@@ -48,32 +48,31 @@ class Enemy1 {
       }
     }
   
-    display() {
+    display(){
       ellipse(this.posX, this.posY, this.size);
     }
 
-    showcase(delay) {
-      if (enemyOn){
+    showcase(delay){
+      if(enemyOn){
         if(this.readyToSpawn) {
           enemies.push(new Enemy1()); // append enemy object
           this.readyToSpawn = false;
           this.lastSpawnedTime = millis();
         }
-        else {
+        else{
           if(millis() - this.lastSpawnedTime > delay) {
             this.readyToSpawn = true;
           }
         } 
-        let t = frameCount / 60; // update time
+        let t = time / 60; // update time
 
-        for (let enmy of enemies) {
+        for(let enmy of enemies) {
           enmy.update(t); // update enemy position
         }
- 
+      }
       // loop through enemies with a for..of loop
-        for (let enmy of enemies) {
-          enmy.display(); // draw enemy
-        }
+      for (let enmy of enemies) {
+        enmy.display(); // draw enemy
       }
     }
 }
