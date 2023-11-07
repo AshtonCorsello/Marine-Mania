@@ -36,6 +36,8 @@ let startedAudio = false;
 let startButton;
 let debugButton;
 
+let playerElement = document.getElementById("player")
+
 function preload() {
    mySound = loadSound('./src/BeepBox-Song.wav'); // load music file
    mainMenu = loadImage('./src/mainMenu.gif'); // load main menu gif
@@ -49,7 +51,7 @@ function setup() {
     cnv.id('game-canvas');
     fill(240);
     noStroke();
-    player = new Player(CANV_WIDTH/2,(CANV_HEIGHT - CANV_HEIGHT/16),7*CANV_SCALAR); // create a new player object
+    player = new Player(playerElement, CANV_WIDTH/2, 7*CANV_SCALAR); // create a new player object
     enemy1 = new Enemy1()
     projectile1 = new Projectile();
     fpsCounter = new FpsCounter();
@@ -223,6 +225,7 @@ function GameOver(){ // Game over
       
       gameOverFlag = true;
       retryButton = createButton('Try Again?'); // set text of button
+      retryButton.id('try-again-button')
       retryButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/(1.3)); // set button position
       retryButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
       retryButton.mousePressed(GameInitialization);
@@ -347,6 +350,7 @@ function gameUI() {
   textSize(10*CANV_SCALAR);
   text('Gametime: '+time+' sec',CANV_WIDTH/2,CANV_HEIGHT/20);// Show game time
   textAlign(LEFT);
+  // let score_text = 'Score: ';
   text('Score: ' + player.score, CANV_WIDTH/20, CANV_HEIGHT/20);// determines what is displayed, at what x,y
   textAlign(CENTER);
 }
