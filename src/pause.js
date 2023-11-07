@@ -1,7 +1,7 @@
 
 var pausedTime = 0; // Keeps track of gametime
 var paused = false; // If the game is paused
-var pauseScore = 0; // Keeps track of gamescore
+var pausedScore = 0; // Keeps track of gamescore
 var pausedShieldCells = 0; // Keeps track of the energy cells
 var pausedEnergy = 0; // Keeps track of the energy
 var pausedShieldCD = 0; // Keeps track of the shield count down
