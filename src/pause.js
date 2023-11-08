@@ -9,7 +9,6 @@ var pausedScore = 0; // Keeps track of gamescore
 var pausedShieldCells = 0; // Keeps track of the energy cells
 var pausedEnergy = 0; // Keeps track of the energy
 var pausedShieldCD = 0; // Keeps track of the shield count down
-var pausedShieldTime = 0;
 var pausedEnergyArray = []; // Keeps track of the energy array
 var pausedEnemies = []; // Keeps track of the enemies
 var pausedProjectiles = []; // Keeps track of the projectiles
@@ -30,7 +29,6 @@ function pause(){ // Pauses the game
   pausedEnemies = [...enemies];
   pausedProjectiles = [...projectiles];
   pausedFrameCount = frameCount;
-  pausedShieldTime = Shieldtime;
   keyReleased();
 }
 
@@ -46,7 +44,6 @@ function pause(){ // Pauses the game
   projectiles = [...pausedProjectiles];
   removeElements(pauseText,pauseButton);
   frameCount = pausedFrameCount;
-  Shieldtime = pausedShieldTime;
   keyReleased();
 }
 
