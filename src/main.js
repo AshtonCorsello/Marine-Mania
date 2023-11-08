@@ -115,11 +115,7 @@ function draw() {
           gameStarted = true;
           // Drawing the level
           background(level1); // set the background to the level 1 gif
-          fill('rgb(173, 216, 230)');// determines the color of the rectangle
-          rect(0,0,CANV_WIDTH*2, CANV_HEIGHT/4.8);// Used to block out the background for the score
-          textSize(18*CANV_SCALAR); // determines size of font
-          fill(51); // determines color of text
-
+    
           if (timeElapsed > 1000) {
             player.score++;
             lastPrint = millis();
@@ -139,6 +135,13 @@ function draw() {
           let calcdDelay = STARTING_ENMY_DELAY - time * DELAY_DECR_MULT; // delay decreases over time
           let enemySpawnDelay = (calcdDelay > MIN_ENMY_DELAY) ? calcdDelay : MIN_ENMY_DELAY;
           enemy1.showcase(enemySpawnDelay); //update, draw, and spawn enemies
+
+          //Draws rectangle for score and time (AFTER DRAWING ENEMIES)
+          fill('rgb(173, 216, 230)');// determines the color of the rectangle
+          rect(0,0,CANV_WIDTH*2, CANV_HEIGHT/4.8);// Used to block out the background for the score
+          textSize(18*CANV_SCALAR); // determines size of font
+          fill(51); // determines color of text
+
 
 
           //update and draw any projectiles
