@@ -65,7 +65,6 @@ class Enemy1 {
           }
         } 
         let t = frameCount / 60; // update time
-        console.log(frameCount);
 
         for(let enmy of enemies) {
           enmy.update(t); // update enemy position
