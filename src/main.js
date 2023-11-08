@@ -115,11 +115,7 @@ function draw() {
           gameStarted = true;
           // Drawing the level
           background(level1); // set the background to the level 1 gif
-          fill('rgb(173, 216, 230)');// determines the color of the rectangle
-          rect(0,0,CANV_WIDTH*2, CANV_HEIGHT/4.8);// Used to block out the background for the score
-          textSize(18*CANV_SCALAR); // determines size of font
-          fill(51); // determines color of text
-
+    
           if (timeElapsed > 1000) {
             player.score++;
             lastPrint = millis();
@@ -140,6 +136,13 @@ function draw() {
           let enemySpawnDelay = (calcdDelay > MIN_ENMY_DELAY) ? calcdDelay : MIN_ENMY_DELAY;
           enemy1.showcase(enemySpawnDelay); //update, draw, and spawn enemies
 
+          //Draws rectangle for score and time (AFTER DRAWING ENEMIES)
+          fill('rgb(173, 216, 230)');// determines the color of the rectangle
+          rect(0,0,CANV_WIDTH*2, CANV_HEIGHT/4.8);// Used to block out the background for the score
+          textSize(18*CANV_SCALAR); // determines size of font
+          fill(51); // determines color of text
+
+
 
           //update and draw any projectiles
           for(let i = 0; i < projectiles.length; ++i){
@@ -148,7 +151,7 @@ function draw() {
 
           if (energies == 1 && player.shield == false){// Start shield button is displayed when the number of energy blocks is greater than 1
             button3 = createButton('Shield');
-            button3.position(CANV_WIDTH*(65/72), CANV_HEIGHT*(21/40)); // set button position
+            button3.position(CANV_WIDTH*(65/72), CANV_HEIGHT*(21/36)); // set button position
             button3.size(CANV_WIDTH*(55/720), CANV_HEIGHT/10); // sets size of button
             button3.mousePressed(OpenShield);
           }
