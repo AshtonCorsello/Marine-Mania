@@ -32,7 +32,7 @@ function ShieldCountdown(){ //Shield Countdown
     if(isPaused() == false){
       ShieldCT--;
     }
-    setTimeout(ShieldCountdown, 1000)
+    setTimeout(ShieldCountdown, 1000);
     if(ShieldCT == 0){
       Shieldtime();
     }
