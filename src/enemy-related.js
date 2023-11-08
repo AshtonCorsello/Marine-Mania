@@ -28,10 +28,10 @@ class Enemy1 {
     }
   
   
-    update(time){
+    update(t){
       // x position follows a circle
       let w = 50; // angular speed
-      let angle = w * time + this.initialangle;
+      let angle = w * t + this.initialangle;
 
       if(this.curveType === "sin"){
         this.posX = width / 2 + this.radius * sin(angle);
@@ -64,7 +64,7 @@ class Enemy1 {
             this.readyToSpawn = true;
           }
         } 
-        let t = time / 60; // update time
+        let t = frameCount / 60; // update time
 
         for(let enmy of enemies) {
           enmy.update(t); // update enemy position

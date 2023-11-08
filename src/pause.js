@@ -1,3 +1,7 @@
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////PAUSE FUNCTIONS/////////////////////////
+//////////////////////////////////////////////////////////////////////
+// In order to use pause function press the esc button on the keyboard
 
 var pausedTime = 0; // Keeps track of gametime
 var paused = false; // If the game is paused
@@ -8,6 +12,7 @@ var pausedShieldCD = 0; // Keeps track of the shield count down
 var pausedEnergyArray = []; // Keeps track of the energy array
 var pausedEnemies = []; // Keeps track of the enemies
 var pausedProjectiles = []; // Keeps track of the projectiles
+var pausedFrameCount = 0; // Keeps track of frameCount
 
 function isPaused(){ // Checks to see if the game is paused
   return paused;
@@ -23,6 +28,7 @@ function pause(){ // Pauses the game
   pausedEnergyArray = [...energiesarray];
   pausedEnemies = [...enemies];
   pausedProjectiles = [...projectiles];
+  pausedFrameCount = frameCount;
   keyReleased();
 }
 
@@ -32,11 +38,12 @@ function pause(){ // Pauses the game
   player.score = pausedScore;
   shieldCounter = pausedShieldCells
   energies = pausedEnergy;
-  SheildCT = pausedShieldCD;
+  ShieldCT = pausedShieldCD;
   energiesarray = [...pausedEnergyArray];
   enemies = [...pausedEnemies];
   projectiles = [...pausedProjectiles];
   removeElements(pauseText,pauseButton);
+  frameCount = pausedFrameCount;
   keyReleased();
 }
 

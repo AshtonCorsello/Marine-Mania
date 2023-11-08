@@ -61,7 +61,7 @@ class Player {
         fill(255, 255, 255);
         rect(this.x, this.y, this.size*3, this.size*6, 20); 
         textSize(10*CANV_SCALAR);
-        text('Shield time: '+(ShieldCT+1)+' sec',CANV_WIDTH*(60/72),CANV_HEIGHT/20); // Shield time
+        text('Shield time: '+(ShieldCT)+' sec',CANV_WIDTH*(60/72),CANV_HEIGHT/20); // Shield time
       }
 
       //Draws wake behind boat
