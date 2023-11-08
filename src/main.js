@@ -27,6 +27,7 @@ let enemyOn = new Boolean(true); // For use in debug. Defaults to true in normal
 var time = 0; // Playtime
 var ShieldCT = 0; // Shield time
 let gameOverFlag = false; // flag for being on game over screen
+let gameStarted = false;
 
 ////// all SFX /////////////////////////////////////////////////
 // background music, 321, go, wavesambiance, shield sounds    //
@@ -66,12 +67,12 @@ function preload() {
 
 
 function setup() {
+    angleMode(DEGREES);
     createCanvas(CANV_WIDTH, CANV_HEIGHT);
     fill(240);
     noStroke();
     player = new Player(CANV_WIDTH/2,(CANV_HEIGHT - CANV_HEIGHT/16),7*CANV_SCALAR); // create a new player object
     enemy1 = new Enemy1()
-    projectile1 = new Projectile();
     fpsCounter = new FpsCounter();
 
     lastPrint = millis() - 1000;
@@ -108,42 +109,44 @@ function draw() {
       }
       else{
         let currentTime = int(millis()/1000) // Converts mil secs into seconds
-          let countDown = loadTime - currentTime; // Amount of time passed
-          var timeElapsed = millis() - lastPrint;
-          if(countDown < 0){
-            // Drawing the level
-            background(level1); // set the background to the level 1 gif
-            fill('rgb(173, 216, 230)');// determines the color of the rectangle
-            rect(0,0,CANV_WIDTH*2, CANV_HEIGHT/4.8);// Used to block out the background for the score
-            textSize(18*CANV_SCALAR); // determines size of font
-            fill(51); // determines color of text
+        let countDown = loadTime - currentTime; // Amount of time passed
+        var timeElapsed = millis() - lastPrint;
+        if(countDown < 0){
+          gameStarted = true;
+          // Drawing the level
+          background(level1); // set the background to the level 1 gif
+          fill('rgb(173, 216, 230)');// determines the color of the rectangle
+          rect(0,0,CANV_WIDTH*2, CANV_HEIGHT/4.8);// Used to block out the background for the score
+          textSize(18*CANV_SCALAR); // determines size of font
+          fill(51); // determines color of text
 
-            if(!player.isHit()){ // stops drawing the player if they get hit
-              player.display(); // draw the player
-              player.update();
-            }
-            if (timeElapsed > 1000) {
-              player.score++;
-              lastPrint = millis();
-            }
+          if (timeElapsed > 1000) {
+            player.score++;
+            lastPrint = millis();
+          }
 
-            if(pressedKeys.Escape){// Checks to see if the escape key was pressed to pause the game
-              pause();
-            }
+          if(pressedKeys.Escape){// Checks to see if the escape key was pressed to pause the game
+            pause();
+          }
 
-            if(!player.isHit()){ // stops drawing the player if they get hit
-              player.display(); // draw the player
-              player.update();
-            }
+          if(!player.isHit()){ // stops drawing the player if they get hit
+            player.display(); // draw the player
+            player.update()
+          }
 
-            if (player.level == 1 && player.score >= 100) { ++player.level;}
+          if (player.level == 1 && player.score >= 100) ++player.level;
 
           let calcdDelay = STARTING_ENMY_DELAY - time * DELAY_DECR_MULT; // delay decreases over time
           let enemySpawnDelay = (calcdDelay > MIN_ENMY_DELAY) ? calcdDelay : MIN_ENMY_DELAY;
           enemy1.showcase(enemySpawnDelay); //update, draw, and spawn enemies
 
-          projectile1.showcase();
-          if (energies >= 1 && player.shield == false){// Start shield button is displayed when the number of energy blocks is greater than 1
+
+          //update and draw any projectiles
+          for(let i = 0; i < projectiles.length; ++i){
+            projectiles[i].showcase();
+          }
+
+          if (energies == 1 && player.shield == false){// Start shield button is displayed when the number of energy blocks is greater than 1
             button3 = createButton('Shield');
             button3.position(CANV_WIDTH*(65/72), CANV_HEIGHT*(21/40)); // set button position
             button3.size(CANV_WIDTH*(55/720), CANV_HEIGHT/10); // sets size of button
@@ -157,30 +160,24 @@ function draw() {
           gameUI();
           displayShieldInfo();
 
+          for (let enmy of enemies){                     // checks each enemy for collision
+            if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size)){
+              player.setHitTrue();
 
-            if(mode == 5){// Invincible Mode
-              for (let enmy of enemies){ // Shield Mode checks each enemy for collision
-                if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size))
-                  player.setHitFalse();
-              }
-            }else{
-              for (let enmy of enemies){                     // checks each enemy for collision
-                if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size)){
-                  player.setHitTrue();
-                  if(energies > 0 && player.shield == false){// Death removes shield button if present
-                    removeElements(button3);
-                  }
+              gameStarted = false;
 
-                  gameOverSound.play(0, 0.5, 4);             // play gameover sound
-                  changeMode(9);
-                }
+              if(energies > 0 && player.shield == false){// Death removes shield button if present
+                removeElements(button3)
               }
+              
+              gameOverSound.play(0, 0.5, 4);             // play gameover sound
+              changeMode(9);
             }
+          }
 
-            //collision between player projectile and enemies
-            //create a standalone function for this
-            checkProjectileHit();
-
+          //collision between player projectile and enemies
+          //create a standalone function for this
+          checkProjectileHit();
           }
           else{
             // Draws the countdown
@@ -219,7 +216,6 @@ function draw() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function GameInitialization(){ // initialization
-      
         //removeElements(button1,button2); // removes the buttons from the screen
         removeElements(startButton, debugButton, TutorialButton);
        
@@ -324,7 +320,11 @@ function DebugDraw(){ //Draw function specifically for Debug menu (AKA Mode 2)
     player.update();
   }
 
-  projectile1.showcase();
+  //update and draw any projectiles
+  for(let i = 0; i < projectiles.length; ++i){
+    projectiles[i].showcase();
+  }
+
   enemy1.showcase();
 
   if (keyCode === 49){
@@ -341,7 +341,7 @@ function DebugDraw(){ //Draw function specifically for Debug menu (AKA Mode 2)
 
 function keyPressed(){
     pressedKeys[key] = true;
-   if(keyCode === 32){  // if spacebar is pressed
+   if(keyCode === 32 && gameStarted){  // if spacebar is pressed && playing game
       if(!player.isHit()){
         projectiles.push(new Projectile(player.x, player.y+1));
       }
@@ -356,13 +356,6 @@ function keyReleased(){
 function intersect(obj1X, obj1Y, obj1R, obj2X, obj2Y, obj2R){
     if (sqrt(pow((obj1X - obj2X),2) + pow((obj1Y - obj2Y),2)) < (obj1R + obj2R)) {return true;}
     else {return false;}
-}
-
-function mousePressed(){
-   //console.log("Firing from mouse press");
-  if(!player.isHit()) { // Checks if the player is hit before firing.
-    projectiles.push(new Projectile(mouseX, mouseY));
-  }
 }
 
 function checkProjectileHit() {
@@ -395,20 +388,7 @@ function intersect(obj1X, obj1Y, obj1R, obj2X, obj2Y, obj2R){
 }
 
 function mousePressed(){
-   //console.log("Firing from mouse press");
-  if(!player.isHit()) { // Checks if the player is hit before firing.
+  if(!player.isHit() && gameStarted) { // if playing game and not hit
     projectiles.push(new Projectile(mouseX, mouseY));
   }
 }
-
-function checkProjectileHit() {
-  for (let prjctl of projectiles){
-    for (let enmy of enemies){
-      if (intersect(prjctl.posX, prjctl.posY, prjctl.size, enmy.posX, enmy.posY, enmy.size)){
-        enmy.hit = true;
-        prjctl.hitEnemy(enmy);
-      }
-    }
-  }
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
