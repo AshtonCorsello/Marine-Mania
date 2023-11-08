@@ -151,7 +151,7 @@ function draw() {
 
           if (energies == 1 && player.shield == false){// Start shield button is displayed when the number of energy blocks is greater than 1
             button3 = createButton('Shield');
-            button3.position(CANV_WIDTH*(65/72), CANV_HEIGHT*(21/40)); // set button position
+            button3.position(CANV_WIDTH*(65/72), CANV_HEIGHT*(21/36)); // set button position
             button3.size(CANV_WIDTH*(55/720), CANV_HEIGHT/10); // sets size of button
             button3.mousePressed(OpenShield);
           }
