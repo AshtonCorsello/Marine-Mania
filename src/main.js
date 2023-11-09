@@ -37,8 +37,11 @@ let cannonSounds = []; let enemyDieSounds = [];               //
 let gameOverSound; let startedAudio = false;                  //
 ////////////////////////////////////////////////////////////////
 
+///// all images //////////////////////////
 let mainMenu; // main menu gif
 let level1; // level 1 gif
+let enmyImg1; let playerImg;
+//////////////////////////////////////////
 
 let startButton;
 let debugButton;
@@ -50,6 +53,8 @@ function preload() {
    mainMenu = loadImage('./src/mainMenu.gif'); // load main menu gif
    level1 = loadImage('./src/level1.gif'); // load level 1 gif
    gameover = loadImage('./src/gameover.png'); // load gameover file
+   enmyImg1 = loadImage('./src/norbertEnemy.png');
+   playerImg = loadImage('./src/boat1.0.png');
   
   countdownSound = loadSound('./src/SFX/start/321.wav');          // load 321 sound : bottom of GameInitialization()
   goSound = loadSound('./src/SFX/start/go.wav');                  // load go sound : bottom of GameInitialization()
