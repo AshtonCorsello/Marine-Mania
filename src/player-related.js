@@ -53,7 +53,7 @@ class Player {
         this.y += mvmt.y;
     }
   
-    display() { //Draws the player
+    draw() { //Draws the player
 
       //Draws Shield
       if(player.shield == true){
@@ -64,7 +64,7 @@ class Player {
         text('Shield time: '+(ShieldCT)+' sec',CANV_WIDTH*(60/72),CANV_HEIGHT/20); // Shield time
       }
 
-      imageMode(CENTER);
+      //imageMode(CENTER);
       image(playerImg, this.x, this.y);
     /*
       //Draws wake behind boat
@@ -84,13 +84,14 @@ class Player {
         fill(190);
         rectMode(CENTER);
         square(this.x, this.y+this.size/4, this.size/3);
-    */
+    
       //  textSize(10*CANV_SCALAR);
 
       //  text('Gametime: '+time+' sec',CANV_WIDTH/2,CANV_HEIGHT/20);// Show game time
       //  textAlign(LEFT);
       //  text('Score: ' + this.score, CANV_WIDTH/20, CANV_HEIGHT/20);// determines what is displayed, at what x,y
       //  textAlign(CENTER);
+    */
     }
 
 

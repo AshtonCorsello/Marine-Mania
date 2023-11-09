@@ -131,8 +131,9 @@ function draw() {
           }
 
           if(!player.isHit()){ // stops drawing the player if they get hit
-            player.display(); // draw the player
-            player.update()
+            //player.display(); // draw the player
+            player.draw();
+            player.update();
           }
 
           if (player.level == 1 && player.score >= 100) ++player.level;
@@ -324,7 +325,7 @@ function DebugDraw(){ //Draw function specifically for Debug menu (AKA Mode 2)
   background(145, 240, 243); //White background
 
   if(!player.isHit()){ // stops drawing the player if they get hit
-    player.display(); // draw the player
+    player.draw(); // draw the player
     player.update();
   }
 
