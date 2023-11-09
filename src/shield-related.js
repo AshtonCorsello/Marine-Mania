@@ -62,4 +62,9 @@ function displayShieldInfo() {
      fill(255, 156, 51);
      rect(CANV_WIDTH*(677/720), energiesarray[i], CANV_WIDTH*(30/720), CANV_HEIGHT*(15/400), 20);
    }
+
+    if(player.shield) {
+      textSize(10*CANV_SCALAR);
+      text('Shield time: '+(ShieldCT)+' sec',CANV_WIDTH*(60/72),CANV_HEIGHT/20); // Shield time
+    }
 }

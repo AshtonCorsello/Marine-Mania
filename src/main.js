@@ -57,6 +57,7 @@ function preload() {
   shieldOnSound = loadSound('./src/SFX/shield/shield-on.wav');    // load shieldon sound : in OpenShield()
   shieldOffSound = loadSound('./src/SFX/shield/shield-fail.wav'); // load shieldfail sound : in Shieldtime()
   gameOverSound = loadSound('./src/SFX/died.wav');                // load gameover sound : ~line161
+  enemy2Image = loadImage("./src/img/enemy2.png");                
   for (let i = 1; i <= 8; i++) {  // load sounds into array       // used in Projectile Class definition
     cannonSounds.push(loadSound('./src/SFX/cannon/cannon' + i + '.wav'));
   }
@@ -73,6 +74,7 @@ function setup() {
     noStroke();
     player = new Player(CANV_WIDTH/2,(CANV_HEIGHT - CANV_HEIGHT/16),7*CANV_SCALAR); // create a new player object
     enemy1 = new Enemy1()
+    enemy2 = new Enemy2()
     fpsCounter = new FpsCounter();
 
     lastPrint = millis() - 1000;
@@ -136,11 +138,13 @@ function draw() {
           let enemySpawnDelay = (calcdDelay > MIN_ENMY_DELAY) ? calcdDelay : MIN_ENMY_DELAY;
           enemy1.showcase(enemySpawnDelay); //update, draw, and spawn enemies
 
+          if (player.level >= 2) {
+            enemy2.showcase(enemySpawnDelay+2); 
+          }
+
           //Draws rectangle for score and time (AFTER DRAWING ENEMIES)
           fill('rgb(173, 216, 230)');// determines the color of the rectangle
           rect(0,0,CANV_WIDTH*2, CANV_HEIGHT/4.8);// Used to block out the background for the score
-          textSize(18*CANV_SCALAR); // determines size of font
-          fill(51); // determines color of text
 
 
 
@@ -230,10 +234,14 @@ function GameInitialization(){ // initialization
                                   // eg, LoadTime is uninitialized until 3 lines above here, while it is being used 2 lines into draw():mode1
 
 ////// SFX-related  ////////////////////////////////////////////////
-//                                                                //
-        mySound.loop(0, 1, 0.2);                                  //
-        wavesSound.loop();        // loop waves ambiance          //
-                                                                  //
+//                  
+        if (!mySound.isPlaying()) {                                    
+          mySound.loop(0, 1, 0.2);  
+        }       
+        if (!wavesSound.isPlaying()) {   // loop waves ambiance          //         
+          wavesSound.loop(); 
+        }     
+                                                          //
 ////////////////////////////////////////////////////////////////////   
 }        
 
