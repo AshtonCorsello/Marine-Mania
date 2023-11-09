@@ -1,4 +1,4 @@
-# Your Game Name
+# Marine Mania
 
 ## Overview
 This game project, developed as part of a software engineering course, is a simulation-based game created using p5.js. It involves a player-controlled boat shooting enemies, earning points, and advancing levels.
