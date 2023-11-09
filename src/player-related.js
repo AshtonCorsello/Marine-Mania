@@ -65,7 +65,7 @@ class Player {
 
       //imageMode(CENTER);
       image(playerImg, this.x-this.imgShift, this.y-this.imgShift, this.size*6, this.size*6);
-    /*
+    
       //Draws wake behind boat
         stroke(255,255,250); //Outline color
         fill(220, 250, 253); //Color of shape
