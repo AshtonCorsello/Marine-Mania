@@ -258,6 +258,7 @@ function RoundSetup(){
   energiesarray = [];               // initialization
   player.score = 0;                 // resets score on retry
   time = 0;                         // resets game time
+  player.level = 1;
   ShieldCT = 0;
   calcdDelay = STARTING_ENMY_DELAY; // resets enemy difficulty
   enemySpawnDelay = STARTING_ENMY_DELAY;
