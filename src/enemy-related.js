@@ -49,9 +49,15 @@ class Enemy1 {
     }
   
     display(){
-      fill(192, 192, 192);
-      stroke(192, 192, 192);
+      fill(0,0,0,0);
+      stroke(0,0,0,0);
       ellipse(this.posX, this.posY, this.size);
+      let img = enemy1Image; 
+      let width = img.width;
+      let height = img.height;
+      let centerX = this.posX;
+      let centerY = this.posY;
+      image(img, centerX - width/2, centerY - height/2);
     }
 
     showcase(delay){

@@ -80,12 +80,6 @@ class Player {
         rectMode(CENTER);
         square(this.x, this.y+this.size/4, this.size/3);
 
-      //  textSize(10*CANV_SCALAR);
-
-      //  text('Gametime: '+time+' sec',CANV_WIDTH/2,CANV_HEIGHT/20);// Show game time
-      //  textAlign(LEFT);
-      //  text('Score: ' + this.score, CANV_WIDTH/20, CANV_HEIGHT/20);// determines what is displayed, at what x,y
-      //  textAlign(CENTER);
     }
 
 
