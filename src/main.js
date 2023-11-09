@@ -27,30 +27,52 @@ let enemyOn = new Boolean(true); // For use in debug. Defaults to true in normal
 var time = 0; // Playtime
 var ShieldCT = 0; // Shield time
 let gameOverFlag = false; // flag for being on game over screen
+let gameStarted = false;
 
-let mySound; // background music
+////// all SFX /////////////////////////////////////////////////
+// background music, 321, go, wavesambiance, shield sounds    //
+let mySound; let startSound1; let startSound2; let wavesSound;//
+let shieldOnSound; let shieldOffSound;                        //
+let cannonSounds = []; let enemyDieSounds = [];               // 
+let gameOverSound; let startedAudio = false;                  //
+////////////////////////////////////////////////////////////////
+
 let mainMenu; // main menu gif
 let level1; // level 1 gif
-let startedAudio = false;
 
 let startButton;
 let debugButton;
+let pauseButton;
 
 function preload() {
-   mySound = loadSound('./src/BeepBox-Song.wav'); // load music file
+   //mySound = loadSound('./src/BeepBox-Song.wav'); // load music file
+   mySound = loadSound('./src/SFX/bgm1.wav');  // alternative BGM choice.  comment, and uncomment the above line to get other back.
    mainMenu = loadImage('./src/mainMenu.gif'); // load main menu gif
    level1 = loadImage('./src/level1.gif'); // load level 1 gif
    gameover = loadImage('./src/gameover.png'); // load gameover file
+  
+  countdownSound = loadSound('./src/SFX/start/321.wav');          // load 321 sound : bottom of GameInitialization()
+  goSound = loadSound('./src/SFX/start/go.wav');                  // load go sound : bottom of GameInitialization()
+  wavesSound = loadSound('./src/SFX/waves.wav');                  // load waves ambiance : bottom of GameInitialization()
+  shieldOnSound = loadSound('./src/SFX/shield/shield-on.wav');    // load shieldon sound : in OpenShield()
+  shieldOffSound = loadSound('./src/SFX/shield/shield-fail.wav'); // load shieldfail sound : in Shieldtime()
+  gameOverSound = loadSound('./src/SFX/died.wav');                // load gameover sound : ~line161
+  for (let i = 1; i <= 8; i++) {  // load sounds into array       // used in Projectile Class definition
+    cannonSounds.push(loadSound('./src/SFX/cannon/cannon' + i + '.wav'));
+  }
+  for (let i = 1; i <= 8; i++) {  // load sounds into array       // used in projectile func hitEnemy()
+    enemyDieSounds.push(loadSound('./src/SFX/enemy-die/exp' + i + '.wav'));
+  }
 }
 
 
 function setup() {
+    angleMode(DEGREES);
     createCanvas(CANV_WIDTH, CANV_HEIGHT);
     fill(240);
     noStroke();
     player = new Player(CANV_WIDTH/2,(CANV_HEIGHT - CANV_HEIGHT/16),7*CANV_SCALAR); // create a new player object
     enemy1 = new Enemy1()
-    projectile1 = new Projectile();
     fpsCounter = new FpsCounter();
 
     lastPrint = millis() - 1000;
@@ -62,11 +84,6 @@ function setup() {
   }
 
 function draw() {
-     // Check if the audio has started and play it
-     if (startedAudio && !mySound.isPlaying() && mode != 10 && mode != 0) {
-      mySound.play();
-    }
-
     if(mode == 0){ // Main menu
       background(mainMenu) // set the background to white
       textSize(32*CANV_SCALAR);
@@ -87,82 +104,94 @@ function draw() {
       TutorialButton.mousePressed(Tutorial);
     }
     if(mode == 1 | mode == 5){ // Game has started
-      let currentTime = int(millis()/1000) // Converts mil secs into seconds
-      let countDown = loadTime - currentTime; // Amount of time passed
-      var timeElapsed = millis() - lastPrint;
-      if(countDown < 0){
-        // Drawing the level
-        background(level1); // set the background to white
-        textSize(18*CANV_SCALAR); // determines size of font
-        fill(51); // determines color of text
-
-        if(!player.isHit()){ // stops drawing the player if they get hit
-          player.display(); // draw the player
-          player.update();
-        }
-        if (timeElapsed > 1000) {
-          player.score++;
-          lastPrint = millis();
-        }
-
-        if(!player.isHit()){ // stops drawing the player if they get hit
-          player.display(); // draw the player
-          player.update();
-        }
-
-        if (player.level == 1 && player.score >= 100) { ++player.level;}
-
-      let calcdDelay = STARTING_ENMY_DELAY - time * DELAY_DECR_MULT; // delay decreases over time
-      let enemySpawnDelay = (calcdDelay > MIN_ENMY_DELAY) ? calcdDelay : MIN_ENMY_DELAY;
-      enemy1.showcase(enemySpawnDelay); //update, draw, and spawn enemies
-
-      projectile1.showcase();
-      if (energies == 1 && player.shield == false){// Start shield button is displayed when the number of energy blocks is greater than 1
-        button3 = createButton('Shield');
-        button3.position(CANV_WIDTH*(65/72), CANV_HEIGHT*(21/40)); // set button position
-        button3.size(CANV_WIDTH*(55/720), CANV_HEIGHT/10); // sets size of button
-        button3.mousePressed(OpenShield);
+      if(isPaused() == true){ // If the game is paused display the pause menu
+        pauseDisplay();
       }
-
-      if(energies > 0 && keyCode == SHIFT){
-        OpenShield();
-      }
-
-      gameUI();
-      displayShieldInfo();
-
-
-        if(mode == 5){// Invincible Mode
-          for (let enmy of enemies){ // Shield Mode checks each enemy for collision
-            if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size))
-              player.setHitFalse();
+      else{
+        let currentTime = int(millis()/1000) // Converts mil secs into seconds
+        let countDown = loadTime - currentTime; // Amount of time passed
+        var timeElapsed = millis() - lastPrint;
+        if(countDown < 0){
+          gameStarted = true;
+          // Drawing the level
+          background(level1); // set the background to the level 1 gif
+    
+          if (timeElapsed > 1000) {
+            player.score++;
+            lastPrint = millis();
           }
-        }else{
-          for (let enmy of enemies){ // checks each enemy for collision
+
+          if(pressedKeys.Escape){// Checks to see if the escape key was pressed to pause the game
+            pause();
+          }
+
+          if(!player.isHit()){ // stops drawing the player if they get hit
+            player.display(); // draw the player
+            player.update()
+          }
+
+          if (player.level == 1 && player.score >= 100) ++player.level;
+
+          let calcdDelay = STARTING_ENMY_DELAY - time * DELAY_DECR_MULT; // delay decreases over time
+          let enemySpawnDelay = (calcdDelay > MIN_ENMY_DELAY) ? calcdDelay : MIN_ENMY_DELAY;
+          enemy1.showcase(enemySpawnDelay); //update, draw, and spawn enemies
+
+          //Draws rectangle for score and time (AFTER DRAWING ENEMIES)
+          fill('rgb(173, 216, 230)');// determines the color of the rectangle
+          rect(0,0,CANV_WIDTH*2, CANV_HEIGHT/4.8);// Used to block out the background for the score
+          textSize(18*CANV_SCALAR); // determines size of font
+          fill(51); // determines color of text
+
+
+
+          //update and draw any projectiles
+          for(let i = 0; i < projectiles.length; ++i){
+            projectiles[i].showcase();
+          }
+
+          if (energies == 1 && player.shield == false){// Start shield button is displayed when the number of energy blocks is greater than 1
+            button3 = createButton('Shield');
+            button3.position(CANV_WIDTH*(65/72), CANV_HEIGHT*(21/36)); // set button position
+            button3.size(CANV_WIDTH*(55/720), CANV_HEIGHT/10); // sets size of button
+            button3.mousePressed(OpenShield);
+          }
+
+          if(energies > 0 && keyCode == SHIFT){
+            OpenShield();
+          }
+
+          gameUI();
+          displayShieldInfo();
+
+          for (let enmy of enemies){                     // checks each enemy for collision
             if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size)){
               player.setHitTrue();
+
+              gameStarted = false;
+
               if(energies > 0 && player.shield == false){// Death removes shield button if present
-                removeElements(button3);
+                removeElements(button3)
               }
+              
+              gameOverSound.play(0, 0.5, 4);             // play gameover sound
               changeMode(9);
             }
           }
+
+          //collision between player projectile and enemies
+          //create a standalone function for this
+          checkProjectileHit();
+          }
+          else{
+            // Draws the countdown
+            background(0, 204, 255) // Used to remove text, Title
+            textSize(20*CANV_SCALAR);
+            fill(0, 0, 0);
+            text("The game will start in: " + countDown, CANV_WIDTH/2, CANV_HEIGHT/3);
+          }
+
         }
-
-        //collision between player projectile and enemies
-        //create a standalone function for this
-        checkProjectileHit();
-
       }
-      else{
-        // Draws the countdown
-        background(0, 204, 255) // Used to remove text, Title
-        textSize(20*CANV_SCALAR);
-        fill(0, 0, 0);
-        text("The game will start in: " + countDown, CANV_WIDTH/2, CANV_HEIGHT/3);
-      }
-
-    }
     if(mode == 2){ // debug room implementation
       DebugDraw();
     }
@@ -176,7 +205,7 @@ function draw() {
     }
 
   //fps counter stuff
-  if(FPS_ON){
+  if(FPS_ON && isPaused() == false){
     if(fpsCounter.readyToUpdate())
       fpsCounter.update();
 
@@ -190,30 +219,58 @@ function draw() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function GameInitialization(){ // initialization
-        mode = 1;
         //removeElements(button1,button2); // removes the buttons from the screen
         removeElements(startButton, debugButton, TutorialButton);
-        energies = 0;// initialization
-        energiesarray = [];// initialization
-
+       
         //could make retry initializations in a separate function and do them depending on a flag
-        player.setHitFalse(); // draws player again when retrying
-        currentTime = 0; // resets difficulty on retry
-        enemies = []; // resets enemies on retry
-        player.score = 0; // resets score on retry
-        player.level = 1; // reset level
-        time = 0; // resets game time
-        calcdDelay = STARTING_ENMY_DELAY; // resets enemy difficulty
-        enemySpawnDelay = STARTING_ENMY_DELAY;
-        setTimeout("gameOverFlag = false", 2000); // resets flag to false on retry. Timer prevents previous Gametime func from not being stopped
-        player.x = CANV_WIDTH/2;
-        player.y = (CANV_HEIGHT - CANV_HEIGHT/16);
-        shieldCounter = 0;
+        RoundSetup(); // done, it was required for sound reasons. but i dont think we need a flag - mike A
+        
+        if(mode != 1)
+          mode = 1;                 // change mode at the end to ensure all this code is processed before the code in draw:mode1 is ran.
+                                  // eg, LoadTime is uninitialized until 3 lines above here, while it is being used 2 lines into draw():mode1
 
-        setTimeout(Gametime, 4000); // start counting
-        setTimeout(energie, 4000); // start shield charge
-        loadTime = 3;
-        loadTime =  int(millis()/1000) + loadTime;// Sets the load time to be the loadtime + whenever the button was pressed
+////// SFX-related  ////////////////////////////////////////////////
+//                                                                //
+        mySound.loop(0, 1, 0.2);                                  //
+        wavesSound.loop();        // loop waves ambiance          //
+                                                                  //
+////////////////////////////////////////////////////////////////////   
+}        
+
+// this function runs every time the rety button is clicked. it also runs with GameInitialization()
+function RoundSetup(){
+
+  if (gameOverFlag)
+    removeElements(retryButton);
+
+  player.setHitFalse();             // draws player again when retrying
+  currentTime = 0;                  // resets difficulty on retry
+  enemies = [];                     // resets enemies on retry
+  energies = 0;                     // initialization
+  energiesarray = [];               // initialization
+  player.score = 0;                 // resets score on retry
+  time = 0;                         // resets game time
+  ShieldCT = 0;
+  calcdDelay = STARTING_ENMY_DELAY; // resets enemy difficulty
+  enemySpawnDelay = STARTING_ENMY_DELAY;
+  setTimeout(gameOverFlag = false, 1500); // resets flag to false on retry. Timer prevents previous Gametime func from not being stopped
+  setTimeout("shieldCounter = 0", 2000);
+  player.x = CANV_WIDTH/2;
+  player.y = (CANV_HEIGHT - CANV_HEIGHT/16);
+
+  setTimeout(Gametime, 4000);       // start counting
+  setTimeout(energie, 8000);        // start shield charge
+
+  loadTime = 3;
+  loadTime =  int(millis()/1000) + loadTime;// Sets the load time to be the loadtime + whenever the button was pressed
+
+  countdownSound.play();    // countdown321 sfx            
+  setTimeout(function() {                                  
+      goSound.play();   // "go!" plays after 3.5 seconds   
+  }, 3500); 
+
+  if(mode != 1)
+    mode = 1;
 }
 
 function GameOver(){ // Game over
@@ -227,8 +284,9 @@ function GameOver(){ // Game over
       retryButton = createButton('Try Again?'); // set text of button
       retryButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/(1.3)); // set button position
       retryButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
-      retryButton.mousePressed(GameInitialization);
 
+      retryButton.mousePressed(RoundSetup);
+ 
       returntoMenuButton = createButton('Return to Main Menu'); // Sets the text of the button
       returntoMenuButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/(1.2)); // Sets the button position
       returntoMenuButton.size(CANV_WIDTH/6, CANV_HEIGHT/18); // Sets the size of the button
@@ -265,7 +323,11 @@ function DebugDraw(){ //Draw function specifically for Debug menu (AKA Mode 2)
     player.update();
   }
 
-  projectile1.showcase();
+  //update and draw any projectiles
+  for(let i = 0; i < projectiles.length; ++i){
+    projectiles[i].showcase();
+  }
+
   enemy1.showcase();
 
   if (keyCode === 49){
@@ -282,7 +344,7 @@ function DebugDraw(){ //Draw function specifically for Debug menu (AKA Mode 2)
 
 function keyPressed(){
     pressedKeys[key] = true;
-   if(keyCode === 32){  // if spacebar is pressed
+   if(keyCode === 32 && gameStarted){  // if spacebar is pressed && playing game
       if(!player.isHit()){
         projectiles.push(new Projectile(player.x, player.y+1));
       }
@@ -299,13 +361,6 @@ function intersect(obj1X, obj1Y, obj1R, obj2X, obj2Y, obj2R){
     else {return false;}
 }
 
-function mousePressed(){
-   //console.log("Firing from mouse press");
-  if(!player.isHit()) { // Checks if the player is hit before firing.
-    projectiles.push(new Projectile(mouseX, mouseY));
-  }
-}
-
 function checkProjectileHit() {
   for (let prjctl of projectiles){
     for (let enmy of enemies){
@@ -320,15 +375,13 @@ function checkProjectileHit() {
 
 function gameUI() {
   textSize(10*CANV_SCALAR);
+  fill('black');
+  stroke(0,0,0);
   text('Gametime: '+time+' sec',CANV_WIDTH/2,CANV_HEIGHT/20);// Show game time
   textAlign(LEFT);
   text('Score: ' + player.score, CANV_WIDTH/20, CANV_HEIGHT/20);// determines what is displayed, at what x,y
   text('Level: ' + player.level, CANV_WIDTH/20, CANV_HEIGHT/10); // ... 
   textAlign(CENTER);
-}
-
-function keyReleased(){
-    delete pressedKeys[key];
 }
 
 //checks if two objects intersect using (x,y) and radius
@@ -338,29 +391,7 @@ function intersect(obj1X, obj1Y, obj1R, obj2X, obj2Y, obj2R){
 }
 
 function mousePressed(){
-   //console.log("Firing from mouse press");
-  if(!player.isHit()) { // Checks if the player is hit before firing.
+  if(!player.isHit() && gameStarted) { // if playing game and not hit
     projectiles.push(new Projectile(mouseX, mouseY));
   }
-}
-
-function checkProjectileHit() {
-  for (let prjctl of projectiles){
-    for (let enmy of enemies){
-      if (intersect(prjctl.posX, prjctl.posY, prjctl.size, enmy.posX, enmy.posY, enmy.size)){
-        enmy.hit = true;
-        prjctl.hitEnemy(enmy);
-      }
-    }
-  }
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-function gameUI() {
-  textSize(10*CANV_SCALAR);
-  text('Gametime: '+time+' sec',CANV_WIDTH/2,CANV_HEIGHT/20);// Show game time
-  textAlign(LEFT);
-  text('Score: ' + player.score, CANV_WIDTH/20, CANV_HEIGHT/20);// determines what is displayed, at what x,y
-  text('Level: ' + player.level, CANV_WIDTH/20, CANV_HEIGHT/10); // ... 
-  textAlign(CENTER);
 }
