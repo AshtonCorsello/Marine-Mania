@@ -230,13 +230,9 @@ function GameInitialization(){ // initialization
                                   // eg, LoadTime is uninitialized until 3 lines above here, while it is being used 2 lines into draw():mode1
 
 ////// SFX-related  ////////////////////////////////////////////////
-//                  
-        if (!mySound.isPlaying()) {                                    
-          mySound.loop(0, 1, 0.2);  
-        }       
-        if (!wavesSound.isPlaying()) {   // loop waves ambiance          //         
-          wavesSound.loop(); 
-        }     
+//                                                                //
+        mySound.loop(0, 1, 0.2);                                  //
+        wavesSound.loop();        // loop waves ambiance          //
                                                                   //
 ////////////////////////////////////////////////////////////////////   
 }        
