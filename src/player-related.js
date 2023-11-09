@@ -64,6 +64,9 @@ class Player {
         text('Shield time: '+(ShieldCT)+' sec',CANV_WIDTH*(60/72),CANV_HEIGHT/20); // Shield time
       }
 
+      imageMode(CENTER);
+      image(playerImg, this.x, this.y);
+    /*
       //Draws wake behind boat
         stroke(255,255,250); //Outline color
         fill(220, 250, 253); //Color of shape
@@ -81,7 +84,7 @@ class Player {
         fill(190);
         rectMode(CENTER);
         square(this.x, this.y+this.size/4, this.size/3);
-
+    */
       //  textSize(10*CANV_SCALAR);
 
       //  text('Gametime: '+time+' sec',CANV_WIDTH/2,CANV_HEIGHT/20);// Show game time
