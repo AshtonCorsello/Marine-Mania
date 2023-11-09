@@ -18,6 +18,7 @@ class Player {
         this.isHit = function() { return hit; };
         this.setHitTrue = function() { hit = true; };
         this.setHitFalse = function() { hit = false; };
+        this.imgShift = this.size*3; // should be 1/2 of the 4th and 5th arguments of image() call in player's display fn
     }
   
     update(){
@@ -53,19 +54,19 @@ class Player {
         this.y += mvmt.y;
     }
   
-    draw() { //Draws the player
+    display() { //Draws the player
 
       //Draws Shield
       if(player.shield == true){
         stroke(58, 214, 134);
         fill(255, 255, 255);
-        rect(this.x, this.y, this.size*3, this.size*6, 20); 
+        rect(this.x, this.y, this.size*3, this.size*4, 20); 
         textSize(10*CANV_SCALAR);
         text('Shield time: '+(ShieldCT)+' sec',CANV_WIDTH*(60/72),CANV_HEIGHT/20); // Shield time
       }
 
       //imageMode(CENTER);
-      image(playerImg, this.x, this.y);
+      image(playerImg, this.x-this.imgShift, this.y-this.imgShift, this.size*6, this.size*6);
     /*
       //Draws wake behind boat
         stroke(255,255,250); //Outline color

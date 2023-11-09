@@ -90,7 +90,7 @@ function setup() {
 
 function draw() {
     if(mode == 0){ // Main menu
-      background(mainMenu) // set the background to white
+      background(mainMenu); // set the background to white
       textSize(32*CANV_SCALAR);
       textAlign(CENTER);
       //text('Marine Mania', CANV_WIDTH/2, CANV_HEIGHT/3); // Name of game
@@ -131,8 +131,8 @@ function draw() {
           }
 
           if(!player.isHit()){ // stops drawing the player if they get hit
-            //player.display(); // draw the player
-            player.draw();
+            player.display(); // draw the player
+            //player.draw();
             player.update();
           }
 
@@ -325,7 +325,7 @@ function DebugDraw(){ //Draw function specifically for Debug menu (AKA Mode 2)
   background(145, 240, 243); //White background
 
   if(!player.isHit()){ // stops drawing the player if they get hit
-    player.draw(); // draw the player
+    player.display(); // draw the player
     player.update();
   }
 
