@@ -60,7 +60,7 @@ class Player {
       if(player.shield == true){
         stroke(58, 214, 134);
         fill(255, 255, 255);
-        rect(this.x, this.y, this.size*3, this.size*6, 20); 
+        rect(this.x-this.imgShift/2, this.y-this.imgShift, this.size*3, this.size*6, 20); 
       }
 
       // draws player icon
