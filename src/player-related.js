@@ -60,9 +60,7 @@ class Player {
       if(player.shield == true){
         stroke(58, 214, 134);
         fill(255, 255, 255);
-        rect(this.x, this.y, this.size*3, this.size*4, 20); 
-        textSize(10*CANV_SCALAR);
-        text('Shield time: '+(ShieldCT)+' sec',CANV_WIDTH*(60/72),CANV_HEIGHT/20); // Shield time
+        rect(this.x, this.y, this.size*3, this.size*6, 20); 
       }
 
       //imageMode(CENTER);
@@ -85,14 +83,13 @@ class Player {
         fill(190);
         rectMode(CENTER);
         square(this.x, this.y+this.size/4, this.size/3);
-    
+
       //  textSize(10*CANV_SCALAR);
 
       //  text('Gametime: '+time+' sec',CANV_WIDTH/2,CANV_HEIGHT/20);// Show game time
       //  textAlign(LEFT);
       //  text('Score: ' + this.score, CANV_WIDTH/20, CANV_HEIGHT/20);// determines what is displayed, at what x,y
       //  textAlign(CENTER);
-    */
     }
 
 

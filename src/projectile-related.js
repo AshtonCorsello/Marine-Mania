@@ -60,6 +60,6 @@ class Projectile {
 
       let randomDieSound = random(enemyDieSounds);
       //randomDieSound.SetVolume(0.2);
-      randomDieSound.play();
+      randomDieSound.play(0, 1, 1, 0, 1);
    }
 }

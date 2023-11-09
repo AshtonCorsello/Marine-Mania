@@ -62,6 +62,8 @@ function preload() {
   shieldOnSound = loadSound('./src/SFX/shield/shield-on.wav');    // load shieldon sound : in OpenShield()
   shieldOffSound = loadSound('./src/SFX/shield/shield-fail.wav'); // load shieldfail sound : in Shieldtime()
   gameOverSound = loadSound('./src/SFX/died.wav');                // load gameover sound : ~line161
+  enemy1Image = loadImage("./src/img/enmy1.png");   
+  enemy2Image = loadImage("./src/img/enemy2.png");                
   for (let i = 1; i <= 8; i++) {  // load sounds into array       // used in Projectile Class definition
     cannonSounds.push(loadSound('./src/SFX/cannon/cannon' + i + '.wav'));
   }
@@ -78,6 +80,7 @@ function setup() {
     noStroke();
     player = new Player(CANV_WIDTH/2,(CANV_HEIGHT - CANV_HEIGHT/16),7*CANV_SCALAR); // create a new player object
     enemy1 = new Enemy1()
+    enemy2 = new Enemy2()
     fpsCounter = new FpsCounter();
 
     lastPrint = millis() - 1000;
@@ -142,11 +145,13 @@ function draw() {
           let enemySpawnDelay = (calcdDelay > MIN_ENMY_DELAY) ? calcdDelay : MIN_ENMY_DELAY;
           enemy1.showcase(enemySpawnDelay); //update, draw, and spawn enemies
 
+          if (player.level >= 2) {
+            enemy2.showcase(enemySpawnDelay+2); 
+          }
+
           //Draws rectangle for score and time (AFTER DRAWING ENEMIES)
           fill('rgb(173, 216, 230)');// determines the color of the rectangle
           rect(0,0,CANV_WIDTH*2, CANV_HEIGHT/4.8);// Used to block out the background for the score
-          textSize(18*CANV_SCALAR); // determines size of font
-          fill(51); // determines color of text
 
 
 
@@ -169,24 +174,30 @@ function draw() {
           gameUI();
           displayShieldInfo();
 
-          for (let enmy of enemies){                     // checks each enemy for collision
-            if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size)){
-              player.setHitTrue();
-
-              gameStarted = false;
-
-              if(energies > 0 && player.shield == false){// Death removes shield button if present
-                removeElements(button3)
+          
+          if(mode == 5){// Invincible Mode
+              for (let enmy of enemies){ // Shield Mode checks each enemy for collision
+                if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size))
+                  player.setHitFalse();
               }
-              
-              gameOverSound.play(0, 0.5, 4);             // play gameover sound
-              changeMode(9);
-            }
-          }
+            }else{
+              for (let enmy of enemies){                     // checks each enemy for collision
+                if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size)){
+                  player.setHitTrue();
+                  if(energies > 0 && player.shield == false){// Death removes shield button if present
+                    removeElements(button3);
+                  }
 
-          //collision between player projectile and enemies
-          //create a standalone function for this
-          checkProjectileHit();
+                  gameOverSound.play(0, 0.5, 4);             // play gameover sound
+                  changeMode(9);
+                }
+              }
+            }
+
+            //collision between player projectile and enemies
+            //create a standalone function for this
+            checkProjectileHit();
+
           }
           else{
             // Draws the countdown
@@ -236,10 +247,14 @@ function GameInitialization(){ // initialization
                                   // eg, LoadTime is uninitialized until 3 lines above here, while it is being used 2 lines into draw():mode1
 
 ////// SFX-related  ////////////////////////////////////////////////
-//                                                                //
-        mySound.loop(0, 1, 0.2);                                  //
-        wavesSound.loop();        // loop waves ambiance          //
-                                                                  //
+//                  
+        if (!mySound.isPlaying()) {                                    
+          mySound.loop(0, 1, 0.2);  
+        }       
+        if (!wavesSound.isPlaying()) {   // loop waves ambiance          //         
+          wavesSound.loop(); 
+        }     
+                                                          //
 ////////////////////////////////////////////////////////////////////   
 }        
 
@@ -256,6 +271,7 @@ function RoundSetup(){
   energiesarray = [];               // initialization
   player.score = 0;                 // resets score on retry
   time = 0;                         // resets game time
+  player.level = 1;
   ShieldCT = 0;
   calcdDelay = STARTING_ENMY_DELAY; // resets enemy difficulty
   enemySpawnDelay = STARTING_ENMY_DELAY;
