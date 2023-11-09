@@ -63,33 +63,8 @@ class Player {
         rect(this.x, this.y, this.size*3, this.size*6, 20); 
       }
 
-      //imageMode(CENTER);
+      // draws player icon
       image(playerImg, this.x-this.imgShift, this.y-this.imgShift, this.size*6, this.size*6);
-    
-      //Draws wake behind boat
-        stroke(255,255,250); //Outline color
-        fill(220, 250, 253); //Color of shape
-        triangle(this.x-this.size/1.5, this.y+4*this.size, this.x, this.y, this.x+this.size/1.5, this.y+4*this.size);
-      //Draws boat
-        stroke(255,255,2); //Outline color
-        fill(226, 194, 162); //Color of shape
-        ellipse(this.x, this.y, this.size*1.75, this.size*4, 3);
-        
-      // details of boat
-        stroke(90);
-        fill(200);
-        quad(this.x-this.size/3, this.y+this.size, this.x+this.size/3, this.y+this.size, this.x+this.size/3, this.y-this.size*.75, this.x-this.size/3, this.y-this.size*.75);
-        stroke(100);
-        fill(190);
-        rectMode(CENTER);
-        square(this.x, this.y+this.size/4, this.size/3);
-
-      //  textSize(10*CANV_SCALAR);
-
-      //  text('Gametime: '+time+' sec',CANV_WIDTH/2,CANV_HEIGHT/20);// Show game time
-      //  textAlign(LEFT);
-      //  text('Score: ' + this.score, CANV_WIDTH/20, CANV_HEIGHT/20);// determines what is displayed, at what x,y
-      //  textAlign(CENTER);
     }
 
 
