@@ -48,10 +48,7 @@ class Enemy1 {
       }
     }
   
-    display(){
-      //ellipse(this.posX, this.posY, this.size);
-      image(enmyImg1, this.posX, this.posY);
-    }
+
 
     showcase(delay){
       if(enemyOn){
