@@ -57,6 +57,7 @@ function preload() {
   shieldOnSound = loadSound('./src/SFX/shield/shield-on.wav');    // load shieldon sound : in OpenShield()
   shieldOffSound = loadSound('./src/SFX/shield/shield-fail.wav'); // load shieldfail sound : in Shieldtime()
   gameOverSound = loadSound('./src/SFX/died.wav');                // load gameover sound : ~line161
+  enemy1Image = loadImage("./src/img/enmy1.png");   
   enemy2Image = loadImage("./src/img/enemy2.png");                
   for (let i = 1; i <= 8; i++) {  // load sounds into array       // used in Projectile Class definition
     cannonSounds.push(loadSound('./src/SFX/cannon/cannon' + i + '.wav'));
@@ -167,24 +168,30 @@ function draw() {
           gameUI();
           displayShieldInfo();
 
-          for (let enmy of enemies){                     // checks each enemy for collision
-            if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size)){
-              player.setHitTrue();
-
-              gameStarted = false;
-
-              if(energies > 0 && player.shield == false){// Death removes shield button if present
-                removeElements(button3)
+          
+          if(mode == 5){// Invincible Mode
+              for (let enmy of enemies){ // Shield Mode checks each enemy for collision
+                if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size))
+                  player.setHitFalse();
               }
-              
-              gameOverSound.play(0, 0.5, 4);             // play gameover sound
-              changeMode(9);
-            }
-          }
+            }else{
+              for (let enmy of enemies){                     // checks each enemy for collision
+                if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size)){
+                  player.setHitTrue();
+                  if(energies > 0 && player.shield == false){// Death removes shield button if present
+                    removeElements(button3);
+                  }
 
-          //collision between player projectile and enemies
-          //create a standalone function for this
-          checkProjectileHit();
+                  gameOverSound.play(0, 0.5, 4);             // play gameover sound
+                  changeMode(9);
+                }
+              }
+            }
+
+            //collision between player projectile and enemies
+            //create a standalone function for this
+            checkProjectileHit();
+
           }
           else{
             // Draws the countdown
