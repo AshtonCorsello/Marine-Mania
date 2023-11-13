@@ -50,7 +50,7 @@ function preload() {
    mainMenu = loadImage('./src/mainMenu.gif'); // load main menu gif
    level1 = loadImage('./src/level1.gif'); // load level 1 gif
    gameover = loadImage('./src/gameover.png'); // load gameover file
-  
+
   countdownSound = loadSound('./src/SFX/start/321.wav');          // load 321 sound : bottom of GameInitialization()
   goSound = loadSound('./src/SFX/start/go.wav');                  // load go sound : bottom of GameInitialization()
   wavesSound = loadSound('./src/SFX/waves.wav');                  // load waves ambiance : bottom of GameInitialization()
@@ -107,10 +107,10 @@ function draw() {
       TutorialButton.mousePressed(Tutorial);
     }
     if(mode == 1 | mode == 5){ // Game has started
-      if(isPaused() == true){ // If the game is paused display the pause menu
+      if(isPaused() == true && isCurrentlyDead() == false){ // If the game is paused display the pause menu
         pauseDisplay();
       }
-      else if(isCurrentlyDead() == true && isFirstDeath() == true){
+      else if(isPaused() == true && isCurrentlyDead() == true && isFirstDeath() == true){ // If the player has died for the first time display the on death minigame
         minigameDisplay();
       }
       else{
@@ -121,7 +121,7 @@ function draw() {
           gameStarted = true;
           // Drawing the level
           background(level1); // set the background to the level 1 gif
-    
+
           if (timeElapsed > 1000) {
             player.score++;
             lastPrint = millis();
@@ -157,7 +157,7 @@ function draw() {
             projectiles[i].showcase();
           }
 
-          if (energies == 1 && player.shield == false){// Start shield button is displayed when the number of energy blocks is greater than 1
+          if (energies > 0 && player.shield == false){// Start shield button is displayed when the number of energy blocks is greater than 1
             button3 = createButton('Shield');
             button3.position(CANV_WIDTH*(65/72), CANV_HEIGHT*(21/36)); // set button position
             button3.size(CANV_WIDTH*(55/720), CANV_HEIGHT/10); // sets size of button
@@ -171,7 +171,7 @@ function draw() {
           gameUI();
           displayShieldInfo();
 
-          
+
           if(mode == 5){// Invincible Mode
               for (let enmy of enemies){ // Shield Mode checks each enemy for collision
                 if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size))
@@ -186,11 +186,12 @@ function draw() {
                   }
 
                   gameOverSound.play(0, 0.5, 4);             // play gameover sound
-                  if(isFirstDeath() == false){
+                  if(isFirstDeath() == false){ // If this isn't the player's first time dying, gameover
                     changeMode(9);
                   }
-                  else{
-                    
+                  else{ // If this is the player's first time dying, pause and display the on death minigame
+                    currentDead = true;
+                    pause();
                   }
                 }
               }
@@ -240,10 +241,10 @@ function draw() {
 function GameInitialization(){ // initialization
         //removeElements(button1,button2); // removes the buttons from the screen
         removeElements(startButton, debugButton, TutorialButton);
-       
+
         //could make retry initializations in a separate function and do them depending on a flag
         RoundSetup(); // done, it was required for sound reasons. but i dont think we need a flag - mike A
-        
+
         if(mode != 1)
           mode = 1;                 // change mode at the end to ensure all this code is processed before the code in draw:mode1 is ran.
                                   // eg, LoadTime is uninitialized until 3 lines above here, while it is being used 2 lines into draw():mode1
@@ -305,13 +306,13 @@ function GameOver(){ // Game over
       text('Score: ' + player.score, CANV_WIDTH/2, CANV_HEIGHT/1.5);// determines what is displayed, at what x,y
 
       gameOverFlag = true;
-      
+
       retryButton = createButton('Try Again?'); // set text of button
       retryButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/(1.3)); // set button position
       retryButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
 
       retryButton.mousePressed(RoundSetup);
- 
+
       returntoMenuButton = createButton('Return to Main Menu'); // Sets the text of the button
       returntoMenuButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/(1.2)); // Sets the button position
       returntoMenuButton.size(CANV_WIDTH/6, CANV_HEIGHT/18); // Sets the size of the button
