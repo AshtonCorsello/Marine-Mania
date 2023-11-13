@@ -7,7 +7,7 @@ function energie(){// Generate an energy block every 5 seconds
   if(energies<10 && player.shield == false){
 
     ++shieldCounter; //done so the game over check can be done per second
-    if (shieldCounter >= 5) energiesarray[energies] = CANV_HEIGHT*(37/400)+energies*CANV_HEIGHT*(17/400);
+    if (shieldCounter >= 5) energiesarray[energies] = CANV_HEIGHT/(6.8)+energies*CANV_HEIGHT*(17/400);
     if (shieldCounter >= 5) ShieldCT = ShieldCT + 5;
     if (shieldCounter >= 5) {energies++; shieldCounter = 0;}
 
@@ -54,7 +54,7 @@ function displayShieldInfo() {
    //Draws energy tanks
    stroke(58, 127, 214);
    fill(205, 205, 205);
-   rect(CANV_WIDTH*(677/720), CANV_HEIGHT*(116/400), CANV_WIDTH*(30/720), CANV_HEIGHT*(176/400), 5);
+   rect(CANV_WIDTH*(677/720), CANV_HEIGHT/(4.8) + CANV_HEIGHT*((176/400)/3.2), CANV_WIDTH*(30/720), CANV_HEIGHT*(176/400), 5);
 
  // Draws Energy Blocks
    for(var i = 0; i < 10; i++){
@@ -62,4 +62,9 @@ function displayShieldInfo() {
      fill(255, 156, 51);
      rect(CANV_WIDTH*(677/720), energiesarray[i], CANV_WIDTH*(30/720), CANV_HEIGHT*(15/400), 20);
    }
+
+    if(player.shield) {
+      textSize(10*CANV_SCALAR);
+      text('Shield time: '+(ShieldCT)+' sec',CANV_WIDTH*(60/72),CANV_HEIGHT/20); // Shield time
+    }
 }
