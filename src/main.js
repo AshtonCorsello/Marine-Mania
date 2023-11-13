@@ -106,6 +106,9 @@ function draw() {
       if(isPaused() == true){ // If the game is paused display the pause menu
         pauseDisplay();
       }
+      else if(isCurrentlyDead() == true && isFirstDeath() == true){
+        minigameDisplay();
+      }
       else{
         let currentTime = int(millis()/1000) // Converts mil secs into seconds
           let countDown = loadTime - currentTime; // Amount of time passed
@@ -172,7 +175,12 @@ function draw() {
                   }
 
                   gameOverSound.play(0, 0.5, 4);             // play gameover sound
-                  changeMode(9);
+                  if(isFirstDeath() == false){
+                    changeMode(9);
+                  }
+                  else{
+                    
+                  }
                 }
               }
             }
@@ -254,6 +262,7 @@ function RoundSetup(){
   ShieldCT = 0;
   calcdDelay = STARTING_ENMY_DELAY; // resets enemy difficulty
   enemySpawnDelay = STARTING_ENMY_DELAY;
+  death = true;
   setTimeout(gameOverFlag = false, 1500); // resets flag to false on retry. Timer prevents previous Gametime func from not being stopped
   setTimeout("shieldCounter = 0", 2000);
   player.x = CANV_WIDTH/2;
