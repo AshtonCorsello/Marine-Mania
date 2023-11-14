@@ -37,8 +37,11 @@ let cannonSounds = []; let enemyDieSounds = [];               //
 let gameOverSound; let startedAudio = false;                  //
 ////////////////////////////////////////////////////////////////
 
+///// all images //////////////////////////
 let mainMenu; // main menu gif
 let level1; // level 1 gif
+let playerImg;
+//////////////////////////////////////////
 
 let startButton;
 let debugButton;
@@ -50,6 +53,7 @@ function preload() {
    mainMenu = loadImage('./src/mainMenu.gif'); // load main menu gif
    level1 = loadImage('./src/level1.gif'); // load level 1 gif
    gameover = loadImage('./src/gameover.png'); // load gameover file
+   playerImg = loadImage('./src/img/boat1.0.png');
   
   countdownSound = loadSound('./src/SFX/start/321.wav');          // load 321 sound : bottom of GameInitialization()
   goSound = loadSound('./src/SFX/start/go.wav');                  // load go sound : bottom of GameInitialization()
@@ -88,7 +92,7 @@ function setup() {
 
 function draw() {
     if(mode == 0){ // Main menu
-      background(mainMenu) // set the background to white
+      background(mainMenu); // set the background to white
       textSize(32*CANV_SCALAR);
       textAlign(CENTER);
       //text('Marine Mania', CANV_WIDTH/2, CANV_HEIGHT/3); // Name of game
@@ -130,7 +134,8 @@ function draw() {
 
           if(!player.isHit()){ // stops drawing the player if they get hit
             player.display(); // draw the player
-            player.update()
+            //player.draw();
+            player.update();
           }
 
           if (player.level == 1 && player.score >= 100) ++player.level;
