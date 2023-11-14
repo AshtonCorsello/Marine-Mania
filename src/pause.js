@@ -17,7 +17,7 @@ var pausedFrameCount = 0; // Keeps track of frameCount
 function isPaused(){ // Checks to see if the game is paused
   return paused;
 }
-  
+
 function pause(){ // Pauses the game
   paused = true;
   pausedTime = time;
@@ -42,7 +42,9 @@ function pause(){ // Pauses the game
   energiesarray = [...pausedEnergyArray];
   enemies = [...pausedEnemies];
   projectiles = [...pausedProjectiles];
-  removeElements(pauseText,pauseButton);
+  if(isCurrentlyDead() == false){
+    removeElements(pauseText,pauseButton);
+  }
   frameCount = pausedFrameCount;
   keyReleased();
 }
