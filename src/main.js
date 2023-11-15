@@ -43,6 +43,7 @@ let level1; // level 1 gif
 let startButton;
 let debugButton;
 let pauseButton;
+let playerImg;
 
 function preload() {
    //mySound = loadSound('./src/BeepBox-Song.wav'); // load music file
@@ -50,7 +51,7 @@ function preload() {
    mainMenu = loadImage('./src/mainMenu.gif'); // load main menu gif
    level1 = loadImage('./src/level1.gif'); // load level 1 gif
    gameover = loadImage('./src/gameover.png'); // load gameover file
-
+   playerImg = loadImage('./src/img/boat1.0.png');
   countdownSound = loadSound('./src/SFX/start/321.wav');          // load 321 sound : bottom of GameInitialization()
   goSound = loadSound('./src/SFX/start/go.wav');                  // load go sound : bottom of GameInitialization()
   wavesSound = loadSound('./src/SFX/waves.wav');                  // load waves ambiance : bottom of GameInitialization()
