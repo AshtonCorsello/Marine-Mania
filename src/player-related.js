@@ -18,8 +18,10 @@ class Player {
         this.isHit = function() { return hit; };
         this.setHitTrue = function() { hit = true; };
         this.setHitFalse = function() { hit = false; };
+        this.imgShift = this.size*3; // should be 1/2 of the 4th and 5th arguments of image() call in player's display fn
+
     }
-  
+
     update(){
         let mvmt = createVector(0,0);
 
@@ -52,36 +54,17 @@ class Player {
         this.x += mvmt.x;
         this.y += mvmt.y;
     }
-  
-    display() { //Draws the player
 
+    display() { //Draws the player
       //Draws Shield
       if(player.shield == true){
         stroke(58, 214, 134);
         fill(255, 255, 255);
-        rect(this.x, this.y, this.size*3, this.size*6, 20); 
+        rect(this.x, this.y, this.size*3, this.size*6, 20);       
       }
 
-      //Draws wake behind boat
-        stroke(255,255,250); //Outline color
-        fill(220, 250, 253); //Color of shape
-        triangle(this.x-this.size/1.5, this.y+4*this.size, this.x, this.y, this.x+this.size/1.5, this.y+4*this.size);
-      //Draws boat
-        stroke(255,255,2); //Outline color
-        fill(226, 194, 162); //Color of shape
-        ellipse(this.x, this.y, this.size*1.75, this.size*4, 3);
-        
       // details of boat
-        stroke(90);
-        fill(200);
-        quad(this.x-this.size/3, this.y+this.size, this.x+this.size/3, this.y+this.size, this.x+this.size/3, this.y-this.size*.75, this.x-this.size/3, this.y-this.size*.75);
-        stroke(100);
-        fill(190);
         rectMode(CENTER);
-        square(this.x, this.y+this.size/4, this.size/3);
-
+        image(playerImg, this.x-this.imgShift, this.y-this.imgShift, this.size*6, this.size*6);
     }
-
-
-
 }
