@@ -97,7 +97,8 @@ class Enemy2 {
     this.readyToSpawn = false;
     this.lastSpawnedTime = 0;
     this.hit = false;
-    this.scoreIncrease = 10;
+    this.scoreIncrease = 5;
+    this.health = 3;
 
     //get enemy instance's curvetype
     let curvesArr = ["sin", "cos"];
@@ -123,9 +124,14 @@ class Enemy2 {
       this.posX = width / 2 + this.radius * cos(angle);
     }
     
-    this.posY += pow(this.size, 0.5);
-    // delete enemy if past end of screen or if hit by projectile
-    if (this.posY > height || this.hit == true) {
+    this.posY += pow(this.size, 0.3);
+
+    // reduces health of enemy if hit
+    if (this.hit == true) {
+      this.takeDamage();
+    }
+    // delete enemy if past end of screen or if hp reaches 0
+    if (this.posY > height || this.health <= 0) {
       let index = enemies.indexOf(this);
       enemies.splice(index, 1);
     }
@@ -165,5 +171,10 @@ class Enemy2 {
     for (let enmy of enemies) {
       enmy.display(); // draw enemy
     }
+  }
+
+  takeDamage(){
+    this.health = this.health - 1;
+    this.hit=false;
   }
 }
