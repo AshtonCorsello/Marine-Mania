@@ -50,6 +50,15 @@ function OpenShield(){ //  Open Shield
   energiesarray = [];// Empty energy
 }
 
+function minigameOpenShield(){// Open Shield after winning minigame
+  player.shield = true;
+  shieldOnSound.play();
+  player.display();
+  mode = 5;
+  ShieldCT = 5;// Sets it to a timer of 5
+  ShieldCountdown();
+}
+
 function displayShieldInfo() {
    //Draws energy tanks
    stroke(58, 127, 214);
