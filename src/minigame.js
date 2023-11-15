@@ -23,6 +23,9 @@ function minigameDisplay(){
   // Remove when minigame is implemented ^^^
   // Implement Game below
   displaybox = rect(CANV_WIDTH/2, CANV_HEIGHT/2, CANV_HEIGHT/2, CANV_HEIGHT/2); // Dedicates the space the on death minigame should be displayed in
+  if(pressedKeys.Escape){
+    minigameEnd();
+  }
 }
 
 function minigameEnd(){
