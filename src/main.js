@@ -40,6 +40,14 @@ let gameOverSound; let startedAudio = false;                  //
 let mainMenu; // main menu gif
 let level1; // level 1 gif
 
+//name input
+let nameInputFieldRef;
+let nameInputLabelRef;
+let nameInputFieldShown;
+let currentName = "Anonymous";
+let nameFieldHeight;
+let nameFieldWidth;
+
 let startButton;
 let debugButton;
 let pauseButton;
@@ -85,7 +93,19 @@ function setup() {
       userStartAudio();  // starts audio based on user mouse click
       startedAudio = true
     }
+
+    //setup name input field
+    nameFieldWidth = CANV_WIDTH * (1/6);
+    nameFieldHeight = CANV_HEIGHT * (1/25);
+    nameInputFieldRef = createInput(currentName);
+    nameInputFieldRef.size(nameFieldWidth, nameFieldHeight);
+    nameInputFieldRef.position(CANV_WIDTH / 2 - (nameFieldWidth / 2), CANV_HEIGHT * (10/12));
+    nameInputFieldRef.elt.maxLength = 18; //18 characters max length of name
+    nameInputFieldRef.style('font-size', `${nameFieldHeight * (7/8)}px`);
+    nameInputFieldRef.hide();
+    nameInputFieldShown = false;
   }
+
 
 function draw() {
     if(mode == 0){ // Main menu
@@ -106,6 +126,14 @@ function draw() {
       TutorialButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.8); // set button position
       TutorialButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
       TutorialButton.mousePressed(Tutorial);
+      
+      //display username input field label
+      let enterUserText = "[Enter Username]";
+      let inputFieldPos = nameInputFieldRef.position();
+      textSize(nameFieldHeight * (7/8));
+      fill(0, 255, 0);
+      text(enterUserText,  inputFieldPos.x + (nameFieldWidth / 2), inputFieldPos.y - 5);
+
     }
     if(mode == 1 | mode == 5){ // Game has started
       if(isPaused() == true && isCurrentlyDead() == false){ // If the game is paused display the pause menu
@@ -231,6 +259,15 @@ function draw() {
       fpsCounter.update();
 
     fpsCounter.draw();
+  }
+
+  //hides or shows name input field
+  if(mode == 0 && !nameInputFieldShown){
+    nameInputFieldRef.show();
+    nameInputFieldShown = true;
+  }else if(mode != 0 && nameInputFieldShown){
+    nameInputFieldRef.hide();
+    nameInputFieldShown = false;
   }
 
 }
