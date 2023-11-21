@@ -21,6 +21,7 @@ let pressedKeys = {}; // Holding for the pressed keys
 let enemies = []; // array to hold enemy objects
 let projectiles = []; // array to hold projectile objects
 let fpsCounter;
+let leaderboard;
 let energiesarray = [];// Array of shield energy cycles
 let energies = 0;// Number of energy blocks
 let enemyOn = new Boolean(true); // For use in debug. Defaults to true in normal mode. Will turn on or off enemy spawning.
@@ -87,6 +88,7 @@ function setup() {
     enemy1 = new Enemy1()
     enemy2 = new Enemy2()
     fpsCounter = new FpsCounter();
+    leaderboard = new Leaderboard();
 
     lastPrint = millis() - 1000;
 
@@ -125,7 +127,7 @@ function draw() {
         leaderboardButton = createButton('Leaderboard');
         leaderboardButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.25); 
         leaderboardButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); 
-        leaderboardButton.mousePressed(SetLeaderboardMode);       
+        leaderboardButton.mousePressed(SwitchLeaderboardMode);       
       }
       
       drawNameInputFieldLabel();
@@ -240,7 +242,7 @@ function draw() {
       DebugDraw();
     }
     if(mode == 3){ //leaderboard mode
-
+      leaderboard.draw();
     }
     if(mode == 9){ // Game Over Screen
       GameOver();
@@ -428,8 +430,9 @@ function drawNameInputFieldLabel(){
   text(enterUserText,  inputFieldPos.x + (nameFieldWidth / 2), inputFieldPos.y - 5);
 }
 
-function SetLeaderboardMode(){
+function SwitchLeaderboardMode(){
   mode = 3;
+  removeElements();
 }
 
 //callback function for when user types into text field
