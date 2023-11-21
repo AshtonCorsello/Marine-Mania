@@ -51,6 +51,7 @@ let nameFieldWidth;
 let startButton;
 let debugButton;
 let pauseButton;
+let leaderboardButton;
 let playerImg;
 
 function preload() {
@@ -94,17 +95,8 @@ function setup() {
       startedAudio = true
     }
 
-    //setup name input field
-    nameFieldWidth = CANV_WIDTH * (1/6);
-    nameFieldHeight = CANV_HEIGHT * (1/25);
-    nameInputFieldRef = createInput(currentName);
-    nameInputFieldRef.size(nameFieldWidth, nameFieldHeight);
-    nameInputFieldRef.position(CANV_WIDTH / 2 - (nameFieldWidth / 2), CANV_HEIGHT * (10/12));
-    nameInputFieldRef.elt.maxLength = 18; //18 characters max length of name
-    nameInputFieldRef.style('font-size', `${nameFieldHeight * (7/8)}px`);
-    nameInputFieldRef.hide();
-    nameInputFieldShown = false;
-  }
+    initNameInputField();
+}
 
 
 function draw() {
@@ -113,27 +105,30 @@ function draw() {
       textSize(32*CANV_SCALAR);
       textAlign(CENTER);
       //text('Marine Mania', CANV_WIDTH/2, CANV_HEIGHT/3); // Name of game
-      startButton = createButton('Start Game'); // set text of button
-      startButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.6); // set button position
-      startButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
-      startButton.mousePressed(GameInitialization);
-      debugButton = createButton('Debug Room');
-      debugButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.4); // set button position
-      debugButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
-      debugButton.mousePressed(Debug);
 
-      TutorialButton = createButton('Tutorial');
-      TutorialButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.8); // set button position
-      TutorialButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
-      TutorialButton.mousePressed(Tutorial);
+      if(startButton == null || debugButton == null || TutorialButton == null || leaderboardButton == null){ //so only creates one button
+        startButton = createButton('Start Game'); // set text of button
+        startButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.6); // set button position
+        startButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
+        startButton.mousePressed(GameInitialization);
+
+        debugButton = createButton('Debug Room');
+        debugButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.4); // set button position
+        debugButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
+        debugButton.mousePressed(Debug);
+
+        TutorialButton = createButton('Tutorial');
+        TutorialButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.8); // set button position
+        TutorialButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
+        TutorialButton.mousePressed(Tutorial);
+
+        leaderboardButton = createButton('Leaderboard');
+        leaderboardButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.25); 
+        leaderboardButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); 
+        leaderboardButton.mousePressed(SetLeaderboardMode);       
+      }
       
-      //display username input field label
-      let enterUserText = "[Enter Username]";
-      let inputFieldPos = nameInputFieldRef.position();
-      textSize(nameFieldHeight * (7/8));
-      fill(0, 255, 0);
-      text(enterUserText,  inputFieldPos.x + (nameFieldWidth / 2), inputFieldPos.y - 5);
-
+      drawNameInputFieldLabel();
     }
     if(mode == 1 | mode == 5){ // Game has started
       if(isPaused() == true && isCurrentlyDead() == false){ // If the game is paused display the pause menu
@@ -244,7 +239,9 @@ function draw() {
     if(mode == 2){ // debug room implementation
       DebugDraw();
     }
+    if(mode == 3){ //leaderboard mode
 
+    }
     if(mode == 9){ // Game Over Screen
       GameOver();
     } 
@@ -404,6 +401,40 @@ function DebugDraw(){ //Draw function specifically for Debug menu (AKA Mode 2)
       enemyOn = true;
     }
   }
+}
+
+
+//setup name input field
+function initNameInputField(){
+  nameFieldWidth = CANV_WIDTH * (1/6);
+  nameFieldHeight = CANV_HEIGHT * (1/25);
+  nameInputFieldRef = createInput(currentName);
+  nameInputFieldRef.input(changeUsername);
+  nameInputFieldRef.size(nameFieldWidth, nameFieldHeight);
+  nameInputFieldRef.position(CANV_WIDTH / 2 - (nameFieldWidth / 2), CANV_HEIGHT * (11/12));
+  nameInputFieldRef.elt.maxLength = 18; //18 characters max length of name
+  nameInputFieldRef.style('font-size', `${nameFieldHeight * (7/8)}px`);
+  nameInputFieldRef.hide();
+  nameInputFieldShown = false;
+}
+
+
+//display username input field label
+function drawNameInputFieldLabel(){
+  let enterUserText = "[Enter Username]";
+  let inputFieldPos = nameInputFieldRef.position();
+  textSize(nameFieldHeight * (7/8));
+  fill(0, 255, 0);
+  text(enterUserText,  inputFieldPos.x + (nameFieldWidth / 2), inputFieldPos.y - 5);
+}
+
+function SetLeaderboardMode(){
+  mode = 3;
+}
+
+//callback function for when user types into text field
+function changeUsername(){
+  currentName = this.value();
 }
 
 function keyPressed(){
