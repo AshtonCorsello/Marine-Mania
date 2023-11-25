@@ -242,7 +242,7 @@ function draw() {
       DebugDraw();
     }
     if(mode == 3){ //leaderboard mode
-      leaderboard.draw();
+      DrawLeaderboard();
     }
     if(mode == 9){ // Game Over Screen
       GameOver();
@@ -405,6 +405,26 @@ function DebugDraw(){ //Draw function specifically for Debug menu (AKA Mode 2)
   }
 }
 
+function DrawLeaderboard(){
+  background(0, 204, 255)
+  // Calculate font size based on a percentage of the canvas size
+  const fontSize = min(width / 15, height / 50);
+
+  // Draw title
+  textAlign(CENTER, CENTER);
+  textSize(fontSize * 1.5);
+  fill(0);
+  text("Leaderboard", width / 2, height * 0.1);
+
+  // Draw scores
+  textSize(fontSize);
+  for (let i = 0; i < window.userScores.length; i++) {
+    const username = window.userScores[i]['username'];
+    const score = window.userScores[i]['score'];
+    const entryText = `${i + 1}. ${username}: ${score}`;
+    text(entryText, width / 2, height * 0.2 + i * fontSize * 1.5);
+  }
+}
 
 //setup name input field
 function initNameInputField(){
