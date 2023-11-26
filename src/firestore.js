@@ -34,3 +34,13 @@ onSnapshot(q, (snapshot) => {
         window.userScores.push({...doc.data(), id: doc.id});
     });
 });
+
+//adds a new username, score object to the firestore collection
+function AddToScoresCollection(username, score){
+    addDoc(scoresCollection, {
+        'username': username,
+        'score': score,
+    });
+}
+
+window.AddToScoresCollection = AddToScoresCollection; //make global function so can be called inside main.js

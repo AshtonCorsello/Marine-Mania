@@ -1,18 +1,23 @@
 var x = 0;
+let button_Back;
+let button1;
+let button2;
 
 function Tutorial(){
       mode = 10;
-      removeElements(startButton, debugButton, TutorialButton);
+      if(menuButtonsShown) HideMenuButtons();
       background(0, 204, 255); // set the background to blue
       textSize(32*CANV_SCALAR);
       textAlign(CENTER); 
-      button_Back = createButton('Back'); // set text of button
-      button_Back.position(CANV_WIDTH*(25/720), CANV_HEIGHT*(8/400)); // set button position
-      button_Back.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
-      button_Back.mousePressed(back);
+      if(button_Back == null){
+        button_Back = createButton('Back'); // set text of button
+        button_Back.position(CANV_WIDTH*(25/720), CANV_HEIGHT*(8/400)); // set button position
+        button_Back.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
+        button_Back.mousePressed(back);
+      }
       player.display(); // draw the player
       player.update();
-  if(player.shield == false){ //on shield
+  if(player.shield == false && button1 == null){ //on shield
     button1 = createButton('Shield');
     button1.position(CANV_WIDTH*(65/72), CANV_HEIGHT*(21/40)); // set button position
     button1.size(CANV_WIDTH*(55/720), CANV_HEIGHT/10); // sets size of button
@@ -21,7 +26,7 @@ function Tutorial(){
   if(player.shield == false && keyCode == SHIFT){ //shift on shield
     onShield();
   }
-  if(player.shield == true){ //off shield 
+  if(player.shield == true && button2 == null){ //off shield 
     button2 = createButton('Off Shield');
     button2.position(CANV_WIDTH*(65/72), CANV_HEIGHT*(21/40)); // set button position
     button2.size(CANV_WIDTH*(55/720), CANV_HEIGHT/10); // sets size of button
@@ -57,17 +62,33 @@ function Tutorial(){
       Button();
 }
 function onShield(){
-  removeElements(button1);
+  button1.remove();
+  button1 = null;
+
   player.shield = true;
 }
 
 function offShield(){
-  removeElements(button2);
+  button2.remove();
+  button2 = null;
+
   player.shield = false;
 }
 
 function back(){ //back
-  removeElements(button_Back);
+  button_Back.remove();
+  button_Back = null;
+
+  if(button1 != null){
+  button1.remove();
+  button1 = null;
+  }
+
+  if(button2 != null){
+  button2.remove();
+  button2 = null;
+  }
+
   player.shield = false;
   mode = 0;
 }
