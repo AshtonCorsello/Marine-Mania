@@ -24,35 +24,66 @@ class Player {
 
     update(){
         let mvmt = createVector(0,0);
-
-        if(pressedKeys.a || pressedKeys.ArrowLeft) {
+        if(isPaused() == false){
+          if(pressedKeys.a || pressedKeys.ArrowLeft) {
             mvmt.x -= 1;
-            if (player.x < 0) { //Don't let the player go off the screen
+            if (this.x < 0) { //Don't let the player go off the screen
                 mvmt.x = 0;
             }
           }
           if(pressedKeys.d || pressedKeys.ArrowRight) {
             mvmt.x += 1;
-            if (player.x > CANV_WIDTH - player.size) {
+            if (this.x > CANV_WIDTH - this.size) {
                 mvmt.x = 0;
             }
           }
           if(pressedKeys.w || pressedKeys.ArrowUp) {
             mvmt.y -= 1;
-            if (player.y < (CANV_HEIGHT - (CANV_HEIGHT / 4))) { //Don't let the player go above 1/8 of the screen
-                player.y = (CANV_HEIGHT - (CANV_HEIGHT / 4));
+            if (this.y < (CANV_HEIGHT - (CANV_HEIGHT / 4))) { //Don't let the player go above 1/8 of the screen
+                this.y = (CANV_HEIGHT - (CANV_HEIGHT / 4));
             }
           }
           if(pressedKeys.s || pressedKeys.ArrowDown) {
             mvmt.y += 1;
-            if (player.y >= CANV_HEIGHT - player.size) {
-                player.y = CANV_HEIGHT - player.size;
+            if (this.y >= CANV_HEIGHT - this.size) {
+                this.y = CANV_HEIGHT - this.size;
             }
           }
 
-        mvmt.setMag(this.speed); // Limits diagonal speed to still max at 10
-        this.x += mvmt.x;
-        this.y += mvmt.y;
+          mvmt.setMag(this.speed); // Limits diagonal speed to still max at 10
+          this.x += mvmt.x;
+          this.y += mvmt.y;
+        }
+        else{
+          if(pressedKeys.a || pressedKeys.ArrowLeft) {
+            mvmt.x -= 1;
+            if(this.x < (CANV_WIDTH/2)-(CANV_HEIGHT/4)) { //Don't let the player go off the screen
+                mvmt.x = 0;
+            }
+          }
+          if(pressedKeys.d || pressedKeys.ArrowRight) {
+            mvmt.x += 1;
+            if (this.x > (CANV_WIDTH/2)+(CANV_HEIGHT/4)) {
+                mvmt.x = 0;
+            }
+          }
+          if(pressedKeys.w || pressedKeys.ArrowUp) {
+            mvmt.y -= 1;
+            if (this.y < (CANV_HEIGHT/2)-(CANV_HEIGHT/4)) { //Don't let the player go above 1/8 of the screen
+                mvmt.y = 0;
+            }
+          }
+          if(pressedKeys.s || pressedKeys.ArrowDown) {
+            mvmt.y += 1;
+            if (this.y > (CANV_HEIGHT/2)+(CANV_HEIGHT/4)) {
+                mvmt.y = 0;
+            }
+          }
+
+          mvmt.setMag(this.speed); // Limits diagonal speed to still max at 10
+          this.x += mvmt.x;
+          this.y += mvmt.y;
+        }
     }
 
     display() { //Draws the player
@@ -65,6 +96,13 @@ class Player {
 
       // details of boat
         rectMode(CENTER);
-        image(playerImg, this.x-this.imgShift, this.y-this.imgShift, this.size*6, this.size*6);
+        if(isPaused() == false){
+          image(playerImg, this.x-this.imgShift, this.y-this.imgShift, this.size*6, this.size*6);
+        }
+        else{
+          removeElements(icon);
+          icon = createImg('src/img/boat1.0.png');
+          icon.position(this.x-this.size, this.y-this.size);
+        }
     }
 }
