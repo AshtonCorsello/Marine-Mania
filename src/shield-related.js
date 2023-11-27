@@ -40,7 +40,9 @@ function ShieldCountdown(){ //Shield Countdown
 }
 
 function OpenShield(){ //  Open Shield
-  removeElements(button3); // Disable Shield Button
+  button3.remove();
+  button3 = null;
+
   player.shield = true
   shieldOnSound.play();    // play sfx for shield on
   player.display();// Change shield status and display shield
