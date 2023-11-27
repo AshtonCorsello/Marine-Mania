@@ -65,6 +65,7 @@ let leaderboardReturnToMenuButton;
 let button3;
 
 let playerImg;
+let icon;
 
 function preload() {
    //mySound = loadSound('./src/BeepBox-Song.wav'); // load music file
@@ -249,6 +250,7 @@ function draw() {
                   else{ // If this is the player's first time dying, pause and display the on death minigame
                     currentDead = true;
                     pause();
+                    miniplayer = new Player(CANV_WIDTH/2,(CANV_HEIGHT/2)+(CANV_HEIGHT/5),7*CANV_SCALAR);
                   }
                 }
               }
