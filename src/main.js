@@ -48,6 +48,8 @@ let currentName = "Anonymous";
 let nameFieldHeight;
 let nameFieldWidth;
 
+let monoFont;
+
 //buttons are shown flags
 let menuButtonsShown;
 let gameoverButtonsShown;
@@ -59,6 +61,7 @@ let pauseButton;
 let leaderboardButton;
 let retryButton;
 let returntoMenuButton;
+let leaderboardReturnToMenuButton;
 let button3;
 
 let playerImg;
@@ -84,6 +87,8 @@ function preload() {
   for (let i = 1; i <= 8; i++) {  // load sounds into array       // used in projectile func hitEnemy()
     enemyDieSounds.push(loadSound('./src/SFX/enemy-die/exp' + i + '.wav'));
   }
+
+  monoFont = loadFont('src/EnvyCodeRNerdFontMono-Regular.ttf');
 }
 
 
@@ -238,6 +243,7 @@ function draw() {
 
                   gameOverSound.play(0, 0.5, 4);             // play gameover sound
                   if(isFirstDeath() == false){ // If this isn't the player's first time dying, gameover
+                    AddToScoresCollection(currentName, player.score);
                     changeMode(9);
                   }
                   else{ // If this is the player's first time dying, pause and display the on death minigame
@@ -373,6 +379,13 @@ function GameOver(){ // Game over
 
 function returntoMenu(){ // used to return to the main menu
   if(gameoverButtonsShown) HideGameoverButtons();
+
+  if(leaderboardReturnToMenuButton != null){
+    leaderboardReturnToMenuButton.remove();
+    leaderboardReturnToMenuButton = null;
+  }
+
+  textFont('Helvetica');
   changeMode(0);
 }
 
@@ -419,6 +432,16 @@ function DebugDraw(){ //Draw function specifically for Debug menu (AKA Mode 2)
 }
 
 function DrawLeaderboard(){
+  //return to menu button creation
+  if(leaderboardReturnToMenuButton == null){
+    leaderboardReturnToMenuButton = createButton('Return to Main Menu'); 
+    leaderboardReturnToMenuButton.position(CANV_WIDTH*(9/12), CANV_HEIGHT * (1/14)); 
+    leaderboardReturnToMenuButton.size(CANV_WIDTH/6, CANV_HEIGHT/18); 
+    leaderboardReturnToMenuButton.mousePressed(returntoMenu); 
+  }
+
+  textFont(monoFont);
+
   background(0, 204, 255)
   // Calculate font size based on a percentage of the canvas size
   const fontSize = min(width / 15, height / 50);
@@ -431,10 +454,13 @@ function DrawLeaderboard(){
 
   // Draw scores
   textSize(fontSize);
-  for (let i = 0; i < window.userScores.length; i++) {
-    const username = window.userScores[i]['username'];
-    const score = window.userScores[i]['score'];
-    const entryText = `${i + 1}. ${username}: ${score}`;
+  textAlign(CENTER, CENTER);
+  for (let i = 0; i < window.userScores.length && i < 25; i++) {
+    let username = window.userScores[i]['username'];
+    const score = window.userScores[i]['score'].toString();
+    username = username.padEnd(25 - score.length, '_');
+    const spaceOrNo = (i >= 9) ? "" : " ";
+    const entryText = `${spaceOrNo}${i + 1}. ${username}${score}`;
     text(entryText, width / 2, height * 0.2 + i * fontSize * 1.5);
   }
 }
@@ -520,7 +546,7 @@ function drawNameInputFieldLabel(){
   let inputFieldPos = nameInputFieldRef.position();
   textSize(nameFieldHeight * (7/8));
   fill(0, 255, 0);
-  text(enterUserText,  inputFieldPos.x + (nameFieldWidth / 2), inputFieldPos.y - 5);
+  text(enterUserText,  inputFieldPos.x + (nameFieldWidth / 2), inputFieldPos.y - textAscent() / 2);
 }
 
 function SwitchLeaderboardMode(){

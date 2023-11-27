@@ -42,8 +42,9 @@ function pause(){ // Pauses the game
   energiesarray = [...pausedEnergyArray];
   enemies = [...pausedEnemies];
   projectiles = [...pausedProjectiles];
-  if(isCurrentlyDead() == false){
-    removeElements(pauseText,pauseButton);
+  if(isCurrentlyDead() == false && pauseButton != null){
+    pauseButton.remove();
+    pauseButton = null;
   }
   frameCount = pausedFrameCount;
   keyReleased();
@@ -54,10 +55,12 @@ function pauseDisplay(){ // Displays the Pause text when game is paused
   textAlign(CENTER, CENTER);
   fill(255, 0, 0); // Set the text color to red
   pauseText = text("Paused", CANV_WIDTH / 2, CANV_HEIGHT / 2); // Display the message
-  pauseButton = createButton('Unpause');
-  pauseButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.8);
-  pauseButton.size(CANV_WIDTH/6, CANV_HEIGHT/20);
-  pauseButton.mousePressed(unpause);
+  if(pauseButton == null){
+    pauseButton = createButton('Unpause');
+    pauseButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.8);
+    pauseButton.size(CANV_WIDTH/6, CANV_HEIGHT/20);
+    pauseButton.mousePressed(unpause);
+  }
   if(pressedKeys.Escape){
     unpause();
   }
