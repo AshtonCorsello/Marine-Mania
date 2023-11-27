@@ -40,9 +40,30 @@ let gameOverSound; let startedAudio = false;                  //
 let mainMenu; // main menu gif
 let level1; // level 1 gif
 
+//name input
+let nameInputFieldRef;
+let nameInputLabelRef;
+let nameInputFieldShown;
+let currentName = "Anonymous";
+let nameFieldHeight;
+let nameFieldWidth;
+
+let monoFont;
+
+//buttons are shown flags
+let menuButtonsShown;
+let gameoverButtonsShown;
+
+//button references
 let startButton;
 let debugButton;
 let pauseButton;
+let leaderboardButton;
+let retryButton;
+let returntoMenuButton;
+let leaderboardReturnToMenuButton;
+let button3;
+
 let playerImg;
 
 function preload() {
@@ -66,6 +87,8 @@ function preload() {
   for (let i = 1; i <= 8; i++) {  // load sounds into array       // used in projectile func hitEnemy()
     enemyDieSounds.push(loadSound('./src/SFX/enemy-die/exp' + i + '.wav'));
   }
+
+  monoFont = loadFont('src/EnvyCodeRNerdFontMono-Regular.ttf');
 }
 
 
@@ -85,27 +108,58 @@ function setup() {
       userStartAudio();  // starts audio based on user mouse click
       startedAudio = true
     }
-  }
+
+    //create the main menu buttons once
+    startButton = createButton('Start Game'); // set text of button
+    startButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.6); // set button position
+    startButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
+    startButton.mousePressed(GameInitialization);
+
+    debugButton = createButton('Debug Room');
+    debugButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.4); // set button position
+    debugButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
+    debugButton.mousePressed(Debug);
+
+    TutorialButton = createButton('Tutorial');
+    TutorialButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.8); // set button position
+    TutorialButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
+    TutorialButton.mousePressed(Tutorial);
+
+    leaderboardButton = createButton('Leaderboard');
+    leaderboardButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.25); 
+    leaderboardButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); 
+    leaderboardButton.mousePressed(SwitchLeaderboardMode);  
+
+    //create gameover buttons
+    retryButton = createButton('Try Again?'); // set text of button
+    retryButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/(1.3)); // set button position
+    retryButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
+    retryButton.mousePressed(RoundSetup);
+
+    returntoMenuButton = createButton('Return to Main Menu'); // Sets the text of the button
+    returntoMenuButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/(1.2)); // Sets the button position
+    returntoMenuButton.size(CANV_WIDTH/6, CANV_HEIGHT/18); // Sets the size of the button
+    returntoMenuButton.mousePressed(returntoMenu); // Calls the return to menu function
+
+    initNameInputField(); //create the input field element
+
+    //disabled buttons and input field to start
+    HideMenuButtons(); 
+    HideGameoverButtons();
+}
+
 
 function draw() {
     if(mode == 0){ // Main menu
       background(mainMenu) // set the background to white
       textSize(32*CANV_SCALAR);
       textAlign(CENTER);
-      //text('Marine Mania', CANV_WIDTH/2, CANV_HEIGHT/3); // Name of game
-      startButton = createButton('Start Game'); // set text of button
-      startButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.6); // set button position
-      startButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
-      startButton.mousePressed(GameInitialization);
-      debugButton = createButton('Debug Room');
-      debugButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.4); // set button position
-      debugButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
-      debugButton.mousePressed(Debug);
 
-      TutorialButton = createButton('Tutorial');
-      TutorialButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/1.8); // set button position
-      TutorialButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
-      TutorialButton.mousePressed(Tutorial);
+      //if buttons and input field are disabled, reenable them
+      if(!menuButtonsShown) ShowMenuButtons();
+      
+      drawNameInputFieldLabel(); //draws label thats above input field for usernames
+
     }
     if(mode == 1 | mode == 5){ // Game has started
       if(isPaused() == true && isCurrentlyDead() == false){ // If the game is paused display the pause menu
@@ -158,7 +212,7 @@ function draw() {
             projectiles[i].showcase();
           }
 
-          if (energies > 0 && player.shield == false){// Start shield button is displayed when the number of energy blocks is greater than 1
+          if (energies > 0 && player.shield == false && button3 == null){// Start shield button is displayed when the number of energy blocks is greater than 1
             button3 = createButton('Shield');
             button3.position(CANV_WIDTH*(65/72), CANV_HEIGHT*(21/36)); // set button position
             button3.size(CANV_WIDTH*(55/720), CANV_HEIGHT/10); // sets size of button
@@ -182,12 +236,14 @@ function draw() {
               for (let enmy of enemies){                     // checks each enemy for collision
                 if (intersect(player.x, player.y, player.size-5, enmy.posX, enmy.posY, enmy.size)){
                   player.setHitTrue();
-                  if(energies > 0 && player.shield == false){// Death removes shield button if present
-                    removeElements(button3);
+                  if(energies > 0 && player.shield == false && button3 != null){// Death removes shield button if present
+                    button3.remove();
+                    button3 = null;
                   }
 
                   gameOverSound.play(0, 0.5, 4);             // play gameover sound
                   if(isFirstDeath() == false){ // If this isn't the player's first time dying, gameover
+                    AddToScoresCollection(currentName, player.score);
                     changeMode(9);
                   }
                   else{ // If this is the player's first time dying, pause and display the on death minigame
@@ -216,7 +272,9 @@ function draw() {
     if(mode == 2){ // debug room implementation
       DebugDraw();
     }
-
+    if(mode == 3){ //leaderboard mode
+      DrawLeaderboard();
+    }
     if(mode == 9){ // Game Over Screen
       GameOver();
     } 
@@ -233,6 +291,15 @@ function draw() {
     fpsCounter.draw();
   }
 
+  //hides or shows name input field
+  if(mode == 0 && !nameInputFieldShown){
+    nameInputFieldRef.show();
+    nameInputFieldShown = true;
+  }else if(mode != 0 && nameInputFieldShown){
+    nameInputFieldRef.hide();
+    nameInputFieldShown = false;
+  }
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -240,8 +307,7 @@ function draw() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function GameInitialization(){ // initialization
-        //removeElements(button1,button2); // removes the buttons from the screen
-        removeElements(startButton, debugButton, TutorialButton);
+        HideMenuButtons(); //hide buttons and input field on game start
 
         //could make retry initializations in a separate function and do them depending on a flag
         RoundSetup(); // done, it was required for sound reasons. but i dont think we need a flag - mike A
@@ -265,8 +331,8 @@ function GameInitialization(){ // initialization
 // this function runs every time the rety button is clicked. it also runs with GameInitialization()
 function RoundSetup(){
 
-  if (gameOverFlag)
-    removeElements(retryButton);
+  if (gameOverFlag && gameoverButtonsShown)
+    HideGameoverButtons();
 
   player.setHitFalse();             // draws player again when retrying
   currentTime = 0;                  // resets difficulty on retry
@@ -308,21 +374,18 @@ function GameOver(){ // Game over
 
       gameOverFlag = true;
 
-      retryButton = createButton('Try Again?'); // set text of button
-      retryButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/(1.3)); // set button position
-      retryButton.size(CANV_WIDTH/6, CANV_HEIGHT/20); // sets size of button
-
-      retryButton.mousePressed(RoundSetup);
-
-      returntoMenuButton = createButton('Return to Main Menu'); // Sets the text of the button
-      returntoMenuButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/(1.2)); // Sets the button position
-      returntoMenuButton.size(CANV_WIDTH/6, CANV_HEIGHT/18); // Sets the size of the button
-      returntoMenuButton.mousePressed(returntoMenu); // Calls the return to menu function
-
+      if(!gameoverButtonsShown) ShowGameoverButtons();
 }
 
 function returntoMenu(){ // used to return to the main menu
-  removeElements(retryButton, returntoMenuButton); // removes the buttons from the screen
+  if(gameoverButtonsShown) HideGameoverButtons();
+
+  if(leaderboardReturnToMenuButton != null){
+    leaderboardReturnToMenuButton.remove();
+    leaderboardReturnToMenuButton = null;
+  }
+
+  textFont('Helvetica');
   changeMode(0);
 }
 
@@ -337,12 +400,11 @@ function changeMode(i){
 }
 
 function Debug(){
+  if(menuButtonsShown) HideMenuButtons();
   changeMode(2);
-  removeElements(startButton, debugButton, TutorialButton);
 }
 
 function DebugDraw(){ //Draw function specifically for Debug menu (AKA Mode 2)
-  //removeElements(startButton, debugButton);
   background(145, 240, 243); //White background
 
   if(!player.isHit()){ // stops drawing the player if they get hit
@@ -367,6 +429,134 @@ function DebugDraw(){ //Draw function specifically for Debug menu (AKA Mode 2)
       enemyOn = true;
     }
   }
+}
+
+function DrawLeaderboard(){
+  //return to menu button creation
+  if(leaderboardReturnToMenuButton == null){
+    leaderboardReturnToMenuButton = createButton('Return to Main Menu'); 
+    leaderboardReturnToMenuButton.position(CANV_WIDTH*(9/12), CANV_HEIGHT * (1/14)); 
+    leaderboardReturnToMenuButton.size(CANV_WIDTH/6, CANV_HEIGHT/18); 
+    leaderboardReturnToMenuButton.mousePressed(returntoMenu); 
+  }
+
+  textFont(monoFont);
+
+  background(0, 204, 255)
+  // Calculate font size based on a percentage of the canvas size
+  const fontSize = min(width / 15, height / 50);
+
+  // Draw title
+  textAlign(CENTER, CENTER);
+  textSize(fontSize * 1.5);
+  fill(0);
+  text("Leaderboard", width / 2, height * 0.1);
+
+  // Draw scores
+  textSize(fontSize);
+  textAlign(CENTER, CENTER);
+  for (let i = 0; i < window.userScores.length && i < 25; i++) {
+    let username = window.userScores[i]['username'];
+    const score = window.userScores[i]['score'].toString();
+    username = username.padEnd(25 - score.length, '_');
+    const spaceOrNo = (i >= 9) ? "" : " ";
+    const entryText = `${spaceOrNo}${i + 1}. ${username}${score}`;
+    text(entryText, width / 2, height * 0.2 + i * fontSize * 1.5);
+  }
+}
+
+//setup name input field
+function initNameInputField(){
+  nameFieldWidth = CANV_WIDTH * (1/6);
+  nameFieldHeight = CANV_HEIGHT * (1/25);
+  nameInputFieldRef = createInput(currentName);
+  nameInputFieldRef.input(changeUsername);
+  nameInputFieldRef.size(nameFieldWidth, nameFieldHeight);
+  nameInputFieldRef.position(CANV_WIDTH / 2 - (nameFieldWidth / 2), CANV_HEIGHT * (11/12));
+  nameInputFieldRef.elt.maxLength = 18; //18 characters max length of name
+  nameInputFieldRef.style('font-size', `${nameFieldHeight * (7/8)}px`);
+  nameInputFieldRef.hide();
+  nameInputFieldShown = false;
+}
+
+
+//disables menu buttons and input field for usernames
+function HideMenuButtons(){
+    startButton.style('pointer-events', 'none');
+    startButton.hide();
+
+    debugButton.style('pointer-events', 'none');
+    debugButton.hide();
+
+    TutorialButton.style('pointer-events', 'none');
+    TutorialButton.hide();
+
+    leaderboardButton.style('pointer-events', 'none');
+    leaderboardButton.hide();
+
+    nameInputFieldRef.attribute('disabled', true);
+    nameInputFieldRef.hide();
+
+    menuButtonsShown = false;
+}
+
+//enables menu buttons and input field for username
+function ShowMenuButtons(){
+    startButton.style('pointer-events', 'auto');
+    startButton.show();
+
+    debugButton.style('pointer-events', 'auto');
+    debugButton.show();
+
+    TutorialButton.style('pointer-events', 'auto');
+    TutorialButton.show();
+
+    leaderboardButton.style('pointer-events', 'auto');
+    leaderboardButton.show();
+
+    nameInputFieldRef.removeAttribute('disabled');
+    nameInputFieldRef.show();
+
+    menuButtonsShown = true;
+}
+
+function HideGameoverButtons(){
+    retryButton.style('pointer-events', 'none');
+    retryButton.hide();
+
+    returntoMenuButton.style('pointer-events', 'none');
+    returntoMenuButton.hide();
+
+    gameoverButtonsShown = false;
+}
+
+function ShowGameoverButtons(){
+    retryButton.style('pointer-events', 'auto');
+    retryButton.show();
+
+    returntoMenuButton.style('pointer-events', 'auto');
+    returntoMenuButton.show();
+
+    gameoverButtonsShown = true;
+}
+
+//display username input field label
+function drawNameInputFieldLabel(){
+  let enterUserText = "[Enter Username]";
+  let inputFieldPos = nameInputFieldRef.position();
+  textSize(nameFieldHeight * (7/8));
+  fill(0, 255, 0);
+  text(enterUserText,  inputFieldPos.x + (nameFieldWidth / 2), inputFieldPos.y - textAscent() / 2);
+}
+
+function SwitchLeaderboardMode(){
+  mode = 3;
+  HideMenuButtons();
+}
+
+//callback function for when user types into text field
+function changeUsername(){
+  currentName = this.value();
 }
 
 function keyPressed(){
