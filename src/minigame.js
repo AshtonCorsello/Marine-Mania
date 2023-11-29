@@ -68,23 +68,23 @@ function plankSetup(){// Setup for the planks on the board
   plankWidth = random([(CANV_HEIGHT/4), (CANV_HEIGHT/8), (CANV_HEIGHT/6)]);
   plankX = (CANV_WIDTH/2);
   plankDirection = random(["left", "right"]);
-  plank1 = new Plank(plankX, (CANV_HEIGHT/2)+(CANV_HEIGHT/5), plankWidth, (CANV_HEIGHT/10), plankDirection);
+  plank1 = new Plank(plankX, (CANV_HEIGHT/2)+(CANV_HEIGHT/5), plankWidth, (CANV_HEIGHT/10), plankDirection, plankImg);
   plankWidth = random([(CANV_HEIGHT/4), (CANV_HEIGHT/8), (CANV_HEIGHT/6)]);
   plankX = random([(CANV_WIDTH/2)+(CANV_HEIGHT/10), (CANV_WIDTH/2), (CANV_WIDTH/2)-(CANV_HEIGHT/10)]);
   plankDirection = random(["left", "right"]);
-  plank2 = new Plank(plankX, (CANV_HEIGHT/2)+(CANV_HEIGHT/10), plankWidth, (CANV_HEIGHT/10), plankDirection);
+  plank2 = new Plank(plankX, (CANV_HEIGHT/2)+(CANV_HEIGHT/10), plankWidth, (CANV_HEIGHT/10), plankDirection,plankImg);
   plankWidth = random([(CANV_HEIGHT/4), (CANV_HEIGHT/8), (CANV_HEIGHT/6)]);
   plankX = random([(CANV_WIDTH/2)+(CANV_HEIGHT/10), (CANV_WIDTH/2), (CANV_WIDTH/2)-(CANV_HEIGHT/10)]);
   plankDirection = random(["left", "right"]);
-  plank3 = new Plank(plankX, (CANV_HEIGHT/2), plankWidth, (CANV_HEIGHT/10), plankDirection);
+  plank3 = new Plank(plankX, (CANV_HEIGHT/2), plankWidth, (CANV_HEIGHT/10), plankDirection, plankImg);
   plankWidth = random([(CANV_HEIGHT/4), (CANV_HEIGHT/8), (CANV_HEIGHT/6)]);
   plankX = random([(CANV_WIDTH/2)+(CANV_HEIGHT/10), (CANV_WIDTH/2), (CANV_WIDTH/2)-(CANV_HEIGHT/10)]);
   plankDirection = random(["left", "right"]);
-  plank4 = new Plank(plankX, (CANV_HEIGHT/2)-(CANV_HEIGHT/5), plankWidth, (CANV_HEIGHT/10), plankDirection);
+  plank4 = new Plank(plankX, (CANV_HEIGHT/2)-(CANV_HEIGHT/5), plankWidth, (CANV_HEIGHT/10), plankDirection, plankImg);
   plankWidth = random([(CANV_HEIGHT/4), (CANV_HEIGHT/8), (CANV_HEIGHT/6)]);
   plankX = random([(CANV_WIDTH/2)+(CANV_HEIGHT/10), (CANV_WIDTH/2), (CANV_WIDTH/2)-(CANV_HEIGHT/10)]);
   plankDirection = random(["left", "right"]);
-  plank5 = new Plank(plankX, (CANV_HEIGHT/2)-(CANV_HEIGHT/10), plankWidth, (CANV_HEIGHT/10), plankDirection);
+  plank5 = new Plank(plankX, (CANV_HEIGHT/2)-(CANV_HEIGHT/10), plankWidth, (CANV_HEIGHT/10), plankDirection, plankImg);
   planks = [plank1, plank2, plank3, plank4, plank5];
   pSetup = true;
 }
@@ -215,7 +215,7 @@ class Foe{
     this.img = img;
     this.size = 10*CANV_SCALAR;
   }
-  
+
   move(){
     if(this.direction == "right"){
       this.x += 1;
