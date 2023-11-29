@@ -61,6 +61,7 @@ let pauseButton;
 let leaderboardButton;
 let retryButton;
 let returntoMenuButton;
+let gameOverLeaderboardButton;
 let leaderboardReturnToMenuButton;
 let button3;
 
@@ -143,6 +144,11 @@ function setup() {
     returntoMenuButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/(1.2)); // Sets the button position
     returntoMenuButton.size(CANV_WIDTH/6, CANV_HEIGHT/18); // Sets the size of the button
     returntoMenuButton.mousePressed(returntoMenu); // Calls the return to menu function
+    
+    gameOverLeaderboardButton = createButton('Leaderboard'); // Sets the text of the button
+    gameOverLeaderboardButton.position(CANV_WIDTH*(5/12), CANV_HEIGHT/(1.1)); // Sets the button position
+    gameOverLeaderboardButton.size(CANV_WIDTH/6, CANV_HEIGHT/18); // Sets the size of the button
+    gameOverLeaderboardButton.mousePressed(SwitchLeaderboardMode); // Calls the return to menu function
 
     initNameInputField(); //create the input field element
 
@@ -531,6 +537,9 @@ function HideGameoverButtons(){
     returntoMenuButton.style('pointer-events', 'none');
     returntoMenuButton.hide();
 
+    gameOverLeaderboardButton.style('pointer-events', 'none');
+    gameOverLeaderboardButton.hide();
+
     gameoverButtonsShown = false;
 }
 
@@ -540,6 +549,9 @@ function ShowGameoverButtons(){
 
     returntoMenuButton.style('pointer-events', 'auto');
     returntoMenuButton.show();
+
+    gameOverLeaderboardButton.style('pointer-events', 'auto');
+    gameOverLeaderboardButton.show();
 
     gameoverButtonsShown = true;
 }
@@ -555,7 +567,8 @@ function drawNameInputFieldLabel(){
 
 function SwitchLeaderboardMode(){
   mode = 3;
-  HideMenuButtons();
+  if(menuButtonsShown) HideMenuButtons();
+  if(gameoverButtonsShown) HideGameoverButtons();
 }
 
 //callback function for when user types into text field
