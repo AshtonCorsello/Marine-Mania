@@ -149,7 +149,7 @@ function plankCollision(){// Checks to see if the player is on a plank, if not g
     }
   }
   if(onPlank == false){
-    removeElements(icon);
+    icon.remove();
     unpause();
     changeMode(9);
   }
@@ -159,7 +159,7 @@ function foeCollision(){// Checks to see if the player has collided with one of 
   for(let i = 0; i < foes.length; ++i){
     if(foes[i].x-foes[i].size < miniplayer.x && miniplayer.x < foes[i].x+foes[i].size){
       if(foes[i].y-foes[i].size < miniplayer.y && miniplayer.y < foes[i].y+foes[i].size){
-        removeElements(icon);
+        icon.remove();
         unpause();
         changeMode(9);
       }
