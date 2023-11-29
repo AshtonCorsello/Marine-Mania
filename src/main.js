@@ -385,6 +385,12 @@ function GameOver(){ // Game over
       textSize(32*CANV_SCALAR);
       text('Score: ' + player.score, CANV_WIDTH/2, CANV_HEIGHT/1.5);// determines what is displayed, at what x,y
 
+      if(EntryIsHighScore(currentName, player.score)){
+        textSize(18*CANV_SCALAR);
+        fill(0,255,0); //make text green
+        text("NEW HIGH SCORE!", CANV_WIDTH / 2, CANV_HEIGHT * 0.2);
+      }
+
       gameOverFlag = true;
 
       if(!gameoverButtonsShown) ShowGameoverButtons();
@@ -492,6 +498,25 @@ function initNameInputField(){
   nameInputFieldShown = false;
 }
 
+function EntryIsInScoresCollection(username, score){
+  let inCollection = false;
+  for(let i = 0; i < window.userScores.length; i++){
+    if(window.userScores[i]['username'] == username && window.userScores[i]['score'] == score){
+      inCollection = true; //entry is in scoresCollection already
+    }
+  }
+  return inCollection;
+}
+
+function EntryIsHighScore(username, score){
+  let isHighScore = false;
+  for(let i = 0; i < window.userScores.length && i < 25; i++){
+    if(window.userScores[i]['username'] == username && window.userScores[i]['score'] == score){
+      isHighScore = true; //entry is top 25 scores in score collection
+    }
+  }
+  return isHighScore;
+}
 
 //disables menu buttons and input field for usernames
 function HideMenuButtons(){
