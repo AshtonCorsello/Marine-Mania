@@ -81,7 +81,9 @@ function preload() {
   shieldOffSound = loadSound('./src/SFX/shield/shield-fail.wav'); // load shieldfail sound : in Shieldtime()
   gameOverSound = loadSound('./src/SFX/died.wav');                // load gameover sound : ~line161
   enemy1Image = loadImage("./src/img/enmy1.png");   
-  enemy2Image = loadImage("./src/img/enemy2.png");                
+  enemy2Image = loadImage("./src/img/enemy2.png");  
+  plankImg = loadImage("./src/img/plank.png");
+  minigameBackground = loadImage("./src/img/minigameBackground.png");
   for (let i = 1; i <= 8; i++) {  // load sounds into array       // used in Projectile Class definition
     cannonSounds.push(loadSound('./src/SFX/cannon/cannon' + i + '.wav'));
   }
