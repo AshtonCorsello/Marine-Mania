@@ -44,7 +44,7 @@ let level1; // level 1 gif
 let nameInputFieldRef;
 let nameInputLabelRef;
 let nameInputFieldShown;
-let currentName = "Anonymous";
+let currentName = ""; //default name is ""
 let nameFieldHeight;
 let nameFieldWidth;
 
@@ -252,7 +252,10 @@ function draw() {
 
                   gameOverSound.play(0, 0.5, 4);             // play gameover sound
                   if(isFirstDeath() == false){ // If this isn't the player's first time dying, gameover
-                    AddToScoresCollection(currentName, player.score);
+
+                    //if name is set add to firestore collection
+                    if(currentName != "") AddToScoresCollection(currentName, player.score);
+
                     changeMode(9);
                   }
                   else{ // If this is the player's first time dying, pause and display the on death minigame
