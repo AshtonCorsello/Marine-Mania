@@ -100,7 +100,10 @@ class Player {
           image(playerImg, this.x-this.imgShift, this.y-this.imgShift, this.size*6, this.size*6);
         }
         else{
-          icon.remove();
+          if(icon != null){
+            icon.remove();
+            icon = null;
+          }
           icon = createImg('src/img/boat1.0.png');
           icon.position(this.x-this.size, this.y-this.size);
         }
