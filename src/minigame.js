@@ -60,7 +60,8 @@ function minigameEnd(){ // Ends the minigame and returns the state back to norma
 }
 
 function plankSetup(){// Setup for the planks on the board
-  displaybox = rect(CANV_WIDTH/2, CANV_HEIGHT/2, CANV_HEIGHT/2, CANV_HEIGHT/2); // Dedicates the space the on death minigame should be displayed in
+  rect(CANV_WIDTH/2, CANV_HEIGHT/2, CANV_HEIGHT/2, CANV_HEIGHT/2);
+  displaybox = image(minigameBackground, CANV_WIDTH/2-CANV_HEIGHT/4, CANV_HEIGHT/2-CANV_HEIGHT/4, CANV_HEIGHT/2, CANV_HEIGHT/2); // Dedicates the space the on death minigame should be displayed in
   plankWidth = random([(CANV_HEIGHT/4), (CANV_HEIGHT/8), (CANV_HEIGHT/6)]);
   plankX = (CANV_WIDTH/2);
   plankDirection = random(["left", "right"]);
@@ -86,7 +87,8 @@ function plankSetup(){// Setup for the planks on the board
 }
 
 function plankMove(){// Calls all planks to move
-  displaybox = rect(CANV_WIDTH/2, CANV_HEIGHT/2, CANV_HEIGHT/2, CANV_HEIGHT/2); // Dedicates the space the on death minigame should be displayed in
+  rect(CANV_WIDTH/2, CANV_HEIGHT/2, CANV_HEIGHT/2, CANV_HEIGHT/2);
+  displaybox = image(minigameBackground, CANV_WIDTH/2-CANV_HEIGHT/4, CANV_HEIGHT/2-CANV_HEIGHT/4, CANV_HEIGHT/2, CANV_HEIGHT/2); // Dedicates the space the on death minigame should be displayed in
   for(let i = 0; i< planks.length; ++i){
     planks[i].move();
   }
@@ -174,12 +176,13 @@ function foeCollision(){// Checks to see if the player has collided with one of 
 }
 
 class Plank{
-  constructor(x, y, width, height, direction){
+  constructor(x, y, width, height, direction, img){
     this.x = x; 
     this.y = y;
     this.width = width;
     this.height = height;
     this.direction = direction;
+    this.img = img;
   }
 
   move(){
@@ -195,7 +198,7 @@ class Plank{
         this.direction = "right";
       }
     }
-    rect(this.x, this.y, this.width, this.height);
+    image(this.img, this.x-this.width/2, this.y-this.height/2, this.width, this.height);
   }
 }
 
