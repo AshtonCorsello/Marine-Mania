@@ -28,6 +28,7 @@ var time = 0; // Playtime
 var ShieldCT = 0; // Shield time
 let gameOverFlag = false; // flag for being on game over screen
 let gameStarted = false;
+var cloudeMove = 0;
 
 ////// all SFX /////////////////////////////////////////////////
 // background music, 321, go, wavesambiance, shield sounds    //
@@ -73,6 +74,7 @@ function preload() {
    level1 = loadImage('./src/level1.gif'); // load level 1 gif
    gameover = loadImage('./src/gameover.png'); // load gameover file
    playerImg = loadImage('./src/img/boat1.0.png');
+   drakcloude = loadImage('./src/img/cloude.png');
   countdownSound = loadSound('./src/SFX/start/321.wav');          // load 321 sound : bottom of GameInitialization()
   goSound = loadSound('./src/SFX/start/go.wav');                  // load go sound : bottom of GameInitialization()
   wavesSound = loadSound('./src/SFX/waves.wav');                  // load waves ambiance : bottom of GameInitialization()
@@ -191,7 +193,7 @@ function draw() {
             player.update()
           }
 
-          if (player.level == 1 && player.score >= 100) ++player.level;
+          if (player.level >= 1 && player.score >= (100*player.level)) ++player.level;
 
           let calcdDelay = STARTING_ENMY_DELAY - time * DELAY_DECR_MULT; // delay decreases over time
           let enemySpawnDelay = (calcdDelay > MIN_ENMY_DELAY) ? calcdDelay : MIN_ENMY_DELAY;
@@ -199,6 +201,9 @@ function draw() {
 
           if (player.level >= 2) {
             enemy2.showcase(enemySpawnDelay+2); 
+          }
+          if (player.level >= 3) {
+            Drakcloude(); 
           }
 
           //Draws rectangle for score and time (AFTER DRAWING ENEMIES)
@@ -610,5 +615,19 @@ function intersect(obj1X, obj1Y, obj1R, obj2X, obj2Y, obj2R){
 function mousePressed(){
   if(!player.isHit() && gameStarted) { // if playing game and not hit
     projectiles.push(new Projectile(mouseX, mouseY));
+  }
+}
+
+function Drakcloude(){
+  if(cloudeMove == 0){setTimeout(cloudetime, 1000);}
+  image(drakcloude, CANV_WIDTH*(cloudeMove/720), CANV_HEIGHT*(30/400), 300, 200);
+}
+
+function cloudetime(){
+  if(cloudeMove >= 720){
+    cloudeMove = 0;
+  }else{
+  cloudeMove++;
+  setTimeout(cloudetime, 1000);
   }
 }
