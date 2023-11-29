@@ -51,7 +51,10 @@ function minigameDisplay(){// Displays the minigame
 }
 
 function minigameEnd(){ // Ends the minigame and returns the state back to normal
-  removeElements(icon);
+  if(icon != null){
+    icon.remove();
+    icon = null;
+  }
   unpause();
   minigameOpenShield(); // Gives the player a shield for 5 secs after death
   currentDead = false;
