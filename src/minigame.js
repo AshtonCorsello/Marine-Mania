@@ -160,6 +160,11 @@ function plankCollision(){// Checks to see if the player is on a plank, if not g
     }
     unpause();
     changeMode(9);
+
+    // if name is set add to firestore collection
+    if(currentName != "" && !EntryIsInScoresCollection(currentName, player.score)){ 
+      AddToScoresCollection(currentName, player.score); 
+    } 
   }
 }
 
@@ -173,6 +178,11 @@ function foeCollision(){// Checks to see if the player has collided with one of 
         }
         unpause();
         changeMode(9);
+       
+        // if name is set add to firestore collection
+        if(currentName != "" && !EntryIsInScoresCollection(currentName, player.score)){ 
+          AddToScoresCollection(currentName, player.score); 
+        }
       }
     }
   }
