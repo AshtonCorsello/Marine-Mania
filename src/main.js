@@ -65,6 +65,7 @@ let leaderboardReturnToMenuButton;
 let button3;
 
 let playerImg;
+let icon;
 
 function preload() {
    //mySound = loadSound('./src/BeepBox-Song.wav'); // load music file
@@ -80,7 +81,9 @@ function preload() {
   shieldOffSound = loadSound('./src/SFX/shield/shield-fail.wav'); // load shieldfail sound : in Shieldtime()
   gameOverSound = loadSound('./src/SFX/died.wav');                // load gameover sound : ~line161
   enemy1Image = loadImage("./src/img/enmy1.png");   
-  enemy2Image = loadImage("./src/img/enemy2.png");                
+  enemy2Image = loadImage("./src/img/enemy2.png");  
+  plankImg = loadImage("./src/img/plank.png");
+  minigameBackground = loadImage("./src/img/minigameBackground.png");
   for (let i = 1; i <= 8; i++) {  // load sounds into array       // used in Projectile Class definition
     cannonSounds.push(loadSound('./src/SFX/cannon/cannon' + i + '.wav'));
   }
@@ -249,6 +252,7 @@ function draw() {
                   else{ // If this is the player's first time dying, pause and display the on death minigame
                     currentDead = true;
                     pause();
+                    miniplayer = new Player(CANV_WIDTH/2,(CANV_HEIGHT/2)+(CANV_HEIGHT/5),7*CANV_SCALAR);
                   }
                 }
               }
