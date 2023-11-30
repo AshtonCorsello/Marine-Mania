@@ -40,7 +40,9 @@ function ShieldCountdown(){ //Shield Countdown
 }
 
 function OpenShield(){ //  Open Shield
-  removeElements(button3); // Disable Shield Button
+  button3.remove();
+  button3 = null;
+
   player.shield = true
   shieldOnSound.play();    // play sfx for shield on
   player.display();// Change shield status and display shield
@@ -48,6 +50,15 @@ function OpenShield(){ //  Open Shield
   ShieldCountdown();// Shield Countdown
   energies = 0;// Empty energy
   energiesarray = [];// Empty energy
+}
+
+function minigameOpenShield(){// Open Shield after winning minigame
+  player.shield = true;
+  shieldOnSound.play();
+  player.display();
+  mode = 5;
+  ShieldCT = 5;// Sets it to a timer of 5
+  ShieldCountdown();
 }
 
 function displayShieldInfo() {
