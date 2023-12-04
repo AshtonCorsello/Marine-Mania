@@ -86,7 +86,7 @@ function preload() {
   enemy1Image = loadImage("./src/img/enmy1.png");   
   enemy2Image = loadImage("./src/img/enemy2.png");  
   plankImg = loadImage("./src/img/plank.png");
-  minigameBackground = loadImage("./src/img/minigameBackground.png");
+  minigameBackground = loadImage("./src/level1.gif");
   for (let i = 1; i <= 8; i++) {  // load sounds into array       // used in Projectile Class definition
     cannonSounds.push(loadSound('./src/SFX/cannon/cannon' + i + '.wav'));
   }
