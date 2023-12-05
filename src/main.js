@@ -73,7 +73,7 @@ function preload() {
    //mySound = loadSound('./src/BeepBox-Song.wav'); // load music file
    mySound = loadSound('./src/SFX/bgm1.wav');  // alternative BGM choice.  comment, and uncomment the above line to get other back.
    mainMenu = loadImage('./src/mainMenu.gif'); // load main menu gif
-   level1 = loadImage('./src/level1.gif'); // load level 1 gif
+   level1 = loadImage('./src/background1.2.gif'); // load level 1 gif
    gameover = loadImage('./src/gameover.png'); // load gameover file
    playerImg = loadImage('./src/img/boat1.0.png');
    drakcloude = loadImage('./src/img/cloude.png');
@@ -86,7 +86,7 @@ function preload() {
   enemy1Image = loadImage("./src/img/enmy1.png");   
   enemy2Image = loadImage("./src/img/enemy2.png");  
   plankImg = loadImage("./src/img/plank.png");
-  minigameBackground = loadImage("./src/img/minigameBackground.png");
+  minigameBackground = loadImage("./src/level1.gif");
   for (let i = 1; i <= 8; i++) {  // load sounds into array       // used in Projectile Class definition
     cannonSounds.push(loadSound('./src/SFX/cannon/cannon' + i + '.wav'));
   }
