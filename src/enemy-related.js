@@ -30,7 +30,7 @@ class Enemy1 {
   
     update(t){
       // x position follows a circle
-      let w = 50; // angular speed
+      let w = 50*CANV_SCALAR; // angular speed
       let angle = w * t + this.initialangle;
 
       if(this.curveType === "sin"){

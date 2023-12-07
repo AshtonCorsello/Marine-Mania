@@ -7,7 +7,7 @@ class Player {
         this.x = x; // x position of the player
         this.y = y; // y position of the player
         this.size = size; // size of the player
-        this.speed = 3;
+        this.speed = 3*CANV_SCALAR;
         this.score = 0; // Used to keep track of player score
         this.level = 1;
         this.task_done = false;
